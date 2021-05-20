@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: self
       type: git  
-      ref: refs/heads/master #Update to reflect actual branch, likely "refs/heads/master"
+      ref: refs/heads/master
       trigger: none
 
 variables:

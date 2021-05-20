@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: self
       type: git  
-      ref: refs/heads/asebetich-devops-branch
+      ref: refs/heads/master
       trigger: none
 variables:
 - group: 'Infrastructure-Build'
@@ -70,7 +70,7 @@ stages:
   dependsOn: [Terraform_Plan]
   jobs:
   - deployment: Apply
-    environment: 'asebetich-DEV'
+    #environment: 'build' #Optional environment field can be created to implement manual approval process
   - job:
     timeoutInMinutes: 0
     continueOnError: false

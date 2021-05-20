@@ -1,8 +1,5 @@
 variables:
-  # Build & Test API/WebApp Deployment: Update the variable below:
-  containerRegistryServiceConnection: 'DevOps-MSD-RandD Docker Container Service Connection' #Update with docker registry service connection
- 
-
+  #No need to update
   # ***** API Project Build Params ***** 
   apiBuildVMImage: 'ubuntu-latest'
   referenceApp: 'referenceApp'
@@ -11,8 +8,10 @@ variables:
   buildConfiguration: 'Release'
   apiProject: '$(apiSolutionRoot)/src/$(referenceApp).Api/$(referenceApp).Api.csproj'
   apiDockerFilePath: '$(System.DefaultWorkingDirectory)/api/Dockerfile'
-
   # ***** WEBAPP Project Build Params *****
   webappBuildVMImage: 'ubuntu-latest'
   webAppSolutionRoot: '$(System.DefaultWorkingDirectory)/webapp'
   webAppBuildDestination: '$(System.DefaultWorkingDirectory)/webapp/build'
+
+  #Update below to stage & Test API/WebApp Deployment:
+  containerRegistryServiceConnection: '' #Update with docker registry service connection
