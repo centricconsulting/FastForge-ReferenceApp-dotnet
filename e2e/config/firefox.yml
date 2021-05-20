@@ -1,0 +1,5 @@
+---
+  :args:
+  - "--ignore-certificate-errors"
+  - "--disable-popup-blocking"
+  - "--disable-translate"

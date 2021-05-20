@@ -1,0 +1,9 @@
+<%= YAML.include('customers/random_user.yml') %>
+<%= YAML.include('payment_info/credit_cards.yml') %>
+billing_section:
+  <<: *user_01
+payment_info_section:
+  cc_name: ~full_name
+  <<: *amex_01
+shipping_method_section:
+  shipping: Next Day Air

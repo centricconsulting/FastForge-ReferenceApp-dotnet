@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  api:
+    build: "api"
+    depends_on:
+      - "sqlserver"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings:ReferenceAppConnectionString: "Data Source=sqlserver;Initial Catalog=reference_app_dev;User Id=sa;Password=yourStrong(!)Password"
+    ports:
+      - "5000:5000"
+  sqlserver:
+    environment:
+      ACCEPT_EULA: "y"
+      SA_PASSWORD: "yourStrong(!)Password"
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    ports:
+      - "1433:1433"
+    volumes:
+      - "sql-server-data:/var/opt/mssql"
+  testsuite:
+    build: "e2e"
+    depends_on:
+      - "api"
+      - "sqlserver"
+volumes:
+  sql-server-data:

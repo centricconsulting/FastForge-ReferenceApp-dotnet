@@ -1,0 +1,10 @@
+---
+:headless: false
+:options:
+  :prefs:
+    :download:
+      :prompt_for_download: false
+  :args:
+  - "--ignore-certificate-errors"
+  - "--disable-popup-blocking"
+  - "--disable-translate"

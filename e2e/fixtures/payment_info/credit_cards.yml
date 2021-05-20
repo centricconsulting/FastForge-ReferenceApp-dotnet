@@ -1,0 +1,12 @@
+Test Visa: &visa_01
+  card_type: Visa
+  cc_number: 4111111111111111
+  cc_month: 03
+  cc_year: ~today.year
+  cc_cvc: 123
+Test Amex: &amex_01
+  card_type: Amex
+  cc_number: 378282246310005
+  cc_month: '03'
+  cc_year: ~today(format = '%Y')
+  cc_cvc: 123

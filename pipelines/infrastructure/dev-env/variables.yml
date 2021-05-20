@@ -1,0 +1,12 @@
+variables:
+  # Terraform Needed Variables:
+  infraDirectory: 'tf-infrastructure'
+  terraformVersion: '0.14.11'
+  
+  # Update the below to match Azure environment resources
+  resourceGroup: 'apptfstate' #Update
+  servicePrincipal: 'DevOps-MSD-RandD Service Connection' #Update
+  storageAccountName: 'apptfstate31538' #Update
+  storageContainerName: 'asebetich-test-container' #Update
+  storageKey: 'asebetich-dev.tfstate' #Update and name the .tfstate file to reflect environment
+  variableFile: '--var-file="./dev-env/terraform.tfvars"' #Change the terraform folder location to reflect the environment

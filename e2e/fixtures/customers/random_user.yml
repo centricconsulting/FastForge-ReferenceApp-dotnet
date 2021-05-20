@@ -1,0 +1,10 @@
+Test Customer: &user_01
+  first_name: ~first_name
+  last_name: ~last_name
+  address1: 123 Main St
+  city: Columbus
+  country: United States
+  state: Ohio
+  zip: 43215
+  email: ~email_address
+  phone: ~cell_phone

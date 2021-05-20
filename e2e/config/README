@@ -1,0 +1,4 @@
+YML files in this folder are loaded into the config hash.
+
+The filename is used as the key.  For example the contents
+of chrome.yml are available as Config[:chrome].

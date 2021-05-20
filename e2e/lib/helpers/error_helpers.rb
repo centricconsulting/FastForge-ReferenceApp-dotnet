@@ -1,0 +1,3 @@
+class CustomControlError < StandardError
+
+end

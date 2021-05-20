@@ -1,0 +1,278 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - "*"
+
+variables:
+  subscription: "MSD-RandD(477728c9-15e4-46f4-a786-e56c5122926d)"
+  containerImageRepository: "api"
+  containerRegistryServiceConnection: "projectContainerRegistry"
+
+  # ***** API Project Build Params *****
+  apiBuildVMImage: 'ubuntu-latest'
+  apiSolutionRoot: '$(System.DefaultWorkingDirectory)/api'
+  apiSolution: '$(apiSolutionRoot)/referenceApi.sln'
+  apiProject: '$(apiSolutionRoot)/src/referenceApp.Api/referenceApp.Api.csproj'
+  apiDockerFilePath: '$(System.DefaultWorkingDirectory)/api/Dockerfile'
+  # ***** END API PROJECT BUILD PARAMS *****
+
+  # ***** WEBAPP Project Build Params *****
+  webappBuildVMImage: 'ubuntu-latest'
+  webAppSolutionRoot: '$(System.DefaultWorkingDirectory)/webapp'
+  webAppBuildDestination: '$(System.DefaultWorkingDirectory)/webapp/build'
+  # ***** END WEBAPP PROJECT BUILD PARAMS *****
+
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  disable.coverage.autogenerate: 'true'
+  isMaster: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+
+stages:
+- stage: BuildTestStageApi
+  displayName: 'API: Build, Test and Stage'
+  dependsOn: []
+  
+  jobs:
+  - job: BuildAndRunAPIUnitTests
+    displayName: "Build and Test API"
+    dependsOn: []
+
+    pool:
+      vmImage: $(apiBuildVmImage)
+  
+    steps:
+    - checkout: self
+      submodules: true
+  
+    - task: CmdLine@2
+      displayName: 'Dump Environment Variables'
+      inputs:
+        script: 'printenv'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'install dotnet format'
+      inputs:
+        command: 'custom'
+        custom: 'tool'
+        arguments: 'update -g dotnet-format'
+    
+    - task: CmdLine@2
+      displayName: 'Lint dotnet'
+      inputs:
+        script: '$HOME/.dotnet/tools/dotnet-format --check --verbosity diagnostic $(apiSolution)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore $(apiSolution)'
+      inputs:
+        command: 'restore'
+        projects: '$(apiSolution)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build $(apiSolution) --configuration $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        projects: '$(apiSolution)'
+        arguments: '-- configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: "Run ALL Tests and Collect Code Coverage"
+      inputs:
+        command: 'test'
+        projects: '$(apiSolutionRoot)/**/*Tests/*.csproj'
+        arguments: '--verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Install Custom Tool: ReportGenerator Tool'
+      inputs:
+        command: custom
+        custom: tool
+        arguments: 'install --tool-path . dotnet-reportgenerator-globaltool'
+
+    - task: CmdLine@2
+      displayName: 'Create Reports'
+      inputs:
+        script: './reportgenerator -reports:$(apiSolutionRoot)/**/coverage.cobertura.xml -targetdir:$(apiSolutionRoot)/CoverageReport -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges" -sourcedir:$(apiSolutionRoot)'
+
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish API Code Coverage'
+      inputs:
+        codeCoverageTool: Cobertura
+        summaryFileLocation: '$(apiSolutionRoot)/**/coverage.cobertura.xml'
+        reportDirectory: '$(apiSolutionRoot)/CoverageReport'
+    
+    - task: DotNetCoreCLI@2
+      displayName: 'Stage API Build Artifacts'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(apiProject)'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api'
+        zipAfterPublish: false
+        modifyOutputPath: false
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish API Artifacts: api-drop'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'api-drop'
+        publishLocation: 'pipeline'
+
+    - task: Docker@2
+      displayName: Login to ACR
+      inputs:
+        command: login
+        containerRegistry: $(containerRegistryServiceConnection)
+        
+    - task: Docker@2
+      displayName: Build Docker Image and Push to Registry
+      inputs:
+        containerRegistry: $(containerRegistryServiceConnection)
+        repository: 'referenceApp.Api'
+        command: 'buildAndPush'
+        Dockerfile: $(apiDockerFilePath)
+        tags:
+
+- stage: BuildTestStageWebApp
+  displayName: 'WEBAPP: Build, Test and Stage'
+  dependsOn: []
+
+  jobs:
+  - job: BuildWebApp
+    displayName: "Build, Test and Stage Web App"
+    dependsOn: []
+
+    pool:
+      vmImage: $(webappBuildVMImage)
+
+    steps:
+    - checkout: self
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        yarn install
+      displayName: 'Yarn install'
+      workingDirectory: $(webAppSolutionRoot)
+
+    - script: |
+        yarn run eslint --fix-dry-run "$(webAppSolutionRoot)/src/**"
+      displayName: 'Static Code Analysis with ESLINT'
+      workingDirectory: $(webAppSolutionRoot)
+
+    - script: |
+        yarn build:development
+      displayName: 'DEVELOPMEMNT Yarn Build'
+      workingDirectory: $(webAppSolutionRoot)
+      env:
+        CI: true
+        REACT_APP_ENV: development
+
+    - script: yarn test ---coverage --watchAll=false --reporters="jest-trx-results-processor"
+      displayName: 'Yarn Test and Code Coverage'
+      workingDirectory: $(webAppSolutionRoot)
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/test-results.trx'
+
+    - task: CopyFiles@2
+      displayName: Stage DEVELOPMENT Build
+      inputs:
+        sourceFolder: $(webAppBuildDestination) # Optional
+        contents: '**' 
+        targetFolder: '$(Build.ArtifactStagingDirectory)/development_build'
+
+    - script: |
+        yarn build:test
+      displayName: 'TEST Yarn Build'
+      workingDirectory: $(webAppSolutionRoot)
+      env:
+        CI: true
+        REACT_APP_ENV: test
+
+    - task: CopyFiles@2
+      displayName: Stage TEST Build
+      inputs:
+        sourceFolder: $(webAppBuildDestination) # Optional
+        contents: '**' 
+        targetFolder: '$(Build.ArtifactStagingDirectory)/test_build'
+
+    - script: |
+        yarn build:production
+      displayName: 'PRODUCTION Yarn Build'
+      workingDirectory: $(webAppSolutionRoot)
+      env:
+        CI: true
+        REACT_APP_ENV: production
+
+    - task: CopyFiles@2
+      displayName: Stage PRODUCTION Build
+      inputs:
+        sourceFolder: $(webAppBuildDestination) # Optional
+        contents: '**' 
+        targetFolder: '$(Build.ArtifactStagingDirectory)/production_build'
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Web App Artifacts - web-app-drop'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+        artifact: 'web-app-drop'
+        publishLocation: 'pipeline'
+
+- stage: DEV
+  displayName: "DEV Deployment"
+  dependsOn: [BuildTestStageApi, BuildTestStageWebApp]
+  variables:
+    Environment: Development
+  jobs:
+    - template:  deploy-webui-api.yml
+      parameters:
+        environment: ${{ variables.environment }}
+        subscription: '$(subscription)'
+        apiAppName: 'aceraccoon-api-dev'
+        dockerNamespace: 'appsharedcr.azurecr.io'
+        dockerRepository: 'referenceApp.api:latest'
+        webAppArtifactName: 'web-app-drop'
+        webAppSourceLocation: '$(System.DefaultWorkingDirectory)/development_build/**'
+        webAppStorageAccount: 'aceraccoonwebdev'
+
+- stage: TEST
+  displayName: "TEST Deployment"
+  dependsOn: [DEV]
+  variables:
+    Environment: Test
+  jobs:
+    - template:  deploy-webui-api.yml
+      parameters:
+        environment: ${{ variables.environment }}
+        subscription: '$(subscription)'
+        apiAppName: 'sensiblewoodcock-api-test'
+        dockerNamespace: 'appsharedcr.azurecr.io'
+        dockerRepository: 'referenceApp.api:latest'
+        webAppArtifactName: 'web-app-drop'
+        webAppSourceLocation: '$(System.DefaultWorkingDirectory)/test_build/**'
+        webAppStorageAccount: 'sensiblewoodcockwebtest'
+
+- stage: PRODUCTION
+  displayName: "PRODUCTION Deployment"
+  dependsOn: [TEST]
+  variables:
+    Environment: Production
+  jobs:
+    - template:  deploy-webui-api.yml
+      parameters:
+        environment: ${{ variables.environment }}
+        subscription: '$(subscription)'
+        apiAppName: 'rareblowfish-api-prod'
+        dockerNamespace: 'appsharedcr.azurecr.io'
+        dockerRepository: 'referenceApp.api:latest'
+        webAppArtifactName: 'web-app-drop'
+        webAppSourceLocation: '$(System.DefaultWorkingDirectory)/production_build/**'
+        webAppStorageAccount: 'rareblowfishwebprod'

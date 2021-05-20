@@ -1,0 +1,107 @@
+require 'rubygems'
+require 'cucumber'
+require 'cucumber/rake/task'
+require 'parallel'
+require 'json'
+require 'yard'
+require 'yard-cucumber'
+require 'fileutils'
+require 'cuke_cataloger'
+require 'pry'
+
+ADB_SERIAL = 'your_serial_number'.freeze
+desc 'Add unique id tags to tests in the given directory'
+task 'tag_tests' do
+  puts "Tagging tests in 'features' with tag '@test_case_'\n"
+
+  tagger = CukeCataloger::UniqueTestCaseTagger.new
+  tagger.tag_tests('features', '@test_case_')
+end
+
+task :cleanup do
+  puts ' ========Deleting old reports ang logs========='
+  FileUtils.rm_rf(Dir.glob('reports/test*.*'))
+  FileUtils.rm_rf(Dir.glob('screenshots/error*.*'))
+  File.delete('cucumber_failures.log') if File.exist?('cucumber_failures.log')
+  File.new('cucumber_failures.log', 'w')
+  Dir.mkdir('reports') unless File.directory?('reports')
+  Dir.mkdir('screenshots') unless File.directory?('screenshots')
+end
+
+task :parallel_run do
+  puts '===== Executing Tests in parallel'
+  system 'bundle exec parallel_cucumber features/ -o "-p parallel -p pretty" -n 10'
+  puts ' ====== Parallel execution finished and cucumber_failure.log created ========='
+  RakeHelper.merge_json_files 'reports', 'results.json'
+  RakeHelper.notify_complete
+end
+
+task :merge_files do
+  RakeHelper.merge_json_files 'reports', 'reports/parallel_results.json'
+  RakeHelper.notify_complete
+end
+
+task :upload_results do
+  system 'ruby script\upload_result.rb --file "reports\test_20201111-141520.json" --env "salesforce_dev" --suite "zzzServPro Salesforce" --runtime "20201111-141520"'
+end
+
+task :rerun do # this is for cucumber_parallel only TODO: make for single thread too
+  if File.size('cucumber_failures.log') == 0
+    puts '==== No failures. Everything Passed ========='
+  else
+    puts ' =========Re-running Failed Scenarios============='
+    system 'bundle exec cucumber @cucumber_failures.log -f pretty'
+  end
+end
+
+task parallel_cucumber: %i[cleanup parallel_run rerun]
+
+# Rake::Task["parallel_cucumber"].invoke
+
+YARD::Rake::YardocTask.new(:yard_cuke) do |t|
+  t.files   = ['features/**/*.feature', 'features/**/*.rb']
+end
+
+YARD::Rake::YardocTask.new(:yard_lib) do |t|
+  t.files = %w[lib]
+end
+
+task :start_appium do
+  puts '===== Installing Appium with NodeJS====='
+  sh 'npm install'
+  sh ' ./node_modules/.bin/appium > /dev/null 2>&1'
+end
+
+task :docker do
+  puts '========Preparing docker environment to run cucumber tests inside docker containers======='
+  sh 'sh docker.sh'
+end
+
+task police: %i[cleanup cuke_sniffer]
+
+task :framework_tests do
+  sh 'bundle exec cucumber -t @framework'
+end
+
+Cucumber::Rake::Task.new(:chrome) do |t|
+  t.cucumber_opts = 'features -p chrome --format pretty --profile html -t ~@api '
+end
+
+Cucumber::Rake::Task.new(:sauce) do |t|
+  t.cucumber_opts = 'features -p sauce --format pretty --profile html -t ~@api '
+end
+
+task :cuke_sniffer do
+  sh 'bundle exec cuke_sniffer --out html reports/cuke_sniffer.html'
+end
+
+task :rubocop do
+  sh 'bundle exec rubocop features/'
+end
+
+task police: %i[cleanup cuke_sniffer]
+
+Cucumber::Rake::Task.new(:sauce_labs) do |t|
+  # t.cucumber_opts = "features --profile default SAUCE_VERSION='47' BROWSER='chrome' SAUCE_PLATFORM='Windows 7' BROWSER_TYPE='remote'"
+  t.cucumber_opts = 'features --profile sauce_labs '
+end

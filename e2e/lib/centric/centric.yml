@@ -1,0 +1,7 @@
+centric_logger:
+  location: ./logs
+  filename: centric_log.log
+  log_level: DEBUG
+  color_output: false
+  console_output: true
+  overwrite: true

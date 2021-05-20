@@ -1,0 +1,63 @@
+Bundler/OrderedGems:
+  Exclude:
+    - 'Gemfile'
+
+# Offense count: 1
+Lint/Debugger:
+  Exclude:
+    - 'features/step_definitions/debug_steps.rb'
+
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'Gemfile'
+    - 'Rakefile'
+
+# Offense count: 1
+# Cop supports --auto-correct.
+# Configuration parameters: AllowAsExpressionSeparator.
+Style/Semicolon:
+  Exclude:
+    - 'features/step_definitions/debug_steps.rb'
+
+Layout/LineLength:
+  Max: 140
+  IgnoredPatterns: ['(\A|\s)#','Nenv\.']
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'features/support/lib/extensions/pry_if.rb'
+  Max: 8
+
+Style/CaseEquality:
+  Exclude:
+    - 'features/support/lib/extensions/pry_if.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'features/support/lib/extensions/pry_if.rb'
+
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
+Security/YAMLLoad:
+  Enabled: false
+
+# Robocop misses when we have an out variable so don't let it 'fix' things.
+Lint/UnusedMethodArgument:
+  AutoCorrect: false
+
+Style/Documentation:
+  Exclude:
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'C2PO/lib/c2po/widgets/span_button.rb'
+    - 'C2PO/lib/c2po/extensions/page-object/css_state.rb'
+    - 'C2PO/lib/c2po/extensions/page-object/change_root.rb'
+    - 'C2PO/lib/c2po/extensions/page-object/section_parents.rb'
+
+Metrics/MethodLength:
+  Max: 20
+Naming/AccessorMethodName:
+  Exclude:
+    - 'lib/helpers/browser.rb'
