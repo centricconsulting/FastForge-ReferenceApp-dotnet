@@ -1,0 +1,26 @@
+resources:
+  repositories:
+    - repository: self
+      type: git  
+      ref: refs/heads/master
+      trigger: none
+variables:
+- group: 'Infrastructure-Build'
+- template: 'deploy-apiWebApp-variables.yml'
+
+stages:
+- stage: TEST
+  displayName: "TEST Deployment" 
+  jobs:
+    - template:  ../deploy-webui-api.yml
+      parameters:
+        environment: ${{ variables.environment }}
+        subscription: '${{ variables.subscription }}'
+        apiAppName: ${{ variables.apiAppName }}
+        dockerNamespace: '${{ variables.dockerNamespace }}' 
+        dockerRepository: 'referenceApp.api:latest'
+        webAppArtifactName: 'web-app-drop'
+        webAppSourceLocation: '$(System.DefaultWorkingDirectory)/development_build/**'
+        webAppStorageAccount: '${{ variables.webAppStorageAccount }}'
+        projectid: '${{ variables.projectid }}'
+        buildDefinition: '${{ variables.buildDefinition }}'
