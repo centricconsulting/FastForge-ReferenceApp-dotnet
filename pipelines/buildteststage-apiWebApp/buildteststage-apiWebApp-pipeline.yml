@@ -1,16 +1,21 @@
 resources:
   repositories:
-    - repository: self
-      type: git  
-      ref: refs/heads/master
-      trigger: none
+  - repository: self
+    type: git
+    name: MyProject/MyGitRepo
+    trigger:
+      branches:
+        include:
+        - refs/heads/*
+    batch: True
 
 variables:
 - template: 'stage-apiWebApp-variables.yml'
 
 stages:
-- stage: BuildTestStageApi
-  displayName: 'API: Build, Test and Stage'
+- stage: BuildTestApi
+  condition: always()
+  displayName: 'API: Build, Test'
   
   jobs:
   - job: BuildAndRunAPIUnitTests
@@ -79,7 +84,23 @@ stages:
         codeCoverageTool: Cobertura
         summaryFileLocation: '${{ variables.apiSolutionRoot }}/**/coverage.cobertura.xml'
         reportDirectory: '${{ variables.apiSolutionRoot }}/CoverageReport'
-    
+
+- stage: StageApi 
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/testingbranch'))
+  displayName: 'API: Stage'
+  
+  jobs:
+  - job: StageAPIUnitTests
+    displayName: "Stage API"
+    dependsOn: []
+
+    pool:
+      vmImage: ${{ variables.apiBuildVmImage }}
+  
+    steps:
+    - checkout: self
+      submodules: true
+  
     - task: DotNetCoreCLI@2
       displayName: 'Stage API Build Artifacts'
       inputs:
@@ -112,12 +133,13 @@ stages:
         Dockerfile: ${{ variables.apiDockerFilePath }}
         tags:
 
-- stage: BuildTestStageWebApp
-  displayName: 'WEBAPP: Build, Test and Stage'
+- stage: BuildTestWebApp
+  condition: always()
+  displayName: 'WEBAPP: Build, Test'
 
   jobs:
   - job: BuildWebApp
-    displayName: "Build, Test and Stage Web App"
+    displayName: "Build, Test Web App"
     dependsOn: []
 
     pool:
@@ -159,7 +181,23 @@ stages:
         testRunner: VSTest
         testResultsFiles: '**/test-results.trx'
 
-    - task: CopyFiles@2
+- stage: StageWebApp #Make this conditional to only run on Master/Main Branch changes
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/testingbranch'))  
+  displayName: 'Stage WebApp'
+  
+  jobs: 
+  - job: StageWebApp 
+    displayName: "Stage WebApp"
+    dependsOn: []
+
+    pool:
+      vmImage: ${{ variables.apiBuildVmImage }}
+  
+    steps:
+    - checkout: self
+      submodules: true
+  
+    - task: CopyFiles@2 #Make this its own stage as well
       displayName: Stage DEVELOPMENT Build
       inputs:
         sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
