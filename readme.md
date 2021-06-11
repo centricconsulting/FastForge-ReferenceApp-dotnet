@@ -1,9 +1,6 @@
-Azure DevOps Deployment 
+Azure DevOps Deployment
+
 BUILD
-
-
-
-
 DEPLOY: DEV
 
 
