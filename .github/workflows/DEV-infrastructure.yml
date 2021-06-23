@@ -1,0 +1,116 @@
+name: Dev-infrastructure (run 2nd)
+on:
+  workflow_dispatch:
+#   push:
+#     branches: 
+#       - main
+env:
+  infraDirectory: 'tf-infrastructure'
+  terraformVersion: '0.14.11'
+  resourceGroup: 'apptfstate' #Update
+  servicePrincipal: 'DevOps-MSD-RandD Service Connection' #Update
+  storageAccountName: 'apptfstate31538' #Update
+  storageContainerName: 'asebetich-test-container' #Update
+  storageKey: 'asebetich-github-dev.tfstate' #Update and name the .tfstate file to reflect environment
+  variableFile: '--var-file="dev-env/terraform.tfvars"' #Change the terraform folder location to reflect the environment
+  subscription_id: ${{ secrets.subscription_id }}
+  client_id: ${{ secrets.client_id }}
+  client_secret: ${{ secrets.client_secret }}
+  tenant_id: ${{ secrets.tenant_id }}
+  
+jobs:
+  Terraform_Plan:
+    runs-on: 'ubuntu-latest'
+    needs: []
+    if: always()
+    steps:
+    - uses: actions/checkout@v2
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
+
+    - name: Replace tokens
+      uses: cschleiden/replace-tokens@v1.0
+      with:
+        tokenPrefix: '!__'
+        tokenSuffix: '__!'
+        files: '["**/*.tf", "**/*.tfvars"]'
+      env: 
+        region: eastus2
+        resourceGroup: ${{ env.resourceGroup }}
+        storageAccountName: ${{ env.storageAccountName }}
+        storageContainerName: ${{ env.storageContainerName }}
+        storageKey: ${{ env.storageKey }}
+        subscription_id: ${{ env.subscription_id }}
+        client_id: ${{ env.client_id }}
+        client_secret: ${{ env.client_secret }}
+        tenant_id: ${{ env.tenant_id }}
+        
+    - name: terraform version installer
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.11 #${terraformVersion}
+        
+    - name: terraform init
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform init -reconfigure -backend-config=storage_account_name='${{ env.storageAccountName }}' -backend-config=container_name='${{ env.storageContainerName }}' -backend-config=key='${{ env.storageKey }}' -backend-config=resource_group_name='${{ env.resourceGroup }}' -backend-config=arm_subscription_id='${{ env.subscription_id }}' -backend-config=arm_tenant_id='${{ env.tenant_id }}' -backend-config=arm_client_id='${{ env.client_id }}' -backend-config=arm_client_secret='${{ env.client_secret }}'
+      
+    - name: terraform validate
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform validate
+      
+    - name: terraform plan
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform plan ${{ env.variableFile }}       
+  Terraform_Apply:
+    runs-on: 'ubuntu-latest'
+    needs: [Terraform_Plan]
+    environment:
+      name: DEV
+    steps:
+    - uses: actions/checkout@v2
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-AzPSSession: true
+
+    - name: Replace tokens
+      uses: cschleiden/replace-tokens@v1.0
+      with:
+        tokenPrefix: '!__'
+        tokenSuffix: '__!'
+        files: '["**/*.tf", "**/*.tfvars"]'
+      env: 
+        region: eastus2
+        resourceGroup: ${{ env.resourceGroup }}
+        storageAccountName: ${{ env.storageAccountName }}
+        storageContainerName: ${{ env.storageContainerName }}
+        storageKey: ${{ env.storageKey }}
+        subscription_id: ${{ env.subscription_id }}
+        client_id: ${{ env.client_id }}
+        client_secret: ${{ env.client_secret }}
+        tenant_id: ${{ env.tenant_id }}
+        
+    - name: terraform version installer
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.11 #${terraformVersion}
+        
+    - name: terraform init
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform init -reconfigure -backend-config=storage_account_name='${{ env.storageAccountName }}' -backend-config=container_name='${{ env.storageContainerName }}' -backend-config=key='${{ env.storageKey }}' -backend-config=resource_group_name='${{ env.resourceGroup }}' -backend-config=arm_subscription_id='${{ env.subscription_id }}' -backend-config=arm_tenant_id='${{ env.tenant_id }}' -backend-config=arm_client_id='${{ env.client_id }}' -backend-config=arm_client_secret='${{ env.client_secret }}'
+      
+    - name: terraform validate
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform validate
+      
+    - name: terraform plan
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform plan ${{ env.variableFile }}     
+      
+    - name: terraform apply
+      working-directory: "./${{ env.infraDirectory }}"
+      run: terraform apply -auto-approve ${{ env.variableFile }} 
