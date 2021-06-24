@@ -10,7 +10,7 @@ resources:
     batch: True
 
 variables:
-- template: 'stage-apiWebApp-variables.yml'
+- template: 'buildteststage-apiWebApp-variables.yml'
 
 stages:
 - stage: BuildTestApi
