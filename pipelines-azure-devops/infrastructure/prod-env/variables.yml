@@ -3,7 +3,7 @@ variables:
   infraDirectory: 'tf-infrastructure'
   terraformVersion: '0.14.11'
   
-  # Update the below to match Azure environment resources
+  # Update values below to match Azure environment resources
   resourceGroup: 'apptfstate' #Update
   servicePrincipal: 'DevOps-MSD-RandD Service Connection' #Update
   storageAccountName: 'apptfstate31538' #Update
