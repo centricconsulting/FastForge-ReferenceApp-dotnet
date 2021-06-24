@@ -1,6 +1,6 @@
 # Static Variables #
 environment      = "test" 
-application_name = "asebetichapp"
+application_name = "" #Update to reflect app name
 region           = "!__region__!"
 api_tier         = "Standard"
 api_size         = "S1"
