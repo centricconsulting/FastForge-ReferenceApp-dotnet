@@ -1,6 +1,6 @@
 variables:
   # Build & Test API/WebApp Deployment: Update the variable below:
-  containerRegistryServiceConnection: 'DevOps-MSD-RandD Docker Container Service Connection' #Update with docker registry service connection
+  containerRegistryServiceConnection: '' #Update with docker registry service connection
  
 
   # ***** API Project Build Params ***** 
