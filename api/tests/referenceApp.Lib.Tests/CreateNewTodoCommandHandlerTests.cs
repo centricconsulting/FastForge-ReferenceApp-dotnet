@@ -7,6 +7,7 @@ using referenceApp.Persistence;
 using referenceApp.Persistence.Models;
 using Shouldly;
 using Xunit;
+using FluentValidation;
 
 namespace referenceApp.Lib.Tests
 {
