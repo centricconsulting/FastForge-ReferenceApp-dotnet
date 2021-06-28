@@ -8,7 +8,6 @@ env:
   infraDirectory: 'tf-infrastructure'
   terraformVersion: '0.14.11'
   resourceGroup: 'apptfstate' #Update
-  servicePrincipal: 'DevOps-MSD-RandD Service Connection' #Update
   storageAccountName: 'apptfstate31538' #Update
   storageContainerName: 'asebetich-test-container' #Update
   storageKey: 'asebetich-github-dev.tfstate' #Update and name the .tfstate file to reflect environment
