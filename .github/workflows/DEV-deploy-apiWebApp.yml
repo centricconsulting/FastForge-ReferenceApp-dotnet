@@ -6,13 +6,8 @@ on:
 #     branches:
 #       - main
 env:
-  servicePrincipal: 'DevOps-MSD-RandD Service Connection' #update with Service principal/connection
   applicationName: 'app-service-name' #Update to reflect application Name
-  dockerNamespace: 'appsharedcr.azurecr.io' #container registry name
   apiAppName: 'app-service-name' #place app service Name here
-  projectid: '799a2586-eff4-4d3e-8ed6-d59c8ef58308' #https://dev.azure.com/{organization}/_apis/projects?api-version=6.0 to find project ID
-  buildDefinition: 'https://dev.azure.com/ModernSoftwareDelivery/LightningDevOps/_build?definitionId=24' #Identify the build definition of the Artifact by finding the # at the end of the url - https://dev.azure.com/{organization}/project/_build?definitionId=[####]
-  environment: 'dev'
    
 jobs:
   BuildTestApi:
