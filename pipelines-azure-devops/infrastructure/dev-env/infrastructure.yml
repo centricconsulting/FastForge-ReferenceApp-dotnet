@@ -70,7 +70,7 @@ stages:
   dependsOn: [Terraform_Plan]
   jobs:
   - deployment: Apply
-    environment: 'asebetich-DEV'
+    environment: 'DEV'
   - job:
     timeoutInMinutes: 0
     continueOnError: false
