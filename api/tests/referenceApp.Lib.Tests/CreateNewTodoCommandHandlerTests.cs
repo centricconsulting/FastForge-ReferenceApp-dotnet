@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using referenceApp.Lib.Tests.Infrastructure;
 using referenceApp.Lib.Todos.CreateNewTodo;
 using referenceApp.Persistence;
 using referenceApp.Persistence.Models;
 using Shouldly;
 using Xunit;
-using FluentValidation;
 
 namespace referenceApp.Lib.Tests
 {

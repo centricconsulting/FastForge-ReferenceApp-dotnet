@@ -1,6 +1,6 @@
+﻿using FluentValidation.TestHelper;
 using referenceApp.Lib.Todos.CreateNewTodo;
 using Xunit;
-using FluentValidation.TestHelper;
 
 namespace referenceApp.Lib.Tests
 {
@@ -8,7 +8,8 @@ namespace referenceApp.Lib.Tests
     {
         private CreateNewTodoCommandValidator _validator;
 
-        public CreateNewTodoCommandValidatorTests(){
+        public CreateNewTodoCommandValidatorTests()
+        {
             _validator = new CreateNewTodoCommandValidator();
         }
 
