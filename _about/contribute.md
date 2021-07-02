@@ -7,6 +7,7 @@
 2. Create a new branch and push it to the repo
 
 `git checkout -b [new_branch_name]`
+
 `git push origin [new_branch_name]`
 
 3. Develop in your new branch (don't forget to write tests :), commit often
