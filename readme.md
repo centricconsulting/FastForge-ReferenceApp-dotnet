@@ -18,6 +18,11 @@ Centric's FastForge platform is our opionated framework for starting certain cla
   * Windows: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=windows
   * Mac: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=mac
   * Linux: https://hub.docker.com/search?offering=community&operating_system=linux&q=&type=edition
+* Build the containers and run all services
+  * `docker-compose build && docker-compose up`
+
+tl;dr
+
 * Build the API
   * `cd api`
   * `dotnet restore`
