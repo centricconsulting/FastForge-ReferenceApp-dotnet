@@ -1,6 +1,6 @@
 name: BuildTestStage-apiWebApp (run 1st)
 on:
-  workflow_dispatch:
+  workflow_dispatch: #Remove "workflow_dispatch" and replace it with the commented section directly below to automate workflow runs upon successful main branch changes
 #   push:
 #     branches:
 #       - main
