@@ -17,7 +17,7 @@ env:
    
 jobs:
   BuildTestApi:
-    name: Build and Test API
+    name: "API: Build, Test"
     runs-on: 'ubuntu-latest'
     needs: []
     if: always()
@@ -49,10 +49,10 @@ jobs:
       run: './reportgenerator -reports:./${{ env.apiSolutionRoot }}/tests/referenceApp.Lib.Tests/coverage.cobertura.xml -targetdir:./${{ env.apiSolutionRoot }}/CoverageReport -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges" -sourcedir:./${{ env.apiSolutionRoot }}'
       
   StageApi:
-    name: Stage API
+    name: "API: Stage"
     runs-on: 'ubuntu-latest'
     needs: [BuildTestApi] 
-    if: (success() && (github.ref == 'refs/heads/main'))
+    if: always() #(success() && (github.ref == 'refs/heads/main'))
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
       run: docker push "${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceapp.api:${{ github.sha }}"
       
   BuildTestWebApp:
-    name: Build, Test Web App
+    name: "WEBAPP: BUild, Test"
     runs-on: 'ubuntu-latest'
     needs: [StageApi] 
     if: always()
@@ -138,10 +138,7 @@ jobs:
         
     - name: Unzip previous directory
       run:  unzip -o directory.zip
-    
-    - name: 'Echo download path'
-      run: echo ${{steps.download-yarn.outputs.download-path}}
-      
+
     - name: Add React Scripts with Yarn
       run: yarn add react-scripts
       working-directory: "./${{ env.webAppSolutionRoot }}"
