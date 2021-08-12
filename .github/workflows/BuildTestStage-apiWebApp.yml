@@ -1,9 +1,9 @@
 name: BuildTestStage-apiWebApp (run 1st)
 on:
-  workflow_dispatch: #Remove "workflow_dispatch" and replace it with the commented section directly below to automate workflow runs upon successful main branch changes
+  workflow_dispatch:
 #   push:
 #     branches:
-#       - main
+#       - main #Change to be appicable to alllllllllll branches
 env:
   referenceApp: 'referenceApp'
   apiSolutionRoot: 'api'
@@ -20,7 +20,7 @@ jobs:
     name: "API: Build, Test"
     runs-on: 'ubuntu-latest'
     needs: []
-    if: always() #This stage should always run upon successful changes to any branch.
+    if: always()
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
     name: "API: Stage"
     runs-on: 'ubuntu-latest'
     needs: [BuildTestApi] 
-    if: always() #(success() && (github.ref == 'refs/heads/main')) #this stage should run only on successful changes to the "main branch" 
+    if: (success() && (github.ref == 'refs/heads/main'))
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -80,10 +80,10 @@ jobs:
       run: docker push "${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceapp.api:${{ github.sha }}"
       
   BuildTestWebApp:
-    name: "WEBAPP: BUild, Test"
+    name: "WEBAPP: Build, Test"
     runs-on: 'ubuntu-latest'
     needs: [StageApi] 
-    if: always() #This stage should always run upon successful changes to any branch.
+    if: always()
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -124,7 +124,7 @@ jobs:
     name: Stage WebApp
     runs-on: 'ubuntu-latest'
     needs: [BuildTestWebApp]
-    if: always() #(success() && (github.ref == 'refs/heads/main')) #this stage should run only on successful changes to the "main branch" 
+    if: (success() && (github.ref == 'refs/heads/main'))
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
@@ -173,4 +173,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: web-app-drop
-        path: stagewebapp-directory.zi
+        path: stagewebapp-directory.zip
