@@ -112,7 +112,7 @@ module "appservice" {
   resource_group_name                      = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
-  app_service_name                         = var.app_service_name
+  app_service_name                         = var.application_name
   application_name                         = var.application_name
   connection_string                        = module.db.connection_string
   performance_alert_id                     = module.appInsights.monitor_action_group_performance_alert_id
