@@ -82,7 +82,7 @@ module "appInsights" {
 module "keyVault" {
   source   = "./_Modules/KeyVault" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  key_vault_name             = "aksdjflakj31kv-name"
+  key_vault_name             = var.keyVault_name 
   environment                = var.environment
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   object_id                  = data.azurerm_client_config.current.object_id
