@@ -4,12 +4,6 @@ variable "resource_group_name" {
   default     = "temp-rg"
 }
 
-variable "app_service_name" {
-  description = "Name of the app service plan to be imported."
-  type        = string
-  default     = "temp-asp"
-}
-
 variable "app_service_plan_id" {
   description = "ID of the app service plan to be imported."
   type        = string
