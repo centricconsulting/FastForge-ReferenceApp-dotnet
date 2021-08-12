@@ -14,6 +14,9 @@ variable "api_tier" {
 variable "api_size" { 
 	description = "API size used to define sku size for App Service Plan"
 } 
+variable "keyVault_name" {
+	description = "Name of the keyvault. Must be globally unique"	
+}
 
 # Shared Container Information #
 variable "shared_container_registry_login_server" {
