@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 #   push:
 #     branches:
-#       - main #Change to be appicable to alllllllllll branches
+#       - main #Change to be appicable to all branches
 env:
   referenceApp: 'referenceApp'
   apiSolutionRoot: 'api'
