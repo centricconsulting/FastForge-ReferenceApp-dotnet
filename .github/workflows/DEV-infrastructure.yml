@@ -7,10 +7,10 @@ on:
 env:
   infraDirectory: 'tf-infrastructure'
   terraformVersion: '0.14.11'
-  resourceGroup: 'apptfstate' #Update
-  storageAccountName: 'apptfstate31538' #Update
-  storageContainerName: 'asebetich-test-container' #Update
-  storageKey: 'asebetich-github-dev.tfstate' #Update and name the .tfstate file to reflect environment
+  resourceGroup: '' #Update
+  storageAccountName: '' #Update
+  storageContainerName: '' #Update
+  storageKey: '.tfstate' #Update and name the .tfstate file to reflect environment
   variableFile: '--var-file="dev-env/terraform.tfvars"' #Change the terraform folder location to reflect the environment
   subscription_id: ${{ secrets.subscription_id }}
   client_id: ${{ secrets.client_id }}
