@@ -1,9 +1,8 @@
 name: Dev-infrastructure (run 2nd)
 on:
-  workflow_dispatch:
-#   push:
-#     branches: 
-#       - main
+  workflow_run:
+    workflows: ["BuildTestStage-apiWebApp (run 1st)"]
+    types: [completed]
 env:
   infraDirectory:       'tf-infrastructure'
   terraformVersion:     '0.14.11'
