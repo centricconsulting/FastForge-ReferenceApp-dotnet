@@ -12,7 +12,7 @@ data "azurerm_resource_group" "app" { #Insinuating that this already exists or i
 resource "azurerm_app_service" "api" {
   resource_group_name = data.azurerm_resource_group.app.name
   location            = data.azurerm_resource_group.app.location
-  name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
+  name                = var.app_service_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
   app_service_plan_id = var.app_service_plan_id #data.azurerm_app_service_plan.api.id
 
   site_config {

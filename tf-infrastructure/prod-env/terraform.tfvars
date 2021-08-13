@@ -1,7 +1,7 @@
 # Static Variables #
 environment      = "prod" 
 application_name = "" #Update to reflect app name
-region           = "" #Update to reflect desired Azure Region
+region           = "!__region__!"
 api_tier         = "Standard"
 api_size         = "S1"
 
