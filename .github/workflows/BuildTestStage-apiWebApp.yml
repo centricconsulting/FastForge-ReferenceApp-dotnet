@@ -5,13 +5,13 @@ on:
 #     branches:
 #       - main #Change to be appicable to all branches
 env:
-  referenceApp: 'referenceApp'
-  apiSolutionRoot: 'api'
-  apiSolution: 'referenceApi.sln'
-  buildConfiguration: 'Release'
-  apiProject: 'api/src/referenceApp.Api/referenceApp.Api.csproj'
-  apiDockerFilePath: 'api/Dockerfile'
-  webAppSolutionRoot: 'webapp'
+  referenceApp:           'referenceApp'
+  apiSolutionRoot:        'api'
+  apiSolution:            'referenceApi.sln'
+  buildConfiguration:     'Release'
+  apiProject:             'api/src/referenceApp.Api/referenceApp.Api.csproj'
+  apiDockerFilePath:      'api/Dockerfile'
+  webAppSolutionRoot:     'webapp'
   webAppBuildDestination: 'webapp/build'
   
    
