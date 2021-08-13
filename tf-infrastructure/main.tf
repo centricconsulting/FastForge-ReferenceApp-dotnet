@@ -11,8 +11,7 @@ terraform {
 
 provider "azurerm" {
   features {} 
-  # Below 4 values can be removed when using Azure DevOps Pipeline as these values can be directly added to the "Terraform init" task within Azure DevOps.
-  #  GitHub Actions must have these 4 values defined. (Stored as a repository secret) 
+  #GitHub Actions must have these 4 values defined. (Stored as a repository secret) 
   subscription_id = "!__subscription_id__!"
   client_id       = "!__client_id__!"
   client_secret   = "!__client_secret__!"
