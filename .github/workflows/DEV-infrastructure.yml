@@ -67,8 +67,8 @@ jobs:
   Terraform_Apply:
     runs-on: 'ubuntu-latest'
     needs: [Terraform_Plan]
-    environment:
-      name: DEV #Update with appropriate name of created environment
+#     environment: @Optionally include to mandate manual review. The name is in reference to the created "Environments" within the Settings
+#       name: DEV #Update with appropriate name of created environment
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
