@@ -1,15 +1,13 @@
 name: BuildTestStage-apiWebApp (run 1st)
+on: #Initial deployment must be manual. After initial deployment, Lines 4 - 10 will replace lines 2-3 
+  workflow_dispatch:
 # on:
-#   workflow_dispatch:
-on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
 env:
   referenceApp:           'referenceApp'
   apiSolutionRoot:        'api'
