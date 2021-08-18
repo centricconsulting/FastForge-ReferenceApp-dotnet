@@ -1,8 +1,10 @@
 name: DEV-deploy-apiWebApp (run 3rd)
-on:
-  workflow_run:
-    workflows: ["Dev-infrastructure (run 2nd)"]
-    types: [completed]
+on: #Initial deployment must be manual. After initial deployment, Lines 4 - 7 will replace lines 2-3 
+  workflow_dispatch:
+# on:
+#   workflow_run:
+#     workflows: ["Dev-infrastructure (run 2nd)"]
+#     types: [completed]
 env:
   apiAppName: '' #place app service name here
    
