@@ -21,8 +21,9 @@ If enhanced Azure Infrastructure management is desired:
 * Azure PowerShell Modules installed
 
 ## How to Get Started with the Azure Infrastructure
-* Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md) have been followed 
-* 
+Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md) have been followed, the following tasks can be performed to deploy FastForge. 
+1. dasdfa
+2. asdfasdf
 ## How to Get Started with Development and Run Locally
 * Install Docker for your platform
   * Windows: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=windows
