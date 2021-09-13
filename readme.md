@@ -13,6 +13,7 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 ## Prerequisites
 * Docker (Desktop)
 * dotnet core
+
 If enhanced Azure Infrastructure management is desired: 
 * Code Editor installed 
 * Terraform package installed
