@@ -8,11 +8,20 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 * **e2e** - contains the  end-to-end functional testing framework and a starter set of tests.
 * **tf-infrastructure** - Terraform scripts to build the various cloud-based development, test, and production environments.
 * **pipelines-azure-devops** - Azure DevOps build-pipeline files
+* **github/workflows** - GitHub Actions workflows for automated deployments
 
 ## Prerequisites
 * Docker (Desktop)
 * dotnet core
+If enhanced Azure Infrastructure management is desired: 
+* Code Editor installed 
+* Terraform package installed
+* GIT installed
+* Azure PowerShell Modules installed
 
+## How to Get Started with the Azure Infrastructure
+* Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md) have been followed 
+* 
 ## How to Get Started with Development and Run Locally
 * Install Docker for your platform
   * Windows: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=windows
