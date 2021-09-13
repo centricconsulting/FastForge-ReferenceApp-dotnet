@@ -20,10 +20,17 @@ If enhanced Azure Infrastructure management is desired:
 * GIT installed
 * Azure PowerShell Modules installed
 
-## How to Get Started with the Azure Infrastructure
+## How to Get Started with a Public GitHub Repository
 Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md) have been followed, the following tasks can be performed to deploy FastForge. 
-1. dasdfa
-2. asdfasdf
+1. Fork [this repository](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet) into your Organization’s GitHub.
+2. If not already completed, navigate to the ```Actions``` tab within your Organization’s GitHub main page and enable workflows for your repository.
+3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create ```secrets``` needed in order to connect to the previously provisioned ```Azure Container Registry```. The variable information can be found under the ```Access Keys``` section of the ```Azure Container Registry```.
+* **REGISTRY_LOGIN_SERVER**: <<Name of Container Registry created in [FastForge Foundation Repository steps](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md)>.azurecr.io>
+* **REGISTRY_USERNAME**: <Chosen Username>
+* **REGISTRY_PASSWORD**: <Chosen Password> (Be sure to adjust this variable if the password is refreshed on the Container Registry)
+
+
+
 ## How to Get Started with Development and Run Locally
 * Install Docker for your platform
   * Windows: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=windows
