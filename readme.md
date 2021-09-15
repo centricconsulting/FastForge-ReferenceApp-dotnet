@@ -60,12 +60,12 @@ After the Public GitHub Repository is created and the workflow associated to the
     1. Add a reviewer for this step and place up to 6 resources that will approve Azure Infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow
     2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```<env>-infrastructure.yml``` file with the appropriate environment name
 3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/<env>-env```) file with the required values for deployment
-4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the ```.tfstate``` file will be located for the Terraform managed resources:
+4. Open the Environments ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the ```.tfstate``` file will be located for the Terraform managed resources:
     1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General-Prerequisites) step #5
     2. **storageAccountName**: Name of the ```Storage Account``` created in the [General Prerequisites](#General-Prerequisites) step #5
     3. **storageContainerName**: Name of the ```Container``` created in the [General Prerequisites](#General-Prerequisites) step #5
     4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
-5. Save/commit all changes and follow the process outlined in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-infrastructure.yml)```Dev-infrastructure (run 2nd)``` workflow to run
+5. Save/commit all changes and follow the process outlined in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-infrastructure.yml)```Dev-infrastructure (run 2nd)``` to run
 
 ## Deploy the API/WebApp for the Environment
 The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
@@ -74,7 +74,7 @@ The last step in the build of FastForge is the deployment of each environment’
 2. Save/commit all changes in the .yml file
 3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account that was part of the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) terraform scripts deployment
-4. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the [third workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-deploy-apiWebApp.yml) ```<env>-deploy-apiWebApp.yml``` and select ```Run workflow``` on the right-hand side
+4. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the [third workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-deploy-apiWebApp.yml) ```<env>-deploy-apiWebApp.yml``` to run
     1. After running the workflow, the API/WEbAPp will be built fo the designated environment
 5. When needed, repeat the above steps to deploy the API/WebApp for each subsequent environment. The [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) must occur first for each environment in order to have the resources required to deploy the API/WebApp associated with this section
 
