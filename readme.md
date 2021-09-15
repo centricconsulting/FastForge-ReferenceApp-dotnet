@@ -7,7 +7,7 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 * **webapp** - React single-page web application
 * **e2e** - contains the  end-to-end functional testing framework and a starter set of tests.
 * **tf-infrastructure** - Terraform scripts to build the various cloud-based development, test, and production environments.
-* **pipelines-azure-devops** - Azure DevOps build-pipeline files
+* **pipelines-azure-devops** - Azure DevOps build-pipeline yml files
 * **github/workflows** - GitHub Actions workflows for automated deployments
 
 ## Prerequisites
@@ -32,7 +32,11 @@ Once the steps outlined in the [FastForge Foundation Repository](https://github.
     1. Open the ```BuildTestStage-apiWebApp.yml``` file and ensure the ref path within the .yml file is pointing to the “main” branch if applicable
     2. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```BuildTestStage-apiWebApp (run 1st)``` workflow, and select “Run workflow” on the right-hand side
 
-## How to Get Started with a Public GitHub Repository
+## Start Building Azure Infrastructure for an Environment 
+After the Public GitHub Repository is created and the workflow associated to the yml file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment.
+1. Five additional secrets need to be created
+    1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
+ 
 
 
 
