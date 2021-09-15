@@ -65,7 +65,7 @@ After the Public GitHub Repository is created and the workflow associated to the
     2. **storageAccountName**: Name of the ```Storage Account``` created in the [General Prerequisites](#General-Prerequisites) step #5
     3. **storageContainerName**: Name of the ```Container``` created in the [General Prerequisites](#General-Prerequisites) step #5
     4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
-5. Save/commit all changes and follow the process outlined in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment), but select the ```Dev-infrastructure (run 2nd)``` workflow to run
+5. Save/commit all changes and follow the process outlined in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-infrastructure.yml)```Dev-infrastructure (run 2nd)``` workflow to run
 
 ## Deploy the API/WebApp for the Environment
 The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
@@ -74,7 +74,7 @@ The last step in the build of FastForge is the deployment of each environment’
 2. Save/commit all changes in the .yml file
 3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account that was part of the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) terraform scripts deployment
-4. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```<env>-deploy-apiWebApp.yml``` workflow, and select ```Run workflow``` on the right-hand side
+4. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the [third workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/DEV-deploy-apiWebApp.yml) ```<env>-deploy-apiWebApp.yml``` and select ```Run workflow``` on the right-hand side
     1. After running the workflow, the API/WEbAPp will be built fo the designated environment
 5. When needed, repeat the above steps to deploy the API/WebApp for each subsequent environment. The [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) must occur first for each environment in order to have the resources required to deploy the API/WebApp associated with this section
 
