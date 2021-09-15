@@ -36,6 +36,15 @@ Once the steps outlined in the [FastForge Foundation Repository](https://github.
 After the Public GitHub Repository is created and the workflow associated to the yml file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment.
 1. Five additional secrets need to be created
     1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
+    2. **CLIENT_ID**: Client ID of Azure crednetials in the **AZURE_CREDENTIALS** secret
+    3. **CLIENT_SECRET**: Client Secret of Azure crednetials in the **AZURE_CREDENTIALS** secret
+    4. **SUBSCRIPTION_ID**: Subscription ID associated to the Azure Subscription
+    5. **TENANT_ID**: Tenant ID of Azure crednetials in the **AZURE_CREDENTIALS** secret
+2. After the above secrets are created, navigate to the ```Settings``` tab within your Organization's GitHub main page and select ```Environments```. Within ```Environments```, select the ```New environment``` option and name the environment based on the working environment.
+    1. Add a reviewer for this step and place up to 6 resources that will approve Azure Infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow.
+    2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```<env>-infrastructure.yml``` file with the appropriate environment name
+
+
  
 
 
