@@ -10,7 +10,23 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 * **pipelines-azure-devops** - Azure DevOps build-pipeline yml files
 * **github/workflows** - GitHub Actions workflows for automated deployments
 
-## Prerequisites
+## General Prerequisites
+1. Create/Re-Use Microsoft Azure Subscription
+    1. The Azure Subscription will host all the required Infrastructure needed for FastForge
+2. Create/Re-Use a GitHub Organization
+    1. GitHub will be used as the primary code repository and will manage the workflow for automation of deployment
+3. Customize the App Dev Process Template for the Organization to be consistent with Centric's Right Site approach
+    1. A key component of Centric's Right Site model is determining appropriate locations for our Client’s project, files and folders that manage the FastForge deployment
+    2. Create an inherited process derived from the existing Agile Template
+    3. Name the process and remember the name to be used later in the process
+4. Determine early on whether the FastForge Repository will be private or public
+    1. Public repositories provide the option to use “Environments” for free, whereas a Private repository requires GitHub Enterprise
+5. Establish a shared container within the Azure Subscription for the Terraform .tfstate file by creating the following in Azure: 
+    1. **Resource Group**
+    2. **Storage Account**
+    3. **Container within the Storage Account**
+
+## Prerequisite Installations
 * Docker (Desktop)
 * dotnet core
 
@@ -44,9 +60,12 @@ After the Public GitHub Repository is created and the workflow associated to the
     1. Add a reviewer for this step and place up to 6 resources that will approve Azure Infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow.
     2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```<env>-infrastructure.yml``` file with the appropriate environment name
 3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/<env>-env```) file with the required values for deployment.
-4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the tfstate file will be located for the Terraform managed resources.
-
-
+4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the tfstate file will be located for the Terraform managed resources:
+    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General Prerequisites "Goto General Prerequisites")
+    2. **storageAccountName**: 
+    3. **storageContainerName**: 
+    4. **storageKey**: 
+## Start Building Azure Infrastructure for an Environment 
  
 
 
