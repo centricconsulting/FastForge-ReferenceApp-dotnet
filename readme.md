@@ -61,7 +61,7 @@ After the Public GitHub Repository is created and the workflow associated to the
     2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```<env>-infrastructure.yml``` file with the appropriate environment name
 3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/<env>-env```) file with the required values for deployment.
 4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the tfstate file will be located for the Terraform managed resources:
-    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites]("Goto General Prerequisites")
+    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](General Prerequisites)
     2. **storageAccountName**: 
     3. **storageContainerName**: 
     4. **storageKey**: 
