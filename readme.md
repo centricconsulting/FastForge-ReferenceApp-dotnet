@@ -21,7 +21,7 @@ Centric's FastForge platform is our opionated framework for starting certain cla
     3. Name the process and remember the name to be used later in the process
 4. Determine early on whether the FastForge Repository will be private or public
     1. Public repositories provide the option to use “Environments” for free, whereas a Private repository requires GitHub Enterprise
-5. Establish a shared container within the Azure Subscription for the Terraform .tfstate file by creating the following in Azure: 
+5. Establish a shared container within the Azure Subscription for the Terraform ```.tfstate``` file by creating the following in Azure: 
     1. **Resource Group**
     2. **Storage Account**
     3. **Container within the Storage Account**
@@ -60,13 +60,16 @@ After the Public GitHub Repository is created and the workflow associated to the
     1. Add a reviewer for this step and place up to 6 resources that will approve Azure Infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow.
     2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```<env>-infrastructure.yml``` file with the appropriate environment name
 3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/<env>-env```) file with the required values for deployment.
-4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the tfstate file will be located for the Terraform managed resources:
-    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General-Prerequisites)
-    2. **storageAccountName**: 
-    3. **storageContainerName**: 
-    4. **storageKey**: 
-## Start Building Azure Infrastructure for an Environment 
- 
+4. Open the Environemnts ```<env>-infrastructure.yml``` file for the appropriate environment and adjust the ```env``` variables to reflect where the ```.tfstate``` file will be located for the Terraform managed resources:
+    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General-Prerequisites) step #5
+    2. **storageAccountName**: Name of the ```Storage Account``` created in the [General Prerequisites](#General-Prerequisites) step #5
+    3. **storageContainerName**: Name of the ```Container``` created in the [General Prerequisites](#General-Prerequisites) step #5
+    4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
+
+## Deploy the API/WebApp for the Environment
+The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
+1. Use the ```env``` section within the .yml file (```<env>-deploy-apiWebApp-pipeline.yml```) to store the following variable:
+    1. **apiAppName**: Name of app service created in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) step #3 
 
 
 
