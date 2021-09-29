@@ -155,24 +155,24 @@ stages:
     - script: |
         yarn install
       displayName: 'Yarn install'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - script: |
-        yarn run eslint --fix-dry-run "${{ variables.webAppSolutionRoot }}/src/**"
+        yarn run eslint --fix-dry-run "$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}/src/**"
       displayName: 'Static Code Analysis with ESLINT'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - script: |
-        yarn build:development
+        yarn run build:development
       displayName: 'DEVELOPMEMNT Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
       env:
         CI: true
         REACT_APP_ENV: development
 
     - script: yarn test ---coverage --watchAll=false --reporters="jest-trx-results-processor"
       displayName: 'Yarn Test and Code Coverage'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - task: PublishTestResults@2
       condition: succeededOrFailed()
@@ -196,23 +196,30 @@ stages:
     displayName: "Stage WebApp"
 
     pool:
-      vmImage: ${{ variables.apiBuildVmImage }}
+      vmImage: ${{ variables.webappBuildVMImage }}
   
     steps:
-    - checkout: self
-      submodules: true
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'yarn'
+        targetPath: '$(Pipeline.Workspace)'
+    - script: |
+        yarn add react-scripts
+      displayName: 'Add React Scripts with Yarn'
+      workingDirectory: '$(Pipeline.Workspace)/s/${{ variables.webAppSolutionRoot }}'   
   
-    - task: CopyFiles@2 #Make this its own stage as well
+    - task: CopyFiles@2 
       displayName: Stage DEVELOPMENT Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}'
         contents: '**' 
-        targetFolder: '$(Build.ArtifactStagingDirectory)/development_build'
+        targetFolder: '$(System.DefaultWorkingDirectory)/development_build'
 
     - script: |
         yarn build:test
       displayName: 'TEST Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}' 
       env:
         CI: true
         REACT_APP_ENV: test
@@ -220,9 +227,9 @@ stages:
     - task: CopyFiles@2
       displayName: Stage TEST Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
-        targetFolder: '$(Build.ArtifactStagingDirectory)/test_build'
+        targetFolder: '$(System.DefaultWorkingDirectory)/test_build'
 
     - script: |
         yarn build:production
@@ -235,9 +242,9 @@ stages:
     - task: CopyFiles@2
       displayName: Stage PRODUCTION Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
-        targetFolder: '$(Build.ArtifactStagingDirectory)/production_build'
+        targetFolder: '$(System.DefaultWorkingDirectory)/production_build'
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Web App Artifacts - web-app-drop'
