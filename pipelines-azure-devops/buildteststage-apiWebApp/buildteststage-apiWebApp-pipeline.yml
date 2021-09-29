@@ -16,6 +16,7 @@ stages:
 - stage: BuildTestApi
   condition: always()
   displayName: 'API: Build, Test'
+  dependsOn: []
   
   jobs:
   - job: BuildAndRunAPIUnitTests
@@ -217,7 +218,7 @@ stages:
         targetFolder: '$(System.DefaultWorkingDirectory)/development_build'
 
     - script: |
-        yarn build:test
+        yarn run build:test
       displayName: 'TEST Yarn Build'
       workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}' 
       env:
@@ -232,9 +233,9 @@ stages:
         targetFolder: '$(System.DefaultWorkingDirectory)/test_build'
 
     - script: |
-        yarn build:production
+        yarn run build:production
       displayName: 'PRODUCTION Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/webapp'
       env:
         CI: true
         REACT_APP_ENV: production
