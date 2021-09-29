@@ -1,6 +1,6 @@
 variables:
   # Deploy API/WebApp:
-  servicePrincipal: '' #update with Service principal/connection
+  servicePrincipal: '' #update with Service principal/connection. Not the docker specific Service principal/connection, but the one used to connect to Azure in general
   applicationName: '' #Update to reflect application Name
   dockerNamespace: '' #container registry name
   apiAppName: '' #place app service Name here
