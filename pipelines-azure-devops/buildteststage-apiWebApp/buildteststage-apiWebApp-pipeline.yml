@@ -3,11 +3,11 @@ resources:
   - repository: self
     type: git
     name: MyProject/MyGitRepo
-    trigger:
-      branches:
-        include:
-        - refs/heads/*
-    batch: True
+    trigger: none
+      # branches:  
+      #   include: 
+      #   - refs/heads/* 
+    batch: True 
 
 variables:
 - template: 'buildteststage-apiWebApp-variables.yml'
@@ -20,7 +20,6 @@ stages:
   jobs:
   - job: BuildAndRunAPIUnitTests
     displayName: "Build and Test API"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.apiBuildVmImage }}
@@ -88,11 +87,11 @@ stages:
 - stage: StageApi 
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   displayName: 'API: Stage'
+  dependsOn: [BuildTestApi]  
   
   jobs:
   - job: StageAPIUnitTests
     displayName: "Stage API"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.apiBuildVmImage }}
@@ -136,11 +135,11 @@ stages:
 - stage: BuildTestWebApp
   condition: always()
   displayName: 'WEBAPP: Build, Test'
-
+  dependsOn: [StageApi]
+  
   jobs:
   - job: BuildWebApp
     displayName: "Build, Test Web App"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.webappBuildVMImage }}
@@ -180,15 +179,21 @@ stages:
       inputs:
         testRunner: VSTest
         testResultsFiles: '**/test-results.trx'
+        
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'yarn'
+        publishLocation: 'pipeline'        
 
 - stage: StageWebApp #Make this conditional to only run on Master/Main Branch changes
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))  
   displayName: 'Stage WebApp'
+  dependsOn: [BuildTestWebApp]
   
   jobs: 
   - job: StageWebApp 
     displayName: "Stage WebApp"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.apiBuildVmImage }}
