@@ -1,4 +1,4 @@
-name: Dev-infrastructure (run 2nd)
+name: ENV-infrastructure (run 2nd)
 on: #Initial deployment must be manual. After initial deployment, Lines 4 - 7 will replace lines 2-3 
   workflow_dispatch
 # on:
