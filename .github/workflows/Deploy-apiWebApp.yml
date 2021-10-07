@@ -1,4 +1,4 @@
-name: DEV-deploy-apiWebApp (run 3rd)
+name: Deploy-apiWebApp (run 3rd)
 on: #Initial deployment must be manual. After initial deployment, Lines 4 - 7 will replace lines 2-3 
   workflow_dispatch
 # on:
