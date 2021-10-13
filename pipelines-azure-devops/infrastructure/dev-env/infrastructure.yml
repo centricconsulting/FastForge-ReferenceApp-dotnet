@@ -1,8 +1,8 @@
-trigger: none
-
-# resources:
+# trigger: none
+#
+# resources: #After initial creation, uncomment lines 1-7 and remove lines 9 - 14
 #   pipelines:
-#   - pipeline: mypipeline
+#   - pipeline: InfrastructurePipelne
 #     source: 'BuildTestStage-apiWebApp (run 1st)'
 #     trigger: true
 
