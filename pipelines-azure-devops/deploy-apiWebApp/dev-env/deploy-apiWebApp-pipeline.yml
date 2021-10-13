@@ -1,11 +1,19 @@
-trigger: none
+# trigger: none
+# 
+# resources: #After initial creation, uncomment lines 1-7 and remove lines 9 - 15. This is done to establish automatic triggers
+#   pipelines:
+#   - pipeline: mypipeline #Arbitraty name to reference
+#     source: 'Infrastructure (run 2nd)' #Name of the Infrastructure pipeline that was created
+#     trigger: true
 
 resources:
-  pipelines:
-  - pipeline: mypipeline #Arbitraty name to reference
-    source: '' #Name of the Infrastructure pipeline that was created
-    trigger: true
-
+  repositories:
+  - repository: self
+    type: git
+    name: MyProject/MyGitRepo
+    trigger: none
+    batch: True 
+    
 variables:
 - group: 'Infrastructure-Build'
 - template: 'deploy-apiWebApp-variables.yml'
