@@ -1,6 +1,6 @@
 # trigger: none
 #
-# resources: #After initial creation, uncomment lines 1-7 and remove lines 9 - 14
+# resources: #After initial creation, uncomment lines 1-7 and remove lines 9 - 14. This is done to establish automatic triggers
 #   pipelines:
 #   - pipeline: InfrastructurePipelne
 #     source: 'BuildTestStage-apiWebApp (run 1st)'
