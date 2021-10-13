@@ -69,7 +69,7 @@ stages:
   displayName: Terraform Apply
   dependsOn: [Terraform_Plan]
   jobs:
-  - deployment: Apply
+  #- deployment: Apply
     #environment: 'DEV'
   - job:
     timeoutInMinutes: 0
