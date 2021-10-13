@@ -86,7 +86,7 @@ stages:
         reportDirectory: '${{ variables.apiSolutionRoot }}/CoverageReport'
 
 - stage: StageApi 
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   displayName: 'API: Stage'
   dependsOn: [BuildTestApi]  
   
@@ -188,7 +188,7 @@ stages:
         publishLocation: 'pipeline'        
 
 - stage: StageWebApp #Make this conditional to only run on Master/Main Branch changes
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))  
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))  
   displayName: 'Stage WebApp'
   dependsOn: [BuildTestWebApp]
   
