@@ -1,3 +1,11 @@
+trigger: none
+
+# resources:
+#   pipelines:
+#   - pipeline: mypipeline
+#     source: 'BuildTestStage-apiWebApp (run 1st)'
+#     trigger: true
+
 resources:
   repositories:
     - repository: self
