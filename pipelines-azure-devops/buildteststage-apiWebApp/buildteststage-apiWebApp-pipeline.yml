@@ -215,7 +215,7 @@ stages:
       inputs:
         sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}'
         contents: '**' 
-        targetFolder: '$(System.DefaultWorkingDirectory)/development_build'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/development_build'
 
     - script: |
         yarn run build:test
@@ -230,7 +230,7 @@ stages:
       inputs:
         sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
-        targetFolder: '$(System.DefaultWorkingDirectory)/test_build'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/test_build'
 
     - script: |
         yarn run build:production
@@ -245,7 +245,7 @@ stages:
       inputs:
         sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
-        targetFolder: '$(System.DefaultWorkingDirectory)/production_build'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/production_build'
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Web App Artifacts - web-app-drop'
