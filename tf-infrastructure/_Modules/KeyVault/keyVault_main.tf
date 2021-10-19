@@ -16,15 +16,18 @@ resource "azurerm_key_vault" "kv" {
     tenant_id = var.tenant_id #data.azurerm_client_config.current.tenant_id
     object_id = var.object_id #data.azurerm_client_config.current.object_id
 
+    certificate_permissions = [
+      "backup", "create", "delete", "deleteissuers", "get", "getissuers", "import", "list", "listissuers", "managecontacts", 
+      "manageissuers", "purge", "recover", "restore", "setissuers", "update"
+    ]
+
     key_permissions = [
-      "create",
-      "get",
+      "backup", "create", "decrypt", "delete", "encrypt", "get", "import", "list", "purge", "recover", "restore", "sign", "unwrapkey", "update",
+      "update", "verify", "wrapkey"
     ]
 
     secret_permissions = [
-      "set",
-      "get",
-      "delete",
+      "backup", "delete", "get", "list", "purge", "recover", "restore", "set"
     ]
   }
 
