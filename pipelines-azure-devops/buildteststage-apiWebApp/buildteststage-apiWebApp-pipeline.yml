@@ -2,13 +2,12 @@ resources:
   repositories:
   - repository: self
     type: git
-    name: MyProject/MyGitRepo
     trigger: none
       # branches:  
       #   include: 
       #   - refs/heads/* 
     batch: True 
-
+    
 variables:
 - template: 'buildteststage-apiWebApp-variables.yml'
 
