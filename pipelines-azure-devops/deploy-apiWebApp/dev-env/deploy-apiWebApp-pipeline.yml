@@ -8,11 +8,10 @@
 
 resources:
   repositories:
-  - repository: self
-    type: git
-    name: MyProject/MyGitRepo
-    trigger: none
-    batch: True 
+    - repository: self
+      type: git  
+      ref: refs/heads/main
+      trigger: none
     
 variables:
 - group: 'Infrastructure-Build'
