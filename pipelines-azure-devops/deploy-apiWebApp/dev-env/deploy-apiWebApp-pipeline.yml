@@ -1,6 +1,6 @@
-# trigger: none
-# 
-# resources: #After initial creation, uncomment lines 1-7 and remove lines 9 - 15. This is done to establish automatic triggers
+# trigger: none 
+
+# resources: #Step 5: After initial creation, uncomment lines 1-7 and remove lines 9 - 14
 #   pipelines:
 #   - pipeline: mypipeline #Arbitraty name to reference
 #     source: 'Infrastructure (run 2nd)' #Name of the Infrastructure pipeline that was created
