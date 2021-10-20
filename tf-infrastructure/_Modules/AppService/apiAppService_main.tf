@@ -26,8 +26,8 @@ resource "azurerm_app_service" "api" {
 		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
-		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/refrenceApp.api:latest"
-		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/refrenceApp.api:latest"
+		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
 		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
   }
 
