@@ -2,10 +2,8 @@ resources:
   repositories:
   - repository: self
     type: git
-    trigger: none #Step 5: Remove the word "none" from line 5 and uncomment lines 6-8
-      # branches:  
-      #   include: 
-      #   - refs/heads/* 
+    trigger: none #Step 5: Remove the word "none" from line 5 and uncomment lines 6
+    # - '*'
     batch: True 
     
 variables:
