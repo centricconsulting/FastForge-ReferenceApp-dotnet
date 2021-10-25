@@ -39,13 +39,6 @@ resource "random_string" "random" {
     override_special = "/@£$"
 }
 
-resource "random_pet" "server" {
-    separator = ""
-    keepers = { # Generate a new pet name each time we switch to a new AMI id
-        environment = var.environment
-    }
-}
-
 ###########################################################################
 # Module examples ~ Templates used to create all the modules listed below #
 ###########################################################################
@@ -53,7 +46,7 @@ resource "random_pet" "server" {
 # ~RESOURCE GROUP EXAMPLE~ #
 module "resource_group" {
   source   = "./_Modules/ResourceGroup"
-  rg_name  = "${var.application_name}_${var.environment}"
+  rg_name  = "${var.application_name}-${var.environment}-RG"
   region   = var.region #In every other module, you can specify this region variable or utilize the output variable produced from the Resource Group Module
 }
 
@@ -61,7 +54,7 @@ module "resource_group" {
 module "asp" {
   source   = "./_Modules/AppServicePlans" 
   resource_group_name   = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  app_service_plan_name = "${var.application_name}-apisp-${var.environment}"
+  app_service_plan_name = "${var.application_name}-${var.environment}-apisp"
   api_tier              = var.api_tier 
   api_size              = var.api_size
 
@@ -72,7 +65,7 @@ module "asp" {
 module "appInsights" {
   source   = "./_Modules/AppInsights" 
   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  app_insights_name   = "${random_pet.server.id}-appinsights-${var.environment}"
+  app_insights_name   = "${var.application_name}-${var.environment}-appinsights"
 
   depends_on  = [module.resource_group] 
 }
@@ -95,7 +88,7 @@ module "keyVault" {
 module "db" {
   source   = "./_Modules/Database" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  sql_server_name            = "${var.application_name}-dbserver-${var.environment}"
+  sql_server_name            = "${var.application_name}-${var.environment}-dbserver"
   sql_firewall_name          = "FirewallRule-${var.environment}"
   sql_db_name                = "${var.application_name}-db-${var.environment}"
   environment                = var.environment
