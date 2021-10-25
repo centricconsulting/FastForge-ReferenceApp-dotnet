@@ -1,5 +1,5 @@
 name: BuildTestStage-apiWebApp (run 1st)
-on: #Initial deployment must be manual. After initial deployment, Lines 4 - 10 will replace lines 2-3 
+on: #Step 5: Replace lines 2-3. Uncomment lines 4 - 10 
   workflow_dispatch
 # on:
 #   push:
