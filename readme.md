@@ -13,13 +13,13 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 ## General Prerequisites
 1. Create/Re-Use Microsoft Azure Subscription
     1. The Azure Subscription will host all the required Infrastructure needed for FastForge
-2. Create/Re-Use a GitHub Organization
-    1. GitHub will be used as the primary code repository and will manage the workflow for automation of deployment
+2. Create/Re-Use a repository (Azure DevOps or GitHub)
+    1. The repository will be used as the primary location for the folder and files and the platform chosen will manage the workflow for automation of deployment
 3. Customize the App Dev Process Template for the Organization to be consistent with Centric's Right Site approach
     1. A key component of Centric's Right Site model is determining appropriate locations for our Client’s project, files and folders that manage the FastForge deployment
     2. Create an inherited process derived from the existing Agile Template
     3. Name the process and remember the name to be used later in the process
-4. Determine early on whether the FastForge Repository will be private or public
+4. For GitHub - determine early on whether the FastForge repository will be private or public
     1. Public repositories provide the option to use “Environments” for free, whereas a Private repository requires GitHub Enterprise
 5. Establish a shared container within the Azure Subscription for the Terraform ```.tfstate``` file by creating the following in Azure: 
     1. **Resource Group**
@@ -78,24 +78,15 @@ The last step in the build of FastForge is the deployment of each environment’
     1. After running the workflow, the API/WEbAPp will be built fo the designated environment
 5. When needed, repeat the above steps to deploy the API/WebApp for each subsequent environment. The [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) must occur first for each environment in order to have the resources required to deploy the API/WebApp associated with this section
 
+## How to Get Started with an Azure DevOps Repository 
+Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-DevOps/readme.md) have been followed, the following tasks can be performed to deploy FastForge:
+1. Within Azure DevOps, create a service connection for the ```Azure Container Registry``` that was provisioned as part of Step 1
 
-## How to Get Started with Development and Run Locally
-* Install Docker for your platform
-  * Windows: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=windows
-  * Mac: https://hub.docker.com/search?offering=community&q=&type=edition&operating_system=mac
-  * Linux: https://hub.docker.com/search?offering=community&operating_system=linux&q=&type=edition
-* Build the containers and run all services
-  * `docker-compose build && docker-compose up`
-
-tl;dr
-
-* Build the API
-  * `cd api`
-  * `dotnet restore`
-  * `dotnet build`
-* Start the WebApp
-  * `cd webapp`
-  * `npm install`
-  * `yarn start`
-* Start the API, SQL Server, and execute the end-to-end in Docker containers via Docker Compose
-  * `docker-compose up`
+Within Azure DevOps, create a service connection for the “Azure Container Registry” that was provisioned as part of Step 1
+Within Azure DevOps, navigate to the “Files” section under “Repos” and verify that the cloned repository from the Centric GitHub is now uploaded to the Azure DevOps Repo:
+https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet.git 
+Edit, “buildteststage-apiWebApp-variables.yml” (/pipelines-azure-devops/buildteststage-apiWebApp/) and adjust the following field to match the Azure DevOps value:
+containerRegistryServiceConnection: <Name of service connection for the Docker Registry>
+Once the above variable value is updated, the first pipeline can run: 
+Within Azure DevOps, navigate to the “Pipelines” section under “Pipelines” and select the first pipeline to run “BuildTestStage-apiWebApp (run 1st)”
+Select the “Run Pipeline” option on the page to run the first pipeline
