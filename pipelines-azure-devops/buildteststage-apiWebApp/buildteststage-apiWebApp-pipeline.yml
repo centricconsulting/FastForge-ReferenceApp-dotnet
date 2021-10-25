@@ -2,7 +2,7 @@ resources:
   repositories:
   - repository: self
     type: git
-    trigger: none #Step 5: Remove the word "none" from line 5 and uncomment lines 6
+    trigger: none #Step 5: Remove the word "none" from line 5 and uncomment line 6
     # - '*'
     batch: True 
     
