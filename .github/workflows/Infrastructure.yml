@@ -1,5 +1,5 @@
 name: Infrastructure (run 2nd)
-on: #Initial deployment must be manual. After initial deployment, Lines 4 - 7 will replace lines 2-3 
+on: #Step 5: Replace lines 2-3. Uncomment lines 4 – 7 
   workflow_dispatch
 # on:
 #   workflow_run:
