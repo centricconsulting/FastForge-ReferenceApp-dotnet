@@ -39,17 +39,17 @@ Once the steps outlined in the [FastForge Foundation Repository](https://github.
 After the Public GitHub Repository is created and the workflow associated to the .yml file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment:
 1. Five additional secrets need to be created:
     1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
-    2. **CLIENT_ID**: Client ID of Azure crednetials in the **AZURE_CREDENTIALS** ```Secrets```
-    3. **CLIENT_SECRET**: Client Secret of Azure crednetials in the **AZURE_CREDENTIALS** ```Secrets```
+    2. **CLIENT_ID**: Client ID of Azure crednetials in the **AZURE_CREDENTIALS** 
+    3. **CLIENT_SECRET**: Client Secret of Azure crednetials in the **AZURE_CREDENTIALS** 
     4. **SUBSCRIPTION_ID**: Subscription ID associated to the Azure Subscription
-    5. **TENANT_ID**: Tenant ID of Azure crednetials in the **AZURE_CREDENTIALS** ```Secrets```
-2. [**OPTIONAL**] Within GitHub Public Repositories, ```Environments``` (Settings > Environments > New environment) can be created to place manual approvals for infrastructure changes when the terraform workflow runs. The name of the ```Environment``` should reflect the environment being built. Line #70 - #71 in the ```infrastructure.yml``` file can be uncommented to reflect the name of the ```Environment``` created. (*NOTE: this step is available for Public repositories by default, but requires a GitHub Enterprise license for Private repositories*
+    5. **TENANT_ID**: Tenant ID of Azure crednetials in the **AZURE_CREDENTIALS** 
+2. [**OPTIONAL**] Within GitHub Public Repositories, ```Environments``` (Settings > Environments > New environment) can be created to place manual approvals for infrastructure changes when the terraform workflow runs. The name of the ```Environment``` should reflect the environment being built. Line #70 - #71 in the ```Infrastructure.yml``` file can be uncommented to reflect the name of the ```Environment``` created. (*NOTE: this step is available for Public repositories by default, but requires a GitHub Enterprise license for Private repositories*
     1. If the ```Environment``` is created, select to add up to 6 resources that will approve infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow.
-3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/dev-env```) file with the required values for deployment
-4. Open ```Infrastructure.yml``` file and adjust the “env” variables to reflect where the tfstate file will be located for the Terraform managed resources:
-    1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General-Prerequisites) step #5
-    2. **storageAccountName**: Name of the ```Storage Account``` created in the [General Prerequisites](#General-Prerequisites) step #5
-    3. **storageContainerName**: Name of the ```Container``` created in the [General Prerequisites](#General-Prerequisites) step #5
+3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/dev-env```) with the required values for deployment
+4. Open the ```Infrastructure.yml``` file and adjust the “env” variables to reflect where the tfstate file will be located for the Terraform managed resources:
+    1. **resourceGroup**: Name of the ```Resource Group``` created in the [Prerequisites](#Prerequisites) step #5
+    2. **storageAccountName**: Name of the ```Storage Account``` created in the [Prerequisites](#Prerequisites) step #5
+    3. **storageContainerName**: Name of the ```Container``` created in the [Prerequisites](#Prerequisites) step #5
     4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
 5. Save/commit all changes and follow the process outlined in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Infrastructure.yml)```Dev-infrastructure (run 2nd)``` to run
 
