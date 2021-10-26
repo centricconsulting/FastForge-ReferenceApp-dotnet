@@ -60,7 +60,7 @@ The last step in the build of FastForge is the deployment of each environment’
 1. Use the ```env``` section within the YAML file (```Deploy-apiWebApp.yml```) to store the following variable:
     1. **apiAppName**: Name of app service created in the [previous section](#github-deployment-step-3-deploy-application-infrastructure) step #3 (defined in the ```terraform.tfvars``` file) 
 2. Save/commit all changes in the YAML file
-3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment)
+3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#github-deployment-step-3-deploy-application-infrastructure)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account
 4. Set the Service Principal created in the [previous section](#github-deployment-step-3-deploy-application-infrastructure) to have the following permissions at the subscription level: 
     1. **Storage Blob Data Contributor**
