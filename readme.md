@@ -6,25 +6,14 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 * **api** - dotnet core API consumed by the webapp
 * **webapp** - React single-page web application
 * **e2e** - contains the  end-to-end functional testing framework and a starter set of tests.
-* **tf-infrastructure** - Terraform scripts to build the various cloud-based development, test, and production environments.
+* **tf-infrastructure** - Terraform scripts to build the various cloud-based environments.
 * **pipelines-azure-devops** - Azure DevOps build-pipeline .yml files
-* **github/workflows** - GitHub Actions workflows for automated deployments
+* **github/workflows** - GitHub Actions workflows .yml files
 
-## General Prerequisites
-1. Create/Re-Use Microsoft Azure Subscription
-    1. The Azure Subscription will host all the required Infrastructure needed for FastForge
-2. Create/Re-Use a repository (Azure DevOps or GitHub)
-    1. The repository will be used as the primary location for the folder and files and the platform chosen will manage the workflow for automation of deployment
-3. Customize the App Dev Process Template for the Organization to be consistent with Centric's Right Site approach
-    1. A key component of Centric's Right Site model is determining appropriate locations for our Client’s project, files and folders that manage the FastForge deployment
-    2. Create an inherited process derived from the existing Agile Template
-    3. Name the process and remember the name to be used later in the process
-4. For GitHub - determine early on whether the FastForge repository will be private or public
-    1. Public repositories provide the option to use “Environments” for free, whereas a Private repository requires GitHub Enterprise
-5. Establish a shared container within the Azure Subscription for the Terraform ```.tfstate``` file by creating the following in Azure: 
-    1. **Resource Group**
-    2. **Storage Account**
-    3. **Container within the Storage Account**
+## Prerequisites
+1. **Complete the FastForge Foundation Steps**
+	> Visit the [Centric Consulting FastForge-Foundation GitHub Repository](https://github.com/centricconsulting/FastForge-Foundation) to complete the appropriate steps. 
+	> *NOTE: The prerequisites and steps outlined in the FastForge Foundation Steps must be completed prior to these deployment steps.*
 
 ## Prerequisite Installations
 * Docker (Desktop)
