@@ -36,7 +36,7 @@ jobs:
       definition: ${{ parameters.buildDefinition }} 
       specificBuildWithTriggering: true
       buildVersionToDownload: 'latestFromBranch'
-      branchName: 'refs/heads/master'
+      branchName: 'refs/heads/main'
       artifactName: 'web-app-drop'
       targetPath: '$(System.DefaultWorkingDirectory)'   
 

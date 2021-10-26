@@ -1,28 +1,33 @@
 name: BuildTestStage-apiWebApp (run 1st)
-on:
-  workflow_dispatch:
+on: #Step 5: Replace lines 2-3. Uncomment lines 4 - 10 
+  workflow_dispatch
+# on:
 #   push:
 #     branches:
 #       - main
+#   pull_request:
+#     branches:
+#       - main
 env:
-  referenceApp: 'referenceApp'
-  apiSolutionRoot: 'api'
-  apiSolution: 'referenceApi.sln'
-  buildConfiguration: 'Release'
-  apiProject: 'api/src/referenceApp.Api/referenceApp.Api.csproj'
-  apiDockerFilePath: 'api/Dockerfile'
-  webAppSolutionRoot: 'webapp'
+  referenceApp:           'referenceApp'
+  apiSolutionRoot:        'api'
+  apiSolution:            'referenceApi.sln'
+  buildConfiguration:     'Release'
+  apiProject:             'api/src/referenceApp.Api/referenceApp.Api.csproj'
+  apiDockerFilePath:      'api/Dockerfile'
+  webAppSolutionRoot:     'webapp'
   webAppBuildDestination: 'webapp/build'
   
    
 jobs:
   BuildTestApi:
-    name: Build and Test API
+    name: "API: Build, Test"
     runs-on: 'ubuntu-latest'
     needs: []
     if: always()
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v2
     - name: Bash Command Lines for GitHub Actions
       run: printenv
  
@@ -30,13 +35,13 @@ jobs:
       run: dotnet tool install --global dotnet-format --version 5.1.225507
       
     - name: Lint dotnet
-      run: dotnet-format --check --verbosity diagnostic "$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/${{ env.apiSolution }}" # Home/api/referenceApi/sln
+      run: dotnet-format --check --verbosity diagnostic "./${{ env.apiSolutionRoot }}/${{ env.apiSolution }}" # Home/api/referenceApi/sln
       
     - name: dotnet restore home/api/referenceApi.sln
-      run: dotnet restore "$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/${{ env.apiSolution }}"
+      run: dotnet restore "./${{ env.apiSolutionRoot }}/${{ env.apiSolution }}"
       
     - name: dotnet build home/api/referenceApi.sln --configuration Release
-      run: dotnet build "$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/${{ env.apiSolution }}" -- configuration "${{ env.buildConfiguration }}"
+      run: dotnet build "./${{ env.apiSolutionRoot }}/${{ env.apiSolution }}" -- configuration "${{ env.buildConfiguration }}"
       
     - name: Run ALL Tests and Collect Code Coverage
       run: find . -name \*.csproj -exec dotnet test --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura {} \;
@@ -45,21 +50,25 @@ jobs:
       run: dotnet tool install --tool-path . dotnet-reportgenerator-globaltool
       
     - name: Create Reports
-      run: './reportgenerator -reports:$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/tests/referenceApp.Lib.Tests/coverage.cobertura.xml -targetdir:$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/CoverageReport -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges" -sourcedir:$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}'
+      run: './reportgenerator -reports:./${{ env.apiSolutionRoot }}/tests/referenceApp.Lib.Tests/coverage.cobertura.xml -targetdir:./${{ env.apiSolutionRoot }}/CoverageReport -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges" -sourcedir:./${{ env.apiSolutionRoot }}'
+      
   StageApi:
-    name: Stage API
+    name: "API: Stage"
     runs-on: 'ubuntu-latest'
     needs: [BuildTestApi] 
     if: (success() && (github.ref == 'refs/heads/main'))
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
     - name: Stage API Build Artifacts
-      run: dotnet publish "$GITHUB_WORKSPACE/${{ env.apiProject }}" --configuration "${{ env.buildConfiguration }}" --output "$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}"
+      run: dotnet publish "./${{ env.apiProject }}" --configuration "${{ env.buildConfiguration }}" --output "./${{ env.apiSolutionRoot }}"
       
     - name: 'Publish API Artifacts: api-drop'
       uses: actions/upload-artifact@v2
       with:
-        path: "$GITHUB_WORKSPACE"
+        name: api-drop
+        path: "./${{ env.apiSolutionRoot }}"
         
     - name: Azure Container Registry Login
       uses: Azure/docker-login@v1
@@ -69,24 +78,27 @@ jobs:
         login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
         
     - name: Build Docker Image 
-      run: docker build -f "$GITHUB_WORKSPACE/${{ env.apiSolutionRoot }}/Dockerfile" -t "${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceapp.api:${{ github.sha }}" .
+      run: docker build -f "./${{ env.apiSolutionRoot }}/Dockerfile" -t "${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceapp.api:${{ github.sha }}" .
       
     - name: Push to Registry 
       run: docker push "${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceapp.api:${{ github.sha }}"
+      
   BuildTestWebApp:
-    name: Build, Test Web App
+    name: "WEBAPP: Build, Test"
     runs-on: 'ubuntu-latest'
     needs: [StageApi] 
     if: always()
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+      
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
 
     - name: Yarn install
-      run: yarn install
+      run: |
       working-directory: "./${{ env.webAppSolutionRoot }}"
       
     - name: Static Code Analysis with ESLINT
@@ -103,15 +115,34 @@ jobs:
     - name: Yarn Test and Code Coverage
       run: yarn test ---coverage --watchAll=false --reporters="jest-trx-results-processor"
       working-directory: "./${{ env.webAppSolutionRoot }}"
-    
-#   StageWebApp: #Uploading/downloading artificat takes too much time. Can we condense the 2 stages?
-#     name: Stage WebApp
-#     runs-on: 'ubuntu-latest'
-#     needs: [BuildTestWebApp]
-#     if: (success() && (github.ref == 'refs/heads/main'))
-#     steps:
-#     - uses: actions/checkout@v2
-    
+   
+    - name: Compress directory
+      run: zip -r directory.zip "./${{ env.webAppSolutionRoot }}/"
+   
+    - uses: actions/upload-artifact@v2
+      with:
+        name: yarn
+        path: directory.zip
+        
+  StageWebApp: 
+    name: Stage WebApp
+    runs-on: 'ubuntu-latest'
+    needs: [BuildTestWebApp]
+    if: (success() && (github.ref == 'refs/heads/main'))
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+      
+    - name: Download yarn Artifact contents
+      uses: actions/download-artifact@v2.0.10
+      id: download-yarn
+      with: 
+        name: yarn
+        path: "./"
+        
+    - name: Unzip previous directory
+      run:  unzip -o directory.zip
+
     - name: Add React Scripts with Yarn
       run: yarn add react-scripts
       working-directory: "./${{ env.webAppSolutionRoot }}"
@@ -138,8 +169,12 @@ jobs:
         
     - name: Stage PRODUCTION Build
       run: cp -avr './${{ env.webAppBuildDestination }}' './production_build'
-      
+
+    - name: Compress directory
+      run: zip -r stagewebapp-directory.zip "./"
+   
     - name: Publish Web App Artifacts - web-app-drop
       uses: actions/upload-artifact@v2
       with:
-        path: $GITHUB_WORKSPACE
+        name: web-app-drop
+        path: stagewebapp-directory.zip

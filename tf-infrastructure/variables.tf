@@ -3,7 +3,7 @@ variable "environment" {
 	description = "Environment variable used to define scope of resource. Examples include, DEV, TEST, QA, PROD, etc."
 }
 variable "application_name" {
-    description = "Name of application."
+    description = "Name of application"
 }
 variable "region" { 
 	description = "Azure region for resource"

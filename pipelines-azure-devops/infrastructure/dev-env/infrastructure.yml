@@ -1,8 +1,16 @@
+# trigger: none 
+
+# resources: #Step 5: Uncomment lines 1-7 and remove lines 9 - 14
+#   pipelines:
+#   - pipeline: InfrastructurePipelne
+#     source: 'BuildTestStage-apiWebApp (run 1st)'
+#     trigger: true
+
 resources:
   repositories:
     - repository: self
       type: git  
-      ref: refs/heads/asebetich-devops-branch
+      ref: refs/heads/main
       trigger: none
 variables:
 - group: 'Infrastructure-Build'
@@ -69,8 +77,8 @@ stages:
   displayName: Terraform Apply
   dependsOn: [Terraform_Plan]
   jobs:
-  - deployment: Apply
-    environment: 'DEV'
+  #- deployment: Apply
+    #environment: 'DEV'
   - job:
     timeoutInMinutes: 0
     continueOnError: false

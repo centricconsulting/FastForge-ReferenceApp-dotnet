@@ -11,12 +11,11 @@ terraform {
 
 provider "azurerm" {
   features {} 
-  # Below 4 values can be removed when using Azure DevOps Pipeline as these values can be directly added to the "Terraform init" task within Azure DevOps.
-  #  GitHub Actions must have these 4 values defined. (Stored as a repository secret) 
-  subscription_id = "!__subscription_id__!"
-  client_id       = "!__client_id__!"
-  client_secret   = "!__client_secret__!"
-  tenant_id       = "!__tenant_id__!"
+#   GitHub Actions must have these 4 values defined. (Stored as a repository secret). Keep them uncommented for Azure DevOps deployments
+#   subscription_id = "!__subscription_id__!"
+#   client_id       = "!__client_id__!"
+#   client_secret   = "!__client_secret__!"
+#   tenant_id       = "!__tenant_id__!"
 }
   
 #######################
@@ -40,13 +39,6 @@ resource "random_string" "random" {
     override_special = "/@£$"
 }
 
-resource "random_pet" "server" {
-    separator = ""
-    keepers = { # Generate a new pet name each time we switch to a new AMI id
-        environment = var.environment
-    }
-}
-
 ###########################################################################
 # Module examples ~ Templates used to create all the modules listed below #
 ###########################################################################
@@ -54,7 +46,7 @@ resource "random_pet" "server" {
 # ~RESOURCE GROUP EXAMPLE~ #
 module "resource_group" {
   source   = "./_Modules/ResourceGroup"
-  rg_name  = "${var.application_name}_${var.environment}"
+  rg_name  = "${var.application_name}-${var.environment}-RG"
   region   = var.region #In every other module, you can specify this region variable or utilize the output variable produced from the Resource Group Module
 }
 
@@ -62,7 +54,7 @@ module "resource_group" {
 module "asp" {
   source   = "./_Modules/AppServicePlans" 
   resource_group_name   = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  app_service_plan_name = "${var.application_name}-apisp-${var.environment}"
+  app_service_plan_name = "${var.application_name}-${var.environment}-apisp"
   api_tier              = var.api_tier 
   api_size              = var.api_size
 
@@ -73,7 +65,7 @@ module "asp" {
 module "appInsights" {
   source   = "./_Modules/AppInsights" 
   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  app_insights_name   = "${random_pet.server.id}-appinsights-${var.environment}"
+  app_insights_name   = "${var.application_name}-${var.environment}-appinsights"
 
   depends_on  = [module.resource_group] 
 }
@@ -82,7 +74,7 @@ module "appInsights" {
 module "keyVault" {
   source   = "./_Modules/KeyVault" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  key_vault_name             = "aksdjflakj31kv-name"
+  key_vault_name             = "${var.application_name}-${var.environment}-kv01" #Must be within 3-24 lower case characters with dashes and numbers allowed. No Spaces 
   environment                = var.environment
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   object_id                  = data.azurerm_client_config.current.object_id
@@ -96,7 +88,7 @@ module "keyVault" {
 module "db" {
   source   = "./_Modules/Database" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-  sql_server_name            = "${var.application_name}-dbserver-${var.environment}"
+  sql_server_name            = "${var.application_name}-${var.environment}-dbserver"
   sql_firewall_name          = "FirewallRule-${var.environment}"
   sql_db_name                = "${var.application_name}-db-${var.environment}"
   environment                = var.environment
@@ -112,7 +104,6 @@ module "appservice" {
   resource_group_name                      = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
-  app_service_name                         = "app-service-name"
   application_name                         = var.application_name
   connection_string                        = module.db.connection_string
   performance_alert_id                     = module.appInsights.monitor_action_group_performance_alert_id

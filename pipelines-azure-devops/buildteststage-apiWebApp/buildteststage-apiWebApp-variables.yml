@@ -10,9 +10,9 @@ variables:
   apiSolution: '$(apiSolutionRoot)/referenceApi.sln'
   buildConfiguration: 'Release'
   apiProject: '$(apiSolutionRoot)/src/$(referenceApp).Api/$(referenceApp).Api.csproj'
-  apiDockerFilePath: '$(System.DefaultWorkingDirectory)/api/Dockerfile'
+  apiDockerFilePath: '$(System.DefaultWorkingDirectory)/api/Dockerfile-AzureDevOps'
 
   # ***** WEBAPP Project Build Params *****
   webappBuildVMImage: 'ubuntu-latest'
-  webAppSolutionRoot: '$(System.DefaultWorkingDirectory)/webapp'
-  webAppBuildDestination: '$(System.DefaultWorkingDirectory)/webapp/build'
+  webAppSolutionRoot: 'webapp'
+  webAppBuildDestination: 'webapp/build'

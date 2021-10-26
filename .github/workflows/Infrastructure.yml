@@ -1,21 +1,22 @@
-name: Dev-infrastructure (run 2nd)
-on:
-  workflow_dispatch:
-#   push:
-#     branches: 
-#       - main
+name: Infrastructure (run 2nd)
+on: #Step 5: Replace lines 2-3. Uncomment lines 4 – 7 
+  workflow_dispatch
+# on:
+#   workflow_run:
+#     workflows: ["BuildTestStage-apiWebApp (run 1st)"]
+#     types: [completed]
 env:
-  infraDirectory: 'tf-infrastructure'
-  terraformVersion: '0.14.11'
-  resourceGroup: 'apptfstate' #Update
-  storageAccountName: 'apptfstate31538' #Update
-  storageContainerName: 'asebetich-test-container' #Update
-  storageKey: 'asebetich-github-dev.tfstate' #Update and name the .tfstate file to reflect environment
-  variableFile: '--var-file="dev-env/terraform.tfvars"' #Change the terraform folder location to reflect the environment
-  subscription_id: ${{ secrets.subscription_id }}
-  client_id: ${{ secrets.client_id }}
-  client_secret: ${{ secrets.client_secret }}
-  tenant_id: ${{ secrets.tenant_id }}
+  infraDirectory:       'tf-infrastructure'
+  terraformVersion:     '0.14.11'
+  resourceGroup:        '' #Update
+  storageAccountName:   '' #Update
+  storageContainerName: '' #Update
+  storageKey:           '.tfstate' #Update and name the .tfstate file to reflect environment
+  variableFile:         '--var-file="dev-env/terraform.tfvars"' #Change the terraform folder location to reflect the environment if applicable
+  subscription_id:      ${{ secrets.subscription_id }}
+  client_id:            ${{ secrets.client_id }}
+  client_secret:        ${{ secrets.client_secret }}
+  tenant_id:            ${{ secrets.tenant_id }}
   
 jobs:
   Terraform_Plan:
@@ -50,7 +51,7 @@ jobs:
     - name: terraform version installer
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 0.14.11 #${terraformVersion}
+        terraform_version: 0.14.11 #terraform Version
         
     - name: terraform init
       working-directory: "./${{ env.infraDirectory }}"
@@ -66,8 +67,8 @@ jobs:
   Terraform_Apply:
     runs-on: 'ubuntu-latest'
     needs: [Terraform_Plan]
-    environment:
-      name: DEV
+#     environment: #@Optionally include to mandate manual review. The name is in reference to the created "Environments" within the Settings
+#       name: DEV #Update with appropriate name of created environment
     steps:
     - uses: actions/checkout@v2
     - name: Azure Login
@@ -96,7 +97,7 @@ jobs:
     - name: terraform version installer
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 0.14.11 #${terraformVersion}
+        terraform_version: 0.14.11 #terraform Version
         
     - name: terraform init
       working-directory: "./${{ env.infraDirectory }}"

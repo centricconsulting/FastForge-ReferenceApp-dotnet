@@ -1,0 +1,55 @@
+name: Deploy-apiWebApp (run 3rd)
+on: #Step 5: Replace lines 2-3. Uncomment lines 4 - 7
+  workflow_dispatch
+# on:
+#   workflow_run:
+#     workflows: ["Dev-infrastructure (run 2nd)"]
+#     types: [completed]
+env:
+  apiAppName: '' #place app service name here
+   
+jobs:
+  APIDeploy:
+    name: Deploy API
+    runs-on: 'windows-latest'
+    needs: []
+    if: always()
+    steps:
+    - uses: actions/checkout@v2
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}  
+
+    - name: 'API: Deploy'
+      uses: Azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.apiAppName }}
+        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/referenceApp.api:latest
+        
+    - name: 'Download BuildTestStage-apiWebApp.yml Artifact'
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        workflow: BuildTestStage-apiWebApp.yml 
+        workflow_conclusion: success
+        branch: main
+        name: web-app-drop
+        path: ./
+        
+    - name: Unzip BuildTestStage Artifact 
+      run:  unzip -o ./stagewebapp-directory.zip
+
+    - name: Azure Web Container Blob Upload
+      uses: LanceMcCarthy/Action-AzureBlobUpload@v1.9.0
+      with:
+        connection_string: "${{ secrets.AZURE_STORAGE_ACCOUNT_CS }}"
+        container_name: $web
+        source_folder: "./development_build/"

@@ -2,13 +2,10 @@ resources:
   repositories:
   - repository: self
     type: git
-    name: MyProject/MyGitRepo
-    trigger:
-      branches:
-        include:
-        - refs/heads/*
-    batch: True
-
+    trigger: none #Step 5: Remove the word "none" from line 5 and uncomment line 6
+    # - '*'
+    batch: True 
+    
 variables:
 - template: 'buildteststage-apiWebApp-variables.yml'
 
@@ -16,11 +13,11 @@ stages:
 - stage: BuildTestApi
   condition: always()
   displayName: 'API: Build, Test'
+  dependsOn: []
   
   jobs:
   - job: BuildAndRunAPIUnitTests
     displayName: "Build and Test API"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.apiBuildVmImage }}
@@ -86,13 +83,13 @@ stages:
         reportDirectory: '${{ variables.apiSolutionRoot }}/CoverageReport'
 
 - stage: StageApi 
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   displayName: 'API: Stage'
+  dependsOn: [BuildTestApi]  
   
   jobs:
   - job: StageAPIUnitTests
     displayName: "Stage API"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.apiBuildVmImage }}
@@ -136,11 +133,11 @@ stages:
 - stage: BuildTestWebApp
   condition: always()
   displayName: 'WEBAPP: Build, Test'
-
+  dependsOn: [StageApi]
+  
   jobs:
   - job: BuildWebApp
     displayName: "Build, Test Web App"
-    dependsOn: []
 
     pool:
       vmImage: ${{ variables.webappBuildVMImage }}
@@ -156,58 +153,71 @@ stages:
     - script: |
         yarn install
       displayName: 'Yarn install'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - script: |
-        yarn run eslint --fix-dry-run "${{ variables.webAppSolutionRoot }}/src/**"
+        yarn run eslint --fix-dry-run "$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}/src/**"
       displayName: 'Static Code Analysis with ESLINT'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - script: |
-        yarn build:development
+        yarn run build:development
       displayName: 'DEVELOPMEMNT Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
       env:
         CI: true
         REACT_APP_ENV: development
 
     - script: yarn test ---coverage --watchAll=false --reporters="jest-trx-results-processor"
       displayName: 'Yarn Test and Code Coverage'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}'
 
     - task: PublishTestResults@2
       condition: succeededOrFailed()
       inputs:
         testRunner: VSTest
         testResultsFiles: '**/test-results.trx'
+        
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'yarn'
+        publishLocation: 'pipeline'        
 
 - stage: StageWebApp #Make this conditional to only run on Master/Main Branch changes
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))  
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))  
   displayName: 'Stage WebApp'
+  dependsOn: [BuildTestWebApp]
   
   jobs: 
   - job: StageWebApp 
     displayName: "Stage WebApp"
-    dependsOn: []
 
     pool:
-      vmImage: ${{ variables.apiBuildVmImage }}
+      vmImage: ${{ variables.webappBuildVMImage }}
   
     steps:
-    - checkout: self
-      submodules: true
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'yarn'
+        targetPath: '$(Pipeline.Workspace)'
+    - script: |
+        yarn add react-scripts
+      displayName: 'Add React Scripts with Yarn'
+      workingDirectory: '$(Pipeline.Workspace)/s/${{ variables.webAppSolutionRoot }}'   
   
-    - task: CopyFiles@2 #Make this its own stage as well
+    - task: CopyFiles@2 
       displayName: Stage DEVELOPMENT Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}'
         contents: '**' 
         targetFolder: '$(Build.ArtifactStagingDirectory)/development_build'
 
     - script: |
-        yarn build:test
+        yarn run build:test
       displayName: 'TEST Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/${{ variables.webAppSolutionRoot }}' 
       env:
         CI: true
         REACT_APP_ENV: test
@@ -215,14 +225,14 @@ stages:
     - task: CopyFiles@2
       displayName: Stage TEST Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
         targetFolder: '$(Build.ArtifactStagingDirectory)/test_build'
 
     - script: |
-        yarn build:production
+        yarn run build:production
       displayName: 'PRODUCTION Yarn Build'
-      workingDirectory: ${{ variables.webAppSolutionRoot }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/webapp'
       env:
         CI: true
         REACT_APP_ENV: production
@@ -230,7 +240,7 @@ stages:
     - task: CopyFiles@2
       displayName: Stage PRODUCTION Build
       inputs:
-        sourceFolder: ${{ variables.webAppBuildDestination }} # Optional
+        sourceFolder: '$(System.DefaultWorkingDirectory)/${{ variables.webAppBuildDestination }}' # Optional
         contents: '**' 
         targetFolder: '$(Build.ArtifactStagingDirectory)/production_build'
 
