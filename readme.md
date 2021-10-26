@@ -12,7 +12,7 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 
 ## Prerequisites
 1. **Complete the FastForge Foundation Steps**
-	> Visit the [Centric Consulting FastForge-Foundation GitHub Repository](https://github.com/centricconsulting/FastForge-Foundation) to complete the appropriate steps. 
+	> Visit the [Centric Consulting FastForge-Foundation GitHub Repository](https://github.com/centricconsulting/FastForge-Foundation) to complete the appropriate steps. <
 	> *NOTE: The prerequisites and steps outlined in the FastForge Foundation Steps must be completed prior to these deployment steps.*
 
 ## Prerequisite Installations
