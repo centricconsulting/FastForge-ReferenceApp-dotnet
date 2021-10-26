@@ -51,12 +51,12 @@ After the Public GitHub Repository is created and the workflow associated to the
     2. **storageAccountName**: Name of the ```Storage Account``` created in the [Prerequisites](#Prerequisites) step #5
     3. **storageContainerName**: Name of the ```Container``` created in the [Prerequisites](#Prerequisites) step #5
     4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
-5. Save/commit all changes and follow the process outlined in the [previous section](#GitHub Deployment Step 1: Build, Stage & Test the API/WebApp), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Infrastructure.yml)```Dev-infrastructure (run 2nd)``` to run
+5. Save/commit all changes and follow the process outlined in the [previous section](#Prerequisites), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Infrastructure.yml)```Dev-infrastructure (run 2nd)``` to run
 
 ## GitHub Deployment Step 3: Deploy Environment API/WebApp
 The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
 1. Use the ```env``` section within the .yml file (```Deploy-apiWebApp.yml```) to store the following variable:
-    1. **apiAppName**: Name of app service created in the [previous section](#GitHub Deployment Step 2: Deploy Application Infrastructure) step #3 (defined in the ```terraform.tfvars``` file) 
+    1. **apiAppName**: Name of app service created in the [previous section](#GitHub Deployment Step 1: Build, Stage & Test the API/WebApp) step #3 (defined in the ```terraform.tfvars``` file) 
 2. Save/commit all changes in the .yml file
 3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account that was part of the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) terraform scripts deployment
