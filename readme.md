@@ -25,19 +25,17 @@ If enhanced Azure Infrastructure management is desired:
 * GIT installed
 * Azure PowerShell Modules installed
 
-## How to Get Started with a Public GitHub Repository 
-Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md) have been followed, the following tasks can be performed to deploy FastForge:
-1. Fork [this repository](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet) into your Organization’s GitHub
-2. If not already completed, navigate to the ```Actions``` tab within your Organization’s GitHub main page and enable workflows for your repository
-3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create ```Secrets``` needed in order to connect to the previously provisioned ```Azure Container Registry```. The variable information can be found under the ```Access Keys``` section of the ```Azure Container Registry```
+## GitHub Deployment Step 1: Build, Stage & Test the API/WebApp
+Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation) have been followed, the following tasks can be performed to deploy FastForge:
+1. [This repository](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet) should already be generated within your Organization’s GitHub
+2. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create ```Secrets``` needed in order to connect to the previously provisioned ```Azure Container Registry```. The variable information can be found under the ```Access Keys``` section of the ```Azure Container Registry```
     1. **REGISTRY_LOGIN_SERVER**: Name of Container Registry created in [FastForge Foundation Repository steps](https://github.com/centricconsulting/FastForge-Foundation/blob/main/tf-GitHub/readme.md).azurecr.io. (Example: exampleCR123.azurecr.io)
     2. **REGISTRY_USERNAME**: Chosen Username
     3. **REGISTRY_PASSWORD**: Chosen Password (Be sure to adjust this variable if the password is refreshed on the Container Registry)
-4. Once the above ```Secrets``` values are created, the [first workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/BuildTestStage-apiWebApp.yml) can run:
-    1. Open the ```BuildTestStage-apiWebApp.yml``` file and ensure the ref path within the .yml file is pointing to the “main” branch if applicable
-    2. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```BuildTestStage-apiWebApp (run 1st)``` workflow, and select “Run workflow” on the right-hand side
+3. Once the above ```Secrets``` values are created, the [first workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/BuildTestStage-apiWebApp.yml) can run:
+    1. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```BuildTestStage-apiWebApp (run 1st)``` workflow, and select “Run workflow” on the right-hand side
 
-## Start Building Azure Infrastructure for an Environment 
+## GitHub Deployment Step 2: Deploy Application Infrastructure
 After the Public GitHub Repository is created and the workflow associated to the .yml file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment:
 1. Five additional secrets need to be created:
     1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
@@ -45,9 +43,8 @@ After the Public GitHub Repository is created and the workflow associated to the
     3. **CLIENT_SECRET**: Client Secret of Azure crednetials in the **AZURE_CREDENTIALS** ```Secrets```
     4. **SUBSCRIPTION_ID**: Subscription ID associated to the Azure Subscription
     5. **TENANT_ID**: Tenant ID of Azure crednetials in the **AZURE_CREDENTIALS** ```Secrets```
-2. [**OPTIONAL**] After the above ```Secrets``` are created, navigate to the ```Settings``` tab within your Organization's GitHub main page and select ```Environments```. Within ```Environments```, select the ```New environment``` option and name the environment based on the working environment:
-    1. Add a reviewer for this step and place up to 6 resources that will approve Azure Infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow
-    2. **If this step is performed**, be sure to uncomment and include lines 70-71 in the ```Infrastructure.yml``` file with the appropriate environment name
+2. [**OPTIONAL**] Within GitHub Public Repositories, ```Environments``` (Settings > Environments > New environment) can be created to place manual approvals for infrastructure changes when the terraform workflow runs. The name of the ```Environment``` should reflect the environment being built. Line #70 - #71 in the ```infrastructure.yml``` file can be uncommented to reflect the name of the ```Environment``` created. (*NOTE: this step is available for Public repositories by default, but requires a GitHub Enterprise license for Private repositories*
+    1. If the ```Environment``` is created, select to add up to 6 resources that will approve infrastructure deployments. This step will force manual intervention to occur between the “Terraform Plan” and “Terraform Apply” stages within the workflow.
 3. Update the ```terraform.tfvars``` file for the appropriate environment (```/tf-infrastructure/dev-env```) file with the required values for deployment
 4. Open ```Infrastructure.yml``` file and adjust the “env” variables to reflect where the tfstate file will be located for the Terraform managed resources:
     1. **resourceGroup**: Name of the ```Resource Group``` created in the [General Prerequisites](#General-Prerequisites) step #5
