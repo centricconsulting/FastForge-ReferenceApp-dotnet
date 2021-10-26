@@ -1,7 +1,7 @@
-# Centrc FastForge Reference Application (dotnet/React/SQL)
+# Centrc FastForge Reference Application (dotnet/React/SQL) #
 Centric's FastForge platform is our opionated framework for starting certain classes of cloud-hosted web and mobile applications based on a mainstream framework. The projects in this repository are based on the dotnet framework with a React user interface and Microsoft SQL Server.
 
-## Directory Structure
+## Directory Structure ##
 * **Root** - contains files useable or using data from the varous projects. There are four projects (outlined below) that contain the source for the major components of this software, API, Testing, Infrastructure, and DevOps
 * **api** - dotnet core API consumed by the webapp
 * **webapp** - React single-page web application
@@ -10,12 +10,12 @@ Centric's FastForge platform is our opionated framework for starting certain cla
 * **pipelines-azure-devops** - Azure DevOps build-pipeline .yml files
 * **github/workflows** - GitHub Actions workflows .yml files
 
-## Prerequisites
+## Prerequisites ##
 1. **Complete the FastForge Foundation Steps**
 	> Visit the [Centric Consulting FastForge-Foundation GitHub Repository](https://github.com/centricconsulting/FastForge-Foundation) to complete the appropriate steps. <
 	> *NOTE: The prerequisites and steps outlined in the FastForge Foundation Steps must be completed prior to these deployment steps.*
 
-## Prerequisite Installations
+## Prerequisite Installations ##
 * Docker (Desktop)
 * dotnet core
 
@@ -25,7 +25,7 @@ If enhanced Azure Infrastructure management is desired:
 * GIT installed
 * Azure PowerShell Modules installed
 
-## GitHub Deployment Step 1: Build, Stage & Test the API/WebApp
+## GitHub Deployment Step 1: Build, Stage & Test the API/WebApp ##
 Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation) have been followed, the following tasks can be performed to deploy FastForge:
 1. [This repository](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet) should already be generated within your Organization’s GitHub
 2. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create ```Secrets``` needed in order to connect to the previously provisioned ```Azure Container Registry```. The variable information can be found under the ```Access Keys``` section of the ```Azure Container Registry```
@@ -35,7 +35,7 @@ Once the steps outlined in the [FastForge Foundation Repository](https://github.
 3. Once the above ```Secrets``` values are created, the [first workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/BuildTestStage-apiWebApp.yml) can run:
     1. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```BuildTestStage-apiWebApp (run 1st)``` workflow, and select “Run workflow” on the right-hand side
 
-## GitHub Deployment Step 2: Deploy Application Infrastructure
+## GitHub Deployment Step 2: Deploy Application Infrastructure ##
 After the Public GitHub Repository is created and the workflow associated to the .yml file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment:
 1. Five additional secrets need to be created:
     1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
@@ -58,7 +58,7 @@ After the Public GitHub Repository is created and the workflow associated to the
 ## GitHub Deployment Step 3: Deploy Environment API/WebApp
 The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
 1. Use the ```env``` section within the .yml file (```Deploy-apiWebApp.yml```) to store the following variable:
-    1. **apiAppName**: Name of app service created in the [previous section](#GitHub Deployment Step 1: Build, Stage & Test the API/WebApp) step #3 (defined in the ```terraform.tfvars``` file) 
+    1. **apiAppName**: Name of app service created in the [previous section](#GitHub-Deployment-Step-1:-Build,-Stage-&-Test-the-API/WebApp) step #3 (defined in the ```terraform.tfvars``` file) 
 2. Save/commit all changes in the .yml file
 3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account that was part of the [previous section](#Start-Building-Azure-Infrastructure-for-an-Environment) terraform scripts deployment
