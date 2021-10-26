@@ -25,9 +25,7 @@ If enhanced Azure Infrastructure management is desired:
 * GIT installed
 * Azure PowerShell Modules installed
 
-## GitHub Deployment Step 1: Deploy Project & Shared Container ##
-
-## GitHub Deployment Step 2: Build, Stage & Test the API/WebApp ##
+## GitHub Deployment Step 1: Build, Stage & Test the API/WebApp ##
 Once the steps outlined in the [FastForge Foundation Repository](https://github.com/centricconsulting/FastForge-Foundation) have been followed, the following tasks can be performed to deploy FastForge:
 1. [This repository](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet) should already be generated within your Organization’s GitHub
 2. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create ```Secrets``` needed in order to connect to the previously provisioned ```Azure Container Registry```. The variable information can be found under the ```Access Keys``` section of the ```Azure Container Registry```
@@ -37,7 +35,7 @@ Once the steps outlined in the [FastForge Foundation Repository](https://github.
 3. Once the above ```Secrets``` values are created, the [first workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/BuildTestStage-apiWebApp.yml) can run:
     1. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the ```BuildTestStage-apiWebApp (run 1st)``` workflow, and select “Run workflow” on the right-hand side
 
-## GitHub Deployment Step 3: Deploy Application Infrastructure ##
+## GitHub Deployment Step 2: Deploy Application Infrastructure ##
 After the Public GitHub Repository is created and the workflow associated to the YAML file (```BuildTestStage-apiWebApp.yml```) successfully runs, the following steps can occur to deploy the needed Azure Infrastructure for a specified cloud environment:
 1. Five additional secrets need to be created:
     1. **AZURE_CREDENTIALS**: [Process of creation](https://github.com/Azure/login#configure-deployment-credentials)
@@ -53,21 +51,21 @@ After the Public GitHub Repository is created and the workflow associated to the
     2. **storageAccountName**: Name of the ```Storage Account``` created in the [Prerequisites](#Prerequisites) step #5
     3. **storageContainerName**: Name of the ```Container``` created in the [Prerequisites](#Prerequisites) step #5
     4. **storageKey**: Name of the ```.tfstate``` file. Must be in ```<name>.tfstate``` format. It is best practice to have the name reflect the environment
-5. Save/commit all changes and follow the process outlined in the [previous section](#github-deployment-step-2-build-stage--test-the-apiwebapp), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Infrastructure.yml) ```Infrastructure (run 2nd)``` to run
+5. Save/commit all changes and follow the process outlined in the [previous section](#github-deployment-step-1-build-stage--test-the-apiwebapp), but select the [second workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Infrastructure.yml) ```Infrastructure (run 2nd)``` to run
 
-## GitHub Deployment Step 4: Deploy Environment API/WebApp
+## GitHub Deployment Step 3: Deploy Environment API/WebApp
 The last step in the build of FastForge is the deployment of each environment’s API and WebApp. The following steps are required to complete the deployment:
 1. Use the ```env``` section within the YAML file (```Deploy-apiWebApp.yml```) to store the following variable:
-    1. **apiAppName**: Name of app service created in the [previous section](#github-deployment-step-3-deploy-application-infrastructure) step #3 (defined in the ```terraform.tfvars``` file) 
+    1. **apiAppName**: Name of app service created in the [previous section](#github-deployment-step-2-deploy-application-infrastructure) step #3 (defined in the ```terraform.tfvars``` file) 
 2. Save/commit all changes in the YAML file
-3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#github-deployment-step-3-deploy-application-infrastructure)
+3. Navigate to the ```Settings``` tab within your Organization’s GitHub main page and create the last ```secret``` needed in order to connect to the storage account that was provisioned in the [previous section](#github-deployment-step-2-deploy-application-infrastructure)
     1. **AZURE_STORAGE_ACCOUNT_CS**: Connection String for the created Storage Account
-4. Set the Service Principal created in the [previous section](#github-deployment-step-3-deploy-application-infrastructure) to have the following permissions at the subscription level: 
+4. Set the Service Principal created in the [previous section](#github-deployment-step-2-deploy-application-infrastructure) to have the following permissions at the subscription level: 
     1. **Storage Blob Data Contributor**
     2. **Storage Blob Data Owner**
 6. Navigate to the ```Actions``` tab within your Organization’s GitHub main page and select the [third workflow](https://github.com/centricconsulting/FastForge-ReferenceApp-dotnet/blob/main/.github/workflows/Deploy-apiWebApp.yml) ```Deploy-apiWebApp.yml``` to run
     1. After running the workflow, the API/WebApp will be built for the designated environment
-7. When needed, repeat the above steps to deploy the API/WebApp for each subsequent environment. The [previous section](#github-deployment-step-3-deploy-application-infrastructure) must occur first for each environment in order to have the resources required to deploy the API/WebApp associated with this section
+7. When needed, repeat the above steps to deploy the API/WebApp for each subsequent environment. The [previous section](#github-deployment-step-2-deploy-application-infrastructure) must occur first for each environment in order to have the resources required to deploy the API/WebApp associated with this section
 
 ## GitHub Deployment Step 5: Trigger Configurations for Automation ##
 The last step in the build of FastForge is the changing of triggers within the 3 YAML files. Editing the YAML files to implement triggers creates a different workflow when code changes are pushed to the repository. The Workflows will now automatically trigger upon code changes to the repo and will follow the order in which they were initially deployed. 
