@@ -40,6 +40,9 @@ resource "azurerm_app_service" "api" {
 	identity {
 		type="SystemAssigned"
 	}
+  tags = {
+    environment = var.environment
+  }  
   depends_on = [data.azurerm_resource_group.app]
 }
 

@@ -4,6 +4,12 @@ variable "rg_name" {
   default     = "rg-temp"
 }
 
+variable "environment" {
+  description = "Environment variable used by Terraform resources"
+  type        = string
+  default     = "dev"
+}
+
 variable "region" {
   description = "Region variable used by Terraform resources"
   type        = string

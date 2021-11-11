@@ -6,7 +6,7 @@ data "azurerm_resource_group" "app" { #Insinuating that this already exists or i
 }
 
 resource "azurerm_storage_account" "web" {
-  name                     = var.web_storage_account_name #"${random_pet.server.id}web${var.environment}"
+  name                     = var.web_storage_account_name 
   resource_group_name      = data.azurerm_resource_group.app.name
   location                 = data.azurerm_resource_group.app.location
   account_tier             = "Standard"
@@ -17,6 +17,9 @@ resource "azurerm_storage_account" "web" {
 	static_website {
 		index_document = "index.html"
 	}	
+  tags = {
+    environment = var.environment
+  }  
 }
 
 output "web_app_url" {

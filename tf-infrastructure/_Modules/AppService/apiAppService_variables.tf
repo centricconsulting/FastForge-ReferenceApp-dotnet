@@ -48,3 +48,9 @@ variable "performance_alert_id" {
   description = "Performance Alert ID from the Monitor Action Group"
   type        = string
 }
+
+variable "environment" {
+  description = "Environment variable used by Terraform resources"
+  type        = string
+  default     = "dev"
+}

@@ -9,3 +9,9 @@ variable "web_storage_account_name" {
   type        = string
   default     = "temp-sa-name"
 }
+
+variable "environment" {
+  description = "Environment variable used by Terraform resources"
+  type        = string
+  default     = "dev"
+}

@@ -21,3 +21,9 @@ variable "api_size" {
   type        = string
   default     = "S1"
 }
+
+variable "environment" {
+  description = "Environment variable used by Terraform resources"
+  type        = string
+  default     = "dev"
+}

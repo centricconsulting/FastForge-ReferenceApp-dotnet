@@ -20,6 +20,9 @@ resource "azurerm_app_service_plan" "api" {
     tier = var.api_tier
     size = var.api_size
   }
+  tags = {
+    environment = var.environment
+  }  
   depends_on = [data.azurerm_resource_group.app]
 }
 

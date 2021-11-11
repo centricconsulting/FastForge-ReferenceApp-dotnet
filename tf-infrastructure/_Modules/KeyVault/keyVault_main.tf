@@ -50,6 +50,7 @@ resource "azurerm_key_vault_secret" "DbLogin" {
 
 output "key_vault_login_value" {
   value = azurerm_key_vault_secret.DbLogin.value
+  sensitive   = true
 }
 
 resource "azurerm_key_vault_secret" "DbPassword" {
@@ -65,4 +66,5 @@ resource "azurerm_key_vault_secret" "DbPassword" {
 
 output "key_vault_login_password_value" {
   value = azurerm_key_vault_secret.DbPassword.value
+  sensitive   = true
 }

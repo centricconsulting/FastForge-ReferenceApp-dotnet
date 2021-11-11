@@ -9,3 +9,9 @@ variable "app_insights_name" {
   type        = string
   default     = "temp-app-insights-name"
 }
+
+variable "environment" {
+  description = "Environment variable used by Terraform resources"
+  type        = string
+  default     = "dev"
+}

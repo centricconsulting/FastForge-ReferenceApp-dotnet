@@ -10,7 +10,9 @@ resource "azurerm_application_insights" "insights" {
   location            = data.azurerm_resource_group.app.location
   resource_group_name = data.azurerm_resource_group.app.name
   application_type    = "web"
-
+  tags = {
+    environment = var.environment
+  }
   depends_on = [data.azurerm_resource_group.app]
 }
 
@@ -19,6 +21,7 @@ output "app_insights_name" {
 }
 output "instrumentation_key" {
   value = azurerm_application_insights.insights.instrumentation_key
+  sensitive   = true
 }
 output "app_id" {
   value = azurerm_application_insights.insights.app_id

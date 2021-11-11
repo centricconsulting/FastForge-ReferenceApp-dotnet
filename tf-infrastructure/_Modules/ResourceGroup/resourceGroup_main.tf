@@ -1,6 +1,9 @@
 resource "azurerm_resource_group" "app" {
   name     = var.rg_name #"${var.application_name}_${var.environment}"
   location = var.region
+  tags = {
+    environment = var.environment
+  }
 }
 output "rg_name" {
   value    = azurerm_resource_group.app.name

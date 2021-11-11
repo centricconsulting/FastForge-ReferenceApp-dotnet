@@ -25,3 +25,20 @@ variable "shared_container_registry_admin_username" {
 variable "shared_container_registry_admin_password" {
 	description = "Admin Password for the Shared Container Server"
 }
+
+#####################
+# Optional Resource #
+##################### # Uncomment any of the below as it pertains to your resource needs
+# Cosmos DB Variables #
+# variable "cosmosdb_account_kind" {
+# 	description = "The Kind of CosmosDB to create"
+# }
+# variable "cosmosdb_account_failover_location" {
+# 	description = "Failover location required for CosmosDB Accounts"
+# }
+# variable "cosmosdb_account_consistency_level" {
+# 	description = "The Kind of CosmosDB to create"
+# }
+# variable "cosmosdb_account_backup_type" {
+# 	description = "The backup type of the CosmosDB account"
+# }
