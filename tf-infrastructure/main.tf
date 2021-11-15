@@ -107,14 +107,14 @@ module "appservice" {
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
   application_name                         = var.application_name
-  connection_string                        = module.db.connection_string
+  connection_string                        = module.sqldb.connection_string
   performance_alert_id                     = module.appInsights.monitor_action_group_performance_alert_id
   shared_container_registry_login_server   = var.shared_container_registry_login_server 
   shared_container_registry_admin_username = var.shared_container_registry_admin_username
   shared_container_registry_admin_password = var.shared_container_registry_admin_password
   environment                              = var.environment
 
-  depends_on  = [module.resource_group, module.db, module.asp, module.appInsights] #This module requires information from other Modules to properly run. Force organized deployments with Depends_on function
+  depends_on  = [module.resource_group, module.sqldb, module.asp, module.appInsights] #This module requires information from other Modules to properly run. Force organized deployments with Depends_on function
 }
 
 # ~WEB STORAGE ACCOUNT EXAMPLE~ #
