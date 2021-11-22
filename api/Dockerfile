@@ -1,20 +1,31 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
-COPY . ./
+#COPY *.sln ./
+COPY src/referenceApp.Api/*.csproj src/referenceApp.Api/
+COPY src/referenceApp.Lib/*.csproj src/referenceApp.Lib/
+COPY src/referenceApp.Persistence/*.csproj src/referenceApp.Persistence/
+#COPY tests/referenceApp.Lib.Tests/*.csproj ./tests/referenceApp.Lib.Tests/
 
-RUN dotnet restore
+RUN dotnet restore src/referenceApp.Api/referenceApp.Api.csproj
+
+COPY src/referenceApp.Api/ src/referenceApp.Api/
+COPY src/referenceApp.Lib/ src/referenceApp.Lib/
+COPY src/referenceApp.Persistence/ src/referenceApp.Persistence/
 
 WORKDIR /app/src/referenceApp.Api
+RUN dotnet build -c release --no-restore
 
-RUN dotnet publish "./referenceApp.Api.csproj" -c Release -o "./out/"
+FROM build as publish
+RUN dotnet publish "./referenceApp.Api.csproj" -c Release -o "./out/" --no-restore
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
 RUN useradd -M -s /bin/true -u 1000 dotnet
 
 WORKDIR /app
-COPY --from=build /app/src/referenceApp.Api/out ./
+
+COPY --from=publish /app/src/referenceApp.Api/out ./
 
 # Make the filesystem read-only to the application.
 # Directories that the app needs read-write rights should be added explicitly
