@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
-using System.Threading.Tasks;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
@@ -10,8 +10,7 @@ using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,15 +38,15 @@ namespace referenceApp.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public virtual void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddCors(options =>
             {
-                options.AddPolicy("development", builder =>
+                options.AddDefaultPolicy(builder =>
                 {
                     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
+
+            services.AddControllers();
 
             // Add MediatR and load handlers from Lib project
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
@@ -64,12 +63,25 @@ namespace referenceApp.Api
 
             services.AddFeatureManagement();
 
-            // FOR DEMONSTRATION PURPOSES
-            services.AddDbContext<ReferenceDbContext>(
-                options => options.UseSqlServer(
-                    Configuration.GetConnectionString("ReferenceAppConnectionString"),
-                    optionsBiuilder => optionsBiuilder.MigrationsAssembly("referenceApp.Api"))
-            );
+            var connectionString = Configuration.GetConnectionString("ReferenceAppConnectionString");
+            if (!string.IsNullOrEmpty(connectionString))
+                // FOR DEMONSTRATION PURPOSES
+                services.AddDbContext<ReferenceDbContext>(
+                    options => options.UseSqlServer(
+                        connectionString,
+                        optionsBiuilder => optionsBiuilder.MigrationsAssembly("referenceApp.Api"))
+                );
+
+            var endpoint = Configuration["Cosmos:Endpoint"];
+            if (!string.IsNullOrEmpty(endpoint))
+                // FOR DEMONSTRATION PURPOSES
+                services.AddDbContext<ReferenceDbContext>(
+                    options => options.UseCosmos(
+                        Configuration["Cosmos:Endpoint"],
+                        Configuration["Cosmos:AccountKey"],
+                        Configuration["Cosmos:DatabaseName"]
+                    )
+                );
 
             services.AddSingleton<ITelemetryInitializer>(new ApplicationNameTelemetryInitializer("referenceApp.Api"));
             services.Configure<ApplicationInsightsServiceOptions>(Configuration.GetSection("ApplicationInsights"));
@@ -90,7 +102,7 @@ namespace referenceApp.Api
 
             app.UseRouting();
 
-            app.UseCors("developement");
+            app.UseCors();
 
             app.UseAuthorization();
 

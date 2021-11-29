@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  api:
+    build: "api"
+    depends_on:
+      - "cosmosdb"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      # ConnectionStrings:ReferenceAppConnectionString: "Data Source=sqlserver;Initial Catalog=reference_app_dev;User Id=sa;Password=yourStrong(!)Password"
+      Cosmos__Endpoint: "https://host.docker.internal:8081"
+      Cosmos__AccountKey: "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+      Cosmos__DatabaseName: "ReferenceAppDev"
+    ports:
+      - "5000:5000"
+  cosmosdb:
+    container_name: cosmosdb
+    # for windows change image to mcr.microsoft.com/cosmosdb/windows/azure-cosmos-emulator
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    tty: true
+    restart: always
+    mem_limit: 2G
+    cpu_count: 2
+    environment:
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+      - AZURE_COSMOS_EMULATOR_ARGS='/AllowNetworkAccess'
+    ports:
+        - "8081:8081"
+        - "8900:8900"
+        - "8901:8901"
+        - "8979:8979"
+        - "10250:10250"
+        - "10251:10251"
+        - "10252:10252"
+        - "10253:10253"
+        - "10254:10254"
+        - "10255:10255"
+        - "10256:10256"
+        - "10350:10350"
+    volumes:
+        -  vol_cosmos:/data/db
+        # for windows change vol_cosmos: to C:\CosmosDB.Emulator\bind-mount
+  testsuite:
+    build: "e2e"
+    depends_on:
+      - "api"
+      - "cosmosdb"
+volumes:
+  vol_cosmos:

@@ -12,7 +12,7 @@ namespace referenceApp.Lib.Tests
     [Collection("QueryCollection")]
     public class GetTodosListQueryHandlerTests
     {
-        private ReferenceDbContext _context;
+        private readonly ReferenceDbContext _context;
 
         public GetTodosListQueryHandlerTests(QueryTestFixture fixture)
         {

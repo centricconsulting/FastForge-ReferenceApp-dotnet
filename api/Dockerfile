@@ -3,9 +3,9 @@ WORKDIR /app
 
 COPY . ./
 
-RUN dotnet restore "./api/" 
+RUN dotnet restore
 
-WORKDIR /app/api/src/referenceApp.Api
+WORKDIR /app/src/referenceApp.Api
 
 RUN dotnet publish "./referenceApp.Api.csproj" -c Release -o "./out/"
 
@@ -14,7 +14,7 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 RUN useradd -M -s /bin/true -u 1000 dotnet
 
 WORKDIR /app
-COPY --from=build /app/api/src/referenceApp.Api/out ./
+COPY --from=build /app/src/referenceApp.Api/out ./
 
 # Make the filesystem read-only to the application.
 # Directories that the app needs read-write rights should be added explicitly
