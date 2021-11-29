@@ -108,6 +108,7 @@ module "appservice" {
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
   application_name                         = var.application_name
+  sqldb                                    = true #Remove/Comment out lines 111-112 (sqldb & connection_string) if CosmosDB is used instead of SQLDB
   connection_string                        = module.sqldb.connection_string
   performance_alert_id                     = module.appInsights.monitor_action_group_performance_alert_id
   shared_container_registry_login_server   = var.shared_container_registry_login_server 
@@ -115,7 +116,7 @@ module "appservice" {
   shared_container_registry_admin_password = var.shared_container_registry_admin_password
   environment                              = var.environment
 
-  depends_on  = [module.resource_group, module.sqldb, module.asp, module.appInsights] #This module requires information from other Modules to properly run. Force organized deployments with Depends_on function
+  depends_on  = [module.resource_group, module.!__dbtype__!, module.asp, module.appInsights] #This module requires information from other Modules to properly run. Force organized deployments with Depends_on function
 }
 
 # ~WEB STORAGE ACCOUNT EXAMPLE~ #
@@ -135,7 +136,7 @@ module "web_storage_account" {
 # module "cosmosdb" {
 #   source   = "./_Modules/CosmosDB" 
 #   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
-#   cosmosdb_account_name       = "${var.application_name}-${var.environment}-cosmosdbacct"
+#   cosmosdb_account_name       = "${var.application_name}-${var.environment}-cosmosdb"
 #   cosmosdb_account_kind       = var.cosmosdb_account_kind
 #   #cosmosdb_account_free_tier  = true #This value can only be set to true once per subscription. Setting this to true essentially provides cost savings for the first CosmosDB Account
 #   failover_location           = var.cosmosdb_account_failover_location
