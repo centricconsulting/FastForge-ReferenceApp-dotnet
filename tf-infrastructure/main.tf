@@ -3,10 +3,10 @@ terraform {
         azurerm = {
             source  = "hashicorp/azurerm"
             version = "=2.59.0" #Required for CosmosDB use. Newer versions are continuously created. Use the best version for your organization
+        }
     }
     backend "azurerm" {
     }  
-    }
 }
 
 provider "azurerm" {
