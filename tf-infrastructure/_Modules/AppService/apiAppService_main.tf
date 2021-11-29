@@ -8,8 +8,9 @@ data "azurerm_resource_group" "app" { #Insinuating that this already exists or i
 ################
 # Module Start #
 ################
-# App Service Creation #
-resource "azurerm_app_service" "api" {
+# App Service Creation with SQLDB used #
+resource "azurerm_app_service" "api1" {
+  count               = var.sqldb ? 1 : 0
   resource_group_name = data.azurerm_resource_group.app.name
   location            = data.azurerm_resource_group.app.location
   name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
@@ -46,10 +47,37 @@ resource "azurerm_app_service" "api" {
   depends_on = [data.azurerm_resource_group.app]
 }
 
-# Output value for app service #
-output "api_url" {
-  description = "API URL"
-  value       = azurerm_app_service.api.default_site_hostname
+# App Service Creation with COSMOSDB used #
+resource "azurerm_app_service" "api2" {
+  count               = var.sqldb ? 0 : 1 
+  resource_group_name = data.azurerm_resource_group.app.name
+  location            = data.azurerm_resource_group.app.location
+  name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
+  app_service_plan_id = var.app_service_plan_id #data.azurerm_app_service_plan.api.id
+
+  site_config {
+		always_on        = false
+		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/${var.application_name}.api:latest"
+	}
+	
+	app_settings = {
+    "MSDEPLOY_RENAME_LOCKED_FILES"            = "1"
+		"WEBSITES_ENABLE_APP_SERVICE_STORAGE"     = "false"
+		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
+    "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
+    "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
+		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
+  }
+
+	identity {
+		type="SystemAssigned"
+	}
+  tags = {
+    environment = var.environment
+  }  
+  depends_on = [data.azurerm_resource_group.app]
 }
 
 # Monitor Metric Alert #
@@ -57,7 +85,7 @@ resource "azurerm_monitor_metric_alert" "api_failed_requests" {
   name                = "apiFailedRequests"
   resource_group_name = data.azurerm_resource_group.app.name
 
-  scopes      = [azurerm_app_service.api.id]
+  scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when failed requests rise above background noise"
 
   criteria {
@@ -78,7 +106,7 @@ resource "azurerm_monitor_metric_alert" "api_response_time" {
   name                = "apiResponseTime"
   resource_group_name = data.azurerm_resource_group.app.name
 
-  scopes      = [azurerm_app_service.api.id]
+  scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when response time rises above SLA"
 
   criteria {
@@ -99,7 +127,7 @@ resource "azurerm_monitor_metric_alert" "api_pending_requests" {
   name = "apiPendingRequests"
   resource_group_name = data.azurerm_resource_group.app.name
 
-  scopes = [azurerm_app_service.api.id]
+  scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when pending request count rises above SLA"
 
   criteria {
