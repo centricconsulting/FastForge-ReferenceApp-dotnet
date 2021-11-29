@@ -16,7 +16,7 @@ namespace referenceApp.Persistence
         {
             context.Database.EnsureCreated();
 
-            if (context.Todos.Any())
+            if (context.Todos.Count() > 0)
             {
                 return;
             }

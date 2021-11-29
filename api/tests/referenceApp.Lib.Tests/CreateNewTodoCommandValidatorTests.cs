@@ -6,7 +6,7 @@ namespace referenceApp.Lib.Tests
 {
     public class CreateNewTodoCommandValidatorTests
     {
-        private CreateNewTodoCommandValidator _validator;
+        private readonly CreateNewTodoCommandValidator _validator;
 
         public CreateNewTodoCommandValidatorTests()
         {

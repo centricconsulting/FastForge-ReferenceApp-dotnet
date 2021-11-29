@@ -13,9 +13,9 @@ namespace referenceApp.Lib.Tests
 {
     public class CreateNewTodoCommandHandlerTests : DbTestBase
     {
-        private ReferenceDbContext _context;
-        private CreateNewTodoCommandHandler _commandHandler;
-        private CreateNewTodoCommand _command;
+        private readonly ReferenceDbContext _context;
+        private readonly CreateNewTodoCommandHandler _commandHandler;
+        private readonly CreateNewTodoCommand _command;
 
         public CreateNewTodoCommandHandlerTests()
         {

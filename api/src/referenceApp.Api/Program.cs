@@ -21,7 +21,10 @@ namespace referenceApp.Api
                 try
                 {
                     var context = scope.ServiceProvider.GetService<ReferenceDbContext>();
-                    context.Database.Migrate();
+                    // Execute migrations for relational providers only
+                    var isRelational = !context.Database.ProviderName.EndsWith("Cosmos");
+                    if (isRelational)
+                        context.Database.Migrate();
 
                     ReferenceDbInitializer.Initialize(context);
                 }
