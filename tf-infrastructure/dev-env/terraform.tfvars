@@ -17,5 +17,5 @@ shared_container_registry_admin_password = "!__REGISTRY_PASSWORD__!"
 # ~COSMOS DATABASE EXAMPLE~ #
 # cosmosdb_account_kind              = "GlobalDocumentDB" #Update and choose GlobalDocumentDB or MongoDB
 # cosmosdb_account_consistency_level = "Strong"
-# cosmostdb_account_backup_type      = "Periodic"
+# cosmosdb_account_backup_type       = "Periodic"
 # cosmosdb_account_failover_location = "eastus2"
