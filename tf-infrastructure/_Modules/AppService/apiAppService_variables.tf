@@ -48,6 +48,7 @@ variable "app_insights_key" {
 variable "connection_string" {
   description = "Connection String for App Service"
   type        = string
+  default     = "value"
 }
 
 variable "performance_alert_id" { 
