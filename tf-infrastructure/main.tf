@@ -133,7 +133,7 @@ module "web_storage_account" {
 ###################### # Uncomment any of the below as it pertains to your resource needs
 # ~COSMOS DATABASE EXAMPLE~ #
 # module "cosmosdb" {
-#   source   = "../_Modules/CosmosDB" 
+#   source   = "./_Modules/CosmosDB" 
 #   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
 #   cosmosdb_account_name       = "${var.application_name}-${var.environment}-cosmosdbacct"
 #   cosmosdb_account_kind       = var.cosmosdb_account_kind
