@@ -21,6 +21,12 @@ variable "application_name" {
   default     = "temp-app-name"
 }
 
+variable "sqldb" { 
+  description = "True or False boolean on if the app service is using a sqldb"
+  type        = string
+  default     = "false"
+}
+
 variable "shared_container_registry_admin_username" {
   description = "Shared Container registry admin username"
   type        = string
