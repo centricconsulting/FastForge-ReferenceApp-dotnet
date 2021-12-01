@@ -11,7 +11,7 @@ terraform {
 
 provider "azurerm" {
   features {} 
-#   GitHub Actions must have these 4 values defined. (Stored as a repository secret). Keep them uncommented for Azure DevOps deployments
+#   GitHub Actions must have these 4 values defined. (Stored as a repository secret). Remove/comment them out for Azure DevOps deployments
 #   subscription_id = "!__subscription_id__!"
 #   client_id       = "!__client_id__!"
 #   client_secret   = "!__client_secret__!"
