@@ -46,6 +46,10 @@ resource "azurerm_cosmosdb_account" "account" {
   depends_on = [data.azurerm_resource_group.app]
 }
 
+output "cosmosdb_account_key" {
+    value = azurerm_cosmosdb_account.account.primary_key
+}
+
 resource "azurerm_cosmosdb_sql_database" "db" {
   name                = var.cosmosdb_name
   resource_group_name = data.azurerm_resource_group.app.name
