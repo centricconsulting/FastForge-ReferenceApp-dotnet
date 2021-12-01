@@ -7,6 +7,7 @@ variable "resource_group_name" {
 variable "app_service_plan_id" {
   description = "ID of the app service plan to be imported."
   type        = string
+  default     = "temp-id"
 }
 
 variable "shared_container_registry_login_server" {
@@ -19,6 +20,18 @@ variable "application_name" {
   description = "Application Name"
   type        = string
   default     = "temp-app-name"
+}
+
+variable "cosmosdb_name" { 
+  description = "Optional CosmosDB Name"
+  type        = string
+  default     = "temp-cosmosdb-name"
+}
+
+variable "cosmosdb_account_key" { 
+  description = "Optional CosmosDB primary account key"
+  type        = string
+  default     = "tempkey"
 }
 
 variable "sqldb" { 
@@ -54,6 +67,7 @@ variable "connection_string" {
 variable "performance_alert_id" { 
   description = "Performance Alert ID from the Monitor Action Group"
   type        = string
+  default     = "temp-value"
 }
 
 variable "environment" {
