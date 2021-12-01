@@ -27,7 +27,7 @@ resource "azurerm_app_service" "api1" {
 		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
-		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceapp.api:latest"
 		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
 		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
   }
@@ -66,9 +66,12 @@ resource "azurerm_app_service" "api2" {
 		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
-		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceapp.api:latest"
 		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
 		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
+		"Cosmos__Endpoint"                        = "https://${var.cosmosdb_name}.documents.azure.com:443/"
+		"Cosmos__AccountKey"                      = var.cosmosdb_account_key
+		"Cosmos__DatabaseName"                    = var.cosmosdb_name
   }
 
 	identity {
