@@ -108,7 +108,9 @@ module "appservice" {
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
   application_name                         = var.application_name
-  sqldb                                    = true #Remove/Comment out lines 111-112 (sqldb & connection_string) if CosmosDB is used instead of SQLDB
+  #cosmosdb_name                            = "${var.application_name}-${var.environment}-cosmosdb" #Include line 111-112 if CosmosDB is used instead of SQLDB
+  #cosmosdb_account_key                     = module.cosmosdb.cosmosdb_account_key
+  sqldb                                    = true #Remove/Comment out lines 113-114 if CosmosDB is used instead of SQLDB
   connection_string                        = module.sqldb.connection_string
   performance_alert_id                     = module.appInsights.monitor_action_group_performance_alert_id
   shared_container_registry_login_server   = var.shared_container_registry_login_server 
