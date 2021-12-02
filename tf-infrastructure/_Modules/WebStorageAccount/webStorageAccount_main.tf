@@ -12,11 +12,13 @@ resource "azurerm_storage_account" "web" {
   account_tier             = "Standard"
   account_kind             = "StorageV2"
   account_replication_type = "LRS"
-	allow_blob_public_access = true
-
-	static_website {
-		index_document = "index.html"
-	}	
+  allow_blob_public_access = true
+  blob_properties {
+    versioning_enabled = true	  
+  }
+  static_website {
+    index_document = "index.html"
+  }	
   tags = {
     environment = var.environment
   }  
