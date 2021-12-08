@@ -52,7 +52,7 @@ namespace referenceApp.Api
 
                 if (env.IsDevelopment())
                 {
-                    config.AddUserSecrets<Program>();
+                    config.AddUserSecrets<Program>(true);
                 }
                 config.AddEnvironmentVariables();
 
