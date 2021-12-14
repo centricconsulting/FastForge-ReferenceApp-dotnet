@@ -35,3 +35,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+/.vs/FastForge-ReferenceApp-dotnet/v17
+/.vs/FastForge-ReferenceApp-dotnet/project-colors.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
