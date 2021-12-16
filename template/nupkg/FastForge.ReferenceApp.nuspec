@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Fastforge.ReferenceAp.nuspec</id>
+    <id>Construct.ReferenceAp.nuspec</id>
     <version>1.0.0</version>
-    <description>
-    Creates A reference app named after the organization using this package    </description>
+    <description>Creates A reference app named after the organization using this package</description>
     <authors>Centric Consulting</authors>
     <packageTypes>
       <packageType name="Template" />

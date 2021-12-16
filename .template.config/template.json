@@ -2,15 +2,15 @@
     "$schema": "http://json.schemastore.org/template",
     "author": "Centric Consulting",
     "classifications": [
-        "fastforge-refapp",
+        "construct-refapp",
         "Web"
     ],
     "tags": {
         "language": "C#"
     },
-    "identity": "FastForge.ReferenceApp",
-    "name": "Centric Consulting FastForge Reference Application",
-    "shortName": "fastforge",
+    "identity": "Construct.ReferenceApp",
+    "name": "Centric Consulting Construct Reference Application",
+    "shortName": "construct",
     "sourceName": "referenceApp",
     "preferNameDirectory": true
 }
