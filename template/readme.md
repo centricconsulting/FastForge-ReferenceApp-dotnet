@@ -53,7 +53,7 @@ Once the nuget tool is installed, we have to crate a nuspec file named with the 
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Construct.ReferenceAp.nuspec</id>
+    <id>Construct.ReferenceApp.nuspec</id>
     <version>1.0.0</version>
     <description>Creates A reference app named after the organization using this package</description>
     <authors>Centric Consulting</authors>
