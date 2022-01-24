@@ -18,7 +18,7 @@ resource "azurerm_app_service" "api1" {
 
   site_config {
 		always_on        = false
-		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/referenceapp.api:latest"
+		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/${var.application_name}.api:latest"
 	}
 	
 	app_settings = {
@@ -57,7 +57,7 @@ resource "azurerm_app_service" "api2" {
 
   site_config {
 		always_on        = false
-		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/${var.application_name}.api:latest"
+		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/referenceapp.api:latest"
 	}
 	
 	app_settings = {
