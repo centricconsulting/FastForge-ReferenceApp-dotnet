@@ -58,14 +58,3 @@
   <li> Microsoft DevOps Organization</li>
   <li> Resource Group, Storage Account, and Container needed to store a shared <code>*.tfstate</code> file. A separate <code>*.tfstate</code> will be used per environment.</li>
 </ul>
-
-
-<!-- SCENARIO1 -->
-<h2 id="deploying"> Deploying the Environment</h2>
-
-<p>TBD, fill in soon</p>
-<p>abc xyz</p>
-
-<pre><code>xyz xyz</code></pre>
-<pre><code>$ </code></pre>
-<pre><code>$ </code></pre>
