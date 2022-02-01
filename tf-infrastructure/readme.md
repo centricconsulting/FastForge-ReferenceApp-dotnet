@@ -11,7 +11,6 @@
     <li><a href="#overview"> ➤ Overview</a></li>
     <li><a href="#file-descriptions"> ➤ File Descriptions</a></li>
     <li><a href="#getting-started"> ➤ Getting Started</a></li>
-    <li><a href="#deploying"> ➤ Deploying the Environment </a></li>
   </ol>
 </details>
 
