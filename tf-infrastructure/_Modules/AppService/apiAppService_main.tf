@@ -10,7 +10,7 @@ data "azurerm_resource_group" "app" { #Insinuating that this already exists or i
 ################
 # App Service Creation with SQLDB used #
 resource "azurerm_app_service" "api1" {
-  count               = var.sqldb ? 1 : 0
+  count               = var.sqldb == true ? 1 : 0
   resource_group_name = data.azurerm_resource_group.app.name
   location            = data.azurerm_resource_group.app.location
   name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
@@ -49,7 +49,7 @@ resource "azurerm_app_service" "api1" {
 
 # App Service Creation with COSMOSDB used #
 resource "azurerm_app_service" "api2" {
-  count               = var.sqldb ? 0 : 1 
+  count               = var.sqldb == true ? 0 : 1 
   resource_group_name = data.azurerm_resource_group.app.name
   location            = data.azurerm_resource_group.app.location
   name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
