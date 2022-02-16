@@ -13,7 +13,7 @@ resources:
       ref: refs/heads/main
       trigger: none
 variables:
-- group: 'test-Build'
+- group: 'Infrastructure-Build'
 - template: 'variables.yml'
 
 stages:
