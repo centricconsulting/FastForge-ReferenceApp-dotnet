@@ -1,7 +1,7 @@
 # Static Variables #
 environment      = "dev" 
-application_name = "t3strrr" #Update to reflect app name. Must be no more than 15 characters
-region           = "westus2" #Update to be consistent across resources
+application_name = "" #Update to reflect app name. Must be no more than 15 characters
+region           = "" #Update to be consistent across resources
 api_tier         = "Standard"
 api_size         = "S1"
 
