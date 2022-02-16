@@ -48,6 +48,7 @@ resource "azurerm_cosmosdb_account" "account" {
 
 output "cosmosdb_account_key" {
     value = azurerm_cosmosdb_account.account.primary_key
+    sensitive   = true 
 }
 
 resource "azurerm_cosmosdb_sql_database" "db" {
