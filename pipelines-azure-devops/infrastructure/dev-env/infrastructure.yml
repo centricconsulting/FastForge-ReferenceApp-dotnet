@@ -1,10 +1,13 @@
 # trigger: none 
 
-# resources: #Step 5: Uncomment lines 1-7 and remove lines 9 - 14
+# resources: #Step 5: Uncomment lines 1-10 and remove lines 12 - 17
 #   pipelines:
 #   - pipeline: InfrastructurePipelne
 #     source: 'BuildTestStage-apiWebApp (run 1st)'
-#     trigger: true
+#     trigger: 
+#       branches:
+#         include: 
+#         - 'main'
 
 resources:
   repositories:
@@ -12,6 +15,7 @@ resources:
       type: git  
       ref: refs/heads/main
       trigger: none
+      
 variables:
 - group: 'Infrastructure-Build'
 - template: 'variables.yml'
