@@ -1,10 +1,13 @@
 # trigger: none 
 
-# resources: #Step 5: Uncomment lines 1-7 and remove lines 9 - 14
+# resources: #Step 5: Uncomment lines 1-10 and remove lines 12-17
 #   pipelines:
 #   - pipeline: mypipeline #Arbitraty name to reference
 #     source: 'Infrastructure (run 2nd)' #Name of the Infrastructure pipeline that was created
-#     trigger: true
+#     trigger: 
+#       branches:
+#         include: 
+#         - 'main'
 
 resources:
   repositories:
