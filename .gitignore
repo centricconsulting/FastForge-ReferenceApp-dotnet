@@ -40,3 +40,4 @@ terraform.rc
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
 /.vs
+.DS_Store
