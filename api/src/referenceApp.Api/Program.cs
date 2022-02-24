@@ -47,11 +47,11 @@ namespace referenceApp.Api
                 var env = hostingContext.HostingEnvironment;
                 config
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
                 if (env.IsDevelopment())
                 {
+                    config.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
                     config.AddUserSecrets<Program>(true);
                 }
                 config.AddEnvironmentVariables();
