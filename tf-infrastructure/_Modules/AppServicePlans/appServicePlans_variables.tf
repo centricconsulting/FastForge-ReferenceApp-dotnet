@@ -27,3 +27,9 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "region" {
+  description = "Region name"
+  type        = string
+  default     = "eastus"
+}

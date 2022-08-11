@@ -1,14 +1,7 @@
-################
-# Data Imports #
-################
-data "azurerm_resource_group" "app" { #Insinuating that this already exists or is created elsewhere to be imported/called upon in this module 
-  name = var.resource_group_name #Defined when calling the Module 
-}
-
 resource "azurerm_key_vault" "kv" {
   name                = var.key_vault_name #"${var.application_name}vault${var.environment}"
-  resource_group_name = data.azurerm_resource_group.app.name
-  location            = data.azurerm_resource_group.app.location
+  resource_group_name = var.resource_group_name
+  location            = var.region
   sku_name            = "standard"
   tenant_id           = var.tenant_id #data.azurerm_client_config.current.tenant_id
 
@@ -34,7 +27,6 @@ resource "azurerm_key_vault" "kv" {
 	tags = {
     environment = var.environment 
   }
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 resource "azurerm_key_vault_secret" "DbLogin" {
