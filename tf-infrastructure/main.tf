@@ -55,6 +55,7 @@ module "resource_group" {
 module "asp" {
   source   = "./_Modules/AppServicePlans" 
   resource_group_name   = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+  region                = module.resource_group.rg_location
   app_service_plan_name = "${var.application_name}-${var.environment}-apisp"
   api_tier              = var.api_tier 
   api_size              = var.api_size
@@ -67,6 +68,7 @@ module "asp" {
 module "appInsights" {
   source   = "./_Modules/AppInsights" 
   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+  region              = module.resource_group.rg_location
   app_insights_name   = "${var.application_name}-${var.environment}-appinsights"
   environment         = var.environment
 
@@ -77,6 +79,7 @@ module "appInsights" {
 module "keyVault" {
   source   = "./_Modules/KeyVault" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+  region                     = module.resource_group.rg_location
   key_vault_name             = "${var.application_name}-${var.environment}-kv01" #Must be within 3-24 lower case characters with dashes and numbers allowed. No Spaces 
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   object_id                  = data.azurerm_client_config.current.object_id
@@ -91,6 +94,7 @@ module "keyVault" {
 module "sqldb" {
   source   = "./_Modules/SQLDatabase" 
   resource_group_name        = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+  region                     = module.resource_group.rg_location
   sql_server_name            = "${var.application_name}-${var.environment}-dbserver"
   sql_firewall_name          = "FirewallRule-${var.environment}"
   sql_db_name                = "${var.application_name}-db-${var.environment}"
@@ -105,6 +109,7 @@ module "sqldb" {
 module "appservice" {
   source   = "./_Modules/AppService"
   resource_group_name                      = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+  region                                   = module.resource_group.rg_location
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
   application_name                         = var.application_name
@@ -125,6 +130,7 @@ module "appservice" {
 module "web_storage_account" {
   source   = "./_Modules/WebStorageAccount"
   resource_group_name      = module.resource_group.rg_name
+  region                   = module.resource_group.rg_location
   web_storage_account_name = "${var.application_name}web${var.environment}"
   environment              = var.environment
 
@@ -138,6 +144,7 @@ module "web_storage_account" {
 # module "cosmosdb" {
 #   source   = "./_Modules/CosmosDB" 
 #   resource_group_name = module.resource_group.rg_name #References RG above to allow for resources creation of resources in this module
+#   region                      = module.resource_group.rg_location
 #   cosmosdb_account_name       = "${var.application_name}-${var.environment}-cosmosdb"
 #   cosmosdb_account_kind       = var.cosmosdb_account_kind
 #   #cosmosdb_account_free_tier  = true #This value can only be set to true once per subscription. Setting this to true essentially provides cost savings for the first CosmosDB Account

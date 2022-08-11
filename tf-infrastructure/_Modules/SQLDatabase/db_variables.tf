@@ -39,3 +39,9 @@ variable "keyVault_secret_dbPassword" {
   type        = string
   default     = "temp-Password"
 }
+
+variable "region" {
+  description = "Region name"
+  type        = string
+  default     = "eastus"
+}

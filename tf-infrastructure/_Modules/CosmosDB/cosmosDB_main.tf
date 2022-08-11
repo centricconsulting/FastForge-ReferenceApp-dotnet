@@ -1,15 +1,8 @@
-################
-# Data Imports #
-################
-data "azurerm_resource_group" "app" { #Insinuating that this already exists or is created elsewhere to be imported/called upon in this module 
-  name = var.resource_group_name #Defined when calling the Module 
-}
-
 # Create the CosmosDB Account
 resource "azurerm_cosmosdb_account" "account" {
   name                = var.cosmosdb_account_name
-  resource_group_name = data.azurerm_resource_group.app.name
-  location            = data.azurerm_resource_group.app.location
+  resource_group_name = var.resource_group_name
+  location            = var.region
   offer_type          = "Standard"
   kind                = var.cosmosdb_account_kind
 
@@ -37,13 +30,12 @@ resource "azurerm_cosmosdb_account" "account" {
     failover_priority = 1
   }
   geo_location {
-    location          = data.azurerm_resource_group.app.location
+    location          = var.region
     failover_priority = 0
   }
   tags = {
     environment = var.environment
   }  
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 output "cosmosdb_account_key" {
@@ -53,20 +45,20 @@ output "cosmosdb_account_key" {
 
 resource "azurerm_cosmosdb_sql_database" "db" {
   name                = var.cosmosdb_name
-  resource_group_name = data.azurerm_resource_group.app.name
+  resource_group_name = var.resource_group_name
   account_name        = azurerm_cosmosdb_account.account.name
   throughput          = var.cosmosdb_throughput
 
-  depends_on = [data.azurerm_resource_group.app, azurerm_cosmosdb_account.account]
+  depends_on = [azurerm_cosmosdb_account.account]
 }
 
 resource "azurerm_cosmosdb_sql_container" "example" {
   name                  = var.cosmosdb_container_name
-  resource_group_name   = data.azurerm_resource_group.app.name
+  resource_group_name   = var.resource_group_name
   account_name          = azurerm_cosmosdb_account.account.name
   database_name         = azurerm_cosmosdb_sql_database.db.name
   partition_key_path    = var.cosmosdb_container_partition_key_path 
   partition_key_version = var.cosmosdb_container_partition_key_version 
   throughput            = var.cosmosdb_container_throughput 
-  depends_on = [data.azurerm_resource_group.app, azurerm_cosmosdb_account.account, azurerm_cosmosdb_sql_database.db]  
+  depends_on = [azurerm_cosmosdb_account.account, azurerm_cosmosdb_sql_database.db]  
 }

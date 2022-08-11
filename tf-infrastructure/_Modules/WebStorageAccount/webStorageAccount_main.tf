@@ -1,14 +1,7 @@
-################
-# Data Imports #
-################
-data "azurerm_resource_group" "app" { #Insinuating that this already exists or is created elsewhere to be imported/called upon in this module 
-  name = var.resource_group_name #Defined when calling the Module 
-}
-
 resource "azurerm_storage_account" "web" {
   name                     = var.web_storage_account_name 
-  resource_group_name      = data.azurerm_resource_group.app.name
-  location                 = data.azurerm_resource_group.app.location
+  resource_group_name      = var.resource_group_name
+  location                 = var.region
   account_tier             = "Standard"
   account_kind             = "StorageV2"
   account_replication_type = "LRS"

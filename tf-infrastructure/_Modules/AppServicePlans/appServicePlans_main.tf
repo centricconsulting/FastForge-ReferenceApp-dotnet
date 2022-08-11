@@ -1,18 +1,11 @@
 ################
-# Data Imports #
-################
-data "azurerm_resource_group" "app" { #Insinuating that this already exists or is created elsewhere to be imported/called upon in this module 
-  name = var.resource_group_name #Defined when calling the Module 
-}
-
-################
 # Module Start #
 ################
 # App Service Plan Creation #
 resource "azurerm_app_service_plan" "api" {
   name                = var.app_service_plan_name #${var.application_name}-apisp-${var.environment}
-  location            = data.azurerm_resource_group.app.location
-  resource_group_name = data.azurerm_resource_group.app.name
+  location            = var.region
+  resource_group_name = var.resource_group_name
   kind                = "Linux"
 	reserved = true
 
@@ -23,7 +16,6 @@ resource "azurerm_app_service_plan" "api" {
   tags = {
     environment = var.environment
   }  
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 output "app_service_plan_name" {

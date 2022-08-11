@@ -1,18 +1,11 @@
 ################
-# Data Imports #
-################
-data "azurerm_resource_group" "app" { #Insinuating that this already exists or is created elsewhere to be imported/called upon in this module 
-  name = var.resource_group_name #Defined when calling the Module 
-}
-
-################
 # Module Start #
 ################
 # App Service Creation with SQLDB used #
 resource "azurerm_app_service" "api1" {
   count               = var.sqldb == true ? 1 : 0
-  resource_group_name = data.azurerm_resource_group.app.name
-  location            = data.azurerm_resource_group.app.location
+  resource_group_name = var.resource_group_name
+  location            = var.region
   name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
   app_service_plan_id = var.app_service_plan_id #data.azurerm_app_service_plan.api.id
 
@@ -44,14 +37,13 @@ resource "azurerm_app_service" "api1" {
   tags = {
     environment = var.environment
   }  
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 # App Service Creation with COSMOSDB used #
 resource "azurerm_app_service" "api2" {
   count               = var.sqldb == true ? 0 : 1 
-  resource_group_name = data.azurerm_resource_group.app.name
-  location            = data.azurerm_resource_group.app.location
+  resource_group_name = var.resource_group_name
+  location            = var.region
   name                = var.application_name #when calling this module, define the name of the app service in the main.tf, not directly in the module
   app_service_plan_id = var.app_service_plan_id #data.azurerm_app_service_plan.api.id
 
@@ -80,13 +72,12 @@ resource "azurerm_app_service" "api2" {
   tags = {
     environment = var.environment
   }  
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 # Monitor Metric Alert #
 resource "azurerm_monitor_metric_alert" "api_failed_requests" {
   name                = "apiFailedRequests"
-  resource_group_name = data.azurerm_resource_group.app.name
+  resource_group_name = var.resource_group_name
 
   scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when failed requests rise above background noise"
@@ -102,12 +93,11 @@ resource "azurerm_monitor_metric_alert" "api_failed_requests" {
   action {
     action_group_id = var.performance_alert_id #azurerm_monitor_action_group.performance_alert.id
   }
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 resource "azurerm_monitor_metric_alert" "api_response_time" {
   name                = "apiResponseTime"
-  resource_group_name = data.azurerm_resource_group.app.name
+  resource_group_name = var.resource_group_name
 
   scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when response time rises above SLA"
@@ -123,12 +113,11 @@ resource "azurerm_monitor_metric_alert" "api_response_time" {
   action {
     action_group_id = var.performance_alert_id #azurerm_monitor_action_group.performance_alert.id
   }
-  depends_on = [data.azurerm_resource_group.app]
 }
 
 resource "azurerm_monitor_metric_alert" "api_pending_requests" {
   name = "apiPendingRequests"
-  resource_group_name = data.azurerm_resource_group.app.name
+  resource_group_name = var.resource_group_name
 
   scopes      = var.sqldb == true ? [azurerm_app_service.api1[0].id] : [azurerm_app_service.api2[0].id]
   description = "Triggered when pending request count rises above SLA"
@@ -144,5 +133,4 @@ resource "azurerm_monitor_metric_alert" "api_pending_requests" {
   action {
     action_group_id = var.performance_alert_id #azurerm_monitor_action_group.performance_alert.id
   }
-  depends_on = [data.azurerm_resource_group.app]
 }
