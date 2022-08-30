@@ -1,0 +1,31 @@
+parameters:
+- name: sourceContainerRegistryServiceConnection
+- name: targetContainerRegistryServiceConnection
+- name: sourceContainerRegistryName
+- name: targetContainerRegistryName
+- name: sourceTagName
+- name: targetTagName
+- name: imageName
+
+jobs:
+- job: PromoteImage
+  steps:
+  - task: Docker@2
+    displayName: Login to Source ACR
+    inputs:
+      command: login
+      containerRegistry: ${{ parameters.sourceContainerRegistryServiceConnection }}
+
+  - task: Docker@2
+    condition: and(succeeded(), ne('${{ parameters.sourceContainerRegistryServiceConnection }}', '${{ parameters.targetContainerRegistryServiceConnection }}'))
+    displayName: Login to Target ACR
+    inputs:
+      command: login
+      containerRegistry: ${{ parameters.targetContainerRegistryServiceConnection }}
+
+  - script: |
+      docker pull ${{ parameters.sourceContainerRegistryName }}/${{ parameters.imageName }}:${{ parameters.sourceTagName }}
+      docker tag ${{ parameters.sourceContainerRegistryName }}/${{ parameters.imageName }}:${{ parameters.sourceTagName }} ${{ parameters.targetContainerRegistryName }}/${{ parameters.imageName }}:${{ parameters.targetTagName }}
+      docker push ${{ parameters.targetContainerRegistryName }}/${{ parameters.imageName }}:${{ parameters.targetTagName }}
+    displayName: 'Tag Image and Push to Registry'
+    

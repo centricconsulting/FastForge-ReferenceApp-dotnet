@@ -1,0 +1,68 @@
+
+parameters:
+- name: infraDirectory
+- name: terraformVersion
+- name: servicePrincipal
+- name: resourceGroup
+- name: storageAccountName
+- name: storageContainerName
+- name: storageKey
+- name: variableFile
+- name: environment
+
+steps:
+- checkout: self
+- task: replacetokens@3
+  inputs:
+    rootDirectory: '${{ parameters.infraDirectory }}'
+    targetFiles: |
+      **/*.tf
+      **/*.tfvars
+    encoding: 'auto'
+    writeBOM: true
+    escapeType: 'none'
+    actionOnMissing: 'warn'
+    keepToken: false
+    tokenPrefix: '!__'
+    tokenSuffix: '__!'
+    useLegacyPattern: false
+    enableTelemetry: true
+- task: TerraformInstaller@0
+  displayName: 'terraform version installer'
+  inputs:
+    terraformVersion: '${{ parameters.terraformVersion }}'
+- task: TerraformTaskV1@0
+  displayName: 'terraform init'
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '${{ parameters.infraDirectory }}'
+    backendServiceArm: '${{ parameters.servicePrincipal }}'
+    backendAzureRmResourceGroupName: '${{ parameters.resourceGroup }}'
+    backendAzureRmStorageAccountName: '${{ parameters.storageAccountName }}'
+    backendAzureRmContainerName: '${{ parameters.storageContainerName }}'
+    backendAzureRmKey: '${{ parameters.storageKey }}'
+- task: TerraformTaskV1@0
+  displayName: 'terraform validate'
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: '${{ parameters.infraDirectory }}'
+- task: TerraformTaskV1@0
+  displayName: 'terraform plan'
+  timeoutInMinutes: 0
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '${{ parameters.infraDirectory }}'
+    commandOptions: '${{ parameters.variableFile }}'
+    environmentServiceNameAzureRM: '${{ parameters.servicePrincipal }}'
+- task: TerraformTaskV1@0
+  displayName: 'terraform apply'
+  timeoutInMinutes: 0
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '${{ parameters.infraDirectory }}'
+    commandOptions: '${{ parameters.variableFile }}'
+    environmentServiceNameAzureRM: '${{ parameters.servicePrincipal }}'

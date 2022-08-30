@@ -1,3 +1,7 @@
+locals {
+  fully_qualified_image_name = "${var.shared_container_registry_login_server}/${var.image_name}:${var.environment}"
+}
+
 ################
 # Module Start #
 ################
@@ -11,7 +15,7 @@ resource "azurerm_app_service" "api1" {
 
   site_config {
 		always_on        = false
-		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/${var.application_name}.api:latest"
+		linux_fx_version = "DOCKER|${local.fully_qualified_image_name}"
 	}
 	
 	app_settings = {
@@ -20,13 +24,13 @@ resource "azurerm_app_service" "api1" {
 		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
-		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceapp.api:latest"
-		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"DOCKER_CUSTOM_IMAGE_NAME"                = local.fully_qualified_image_name
+		"ApplicationInsights__ApplicationVersion" = local.fully_qualified_image_name
 		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
   }
 
   connection_string {
-    name  = "${var.application_name}ConnectionString"
+    name  = "ReferenceAppConnectionString"
     type  = "SQLAzure"
     value = var.connection_string #"Server=tcp:${azurerm_sql_server.dbserver.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.db.name};Persist Security Info=False;User ID=${azurerm_sql_server.dbserver.administrator_login};Password=${azurerm_sql_server.dbserver.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   }
@@ -49,7 +53,7 @@ resource "azurerm_app_service" "api2" {
 
   site_config {
 		always_on        = false
-		linux_fx_version = "DOCKER|${var.shared_container_registry_login_server}/referenceapp.api:latest"
+		linux_fx_version = "DOCKER|${local.fully_qualified_image_name}"
 	}
 	
 	app_settings = {
@@ -58,8 +62,8 @@ resource "azurerm_app_service" "api2" {
 		"DOCKER_REGISTRY_SERVER_URL"              = "https://${var.shared_container_registry_login_server}"
     "DOCKER_REGISTRY_SERVER_USERNAME"         = var.shared_container_registry_admin_username
     "DOCKER_REGISTRY_SERVER_PASSWORD"         = var.shared_container_registry_admin_password
-		"DOCKER_CUSTOM_IMAGE_NAME"                = "${var.shared_container_registry_login_server}/referenceapp.api:latest"
-		"ApplicationInsights__ApplicationVersion" = "${var.shared_container_registry_login_server}/referenceApp.api:latest"
+		"DOCKER_CUSTOM_IMAGE_NAME"                = local.fully_qualified_image_name
+		"ApplicationInsights__ApplicationVersion" = local.fully_qualified_image_name
 		"APPINSIGHTS_INSTRUMENTATIONKEY"          = var.app_insights_key #azurerm_application_insights.insights.instrumentation_key
 		"Cosmos__Endpoint"                        = "https://${var.cosmosdb_name}.documents.azure.com:443/"
 		"Cosmos__AccountKey"                      = var.cosmosdb_account_key

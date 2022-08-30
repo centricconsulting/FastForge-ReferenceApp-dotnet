@@ -140,7 +140,9 @@ stages:
         repository: 'referenceApp.Api'
         command: 'buildAndPush'
         Dockerfile: ${{ variables.apiDockerFilePath }}
-        tags:
+        tags: |
+          latest
+          $(Build.BuildId)
 
 - stage: BuildTestWebApp
   condition: always()

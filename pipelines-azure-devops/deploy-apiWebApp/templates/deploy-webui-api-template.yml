@@ -1,0 +1,131 @@
+parameters:
+- name: environment
+- name: servicePrincipal
+- name: apiAppName
+- name: apiResourceGroupName
+- name: sourceDockerNamespace
+- name: targetDockerNamespace
+- name: dockerRepository
+- name: webAppArtifactName
+- name: webAppSourceLocation
+- name: webAppStorageAccount
+- name: projectid
+- name: buildDefinition
+- name: storybookSourceLocation
+- name: storybookStorageAccount # Specify a Storybook storage account to deploy to if using Storybook
+  default: ''
+- name: sourceContainerRegistryServiceConnection
+- name: targetContainerRegistryServiceConnection
+- name: sourceDockerTagName
+- name: targetDockerTagName
+- name: buildRunId
+
+jobs: 
+- template: "promote-docker-image-template.yml"
+  parameters:
+      sourceContainerRegistryServiceConnection: ${{ parameters.sourceContainerRegistryServiceConnection }}
+      targetContainerRegistryServiceConnection: ${{ parameters.targetContainerRegistryServiceConnection }}
+      sourceContainerRegistryName: ${{ parameters.sourceDockerNamespace }}
+      targetContainerRegistryName: ${{ parameters.targetDockerNamespace }}
+      sourceTagName: ${{ parameters.sourceDockerTagName }}
+      targetTagName: ${{ parameters.targetDockerTagName }}
+      imageName: ${{ parameters.dockerRepository }}
+
+- deployment: WebAPIAppDeploy
+  environment: ${{ parameters.environment }}
+  displayName: "Deploy API and Web App"
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "windows-latest"
+  continueOnError: false
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - checkout: self
+          - task: AzureRmWebAppDeployment@4
+            displayName: "API: Deploy"
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: ${{ parameters.servicePrincipal }}
+              appType: 'webAppContainer'
+              WebAppName: ${{ parameters.apiAppName }}
+              DockerNamespace: ${{ parameters.targetDockerNamespace }}
+              DockerRepository: ${{ parameters.dockerRepository }}
+              DockerImageTag: ${{ parameters.targetDockerTagName }}
+
+          - task: AzureCLI@1
+            displayName: App Service Restart - ${{ parameters.apiAppName }}
+            inputs:
+              azureSubscription: ${{ parameters.servicePrincipal }}
+              scriptLocation: inlineScript
+              inlineScript: |
+                az webapp restart --name "${{ parameters.apiAppName }}" --resource-group "${{ parameters.apiResourceGroupName }}"
+
+          - task: DownloadPipelineArtifact@2
+            displayName: "WEBAPP: Download Build Pipeline Artifacts"
+            inputs:
+              buildType: 'specific'
+              project: ${{ parameters.projectid }} 
+              definition: ${{ parameters.buildDefinition }} 
+              specificBuildWithTriggering: true
+              buildVersionToDownload: 'latestFromBranch'
+              #branchName: 'refs/heads/main'
+              artifactName: 'web-app-drop'
+              targetPath: '$(System.DefaultWorkingDirectory)'
+              runId: ${{ parameters.buildRunId }}   
+
+          - task: AzureFileCopy@4
+            displayName: "WEBAPP: Deploy"
+            inputs:
+              SourcePath: ${{ parameters.webAppSourceLocation }}
+              azureSubscription: ${{ parameters.servicePrincipal }}
+              Destination: 'AzureBlob'
+              storage: ${{ parameters.webAppStorageAccount }}
+              ContainerName: '$web'
+
+- deployment: StorybookDeploy
+  environment: ${{ parameters.environment }}
+  condition: ne('${{ parameters.storybookStorageAccount }}', '')
+  displayName: "Deploy Storybook"
+  timeoutInMinutes: 0
+  pool:
+    vmImage: "ubuntu-latest"
+  continueOnError: false
+  #steps:
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'specific'
+              project: ${{ parameters.projectid }} 
+              definition: ${{ parameters.buildDefinition }} 
+              specificBuildWithTriggering: true
+              buildVersionToDownload: 'latestFromBranch'
+              #branchName: 'refs/heads/main'      
+              artifactName: 'storybook-build'
+              targetPath: '$(System.DefaultWorkingDirectory)/storybook-build'
+              runId: ${{ parameters.buildRunId }}   
+
+          - task: AzureCLI@1
+            displayName: Az File Truncate 
+            inputs:
+              azureSubscription: ${{ parameters.servicePrincipal }}
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage blob delete-batch \
+                  --source \$web \
+                  --account-name "${{ parameters.storybookStorageAccount }}"
+
+          - task: AzureCLI@1
+            displayName: Az File Copy to Storage
+            inputs:
+              azureSubscription: ${{ parameters.servicePrincipal }}
+              scriptLocation: inlineScript
+              inlineScript: |
+                az storage blob upload-batch \
+                  --destination \$web \
+                  --account-name "${{ parameters.storybookStorageAccount }}" \
+                  --source "$(System.DefaultWorkingDirectory)/storybook-build"

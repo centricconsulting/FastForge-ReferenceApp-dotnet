@@ -112,7 +112,7 @@ module "appservice" {
   region                                   = module.resource_group.rg_location
   app_service_plan_id                      = module.asp.app_service_plan_id #References ID defined in another module
   app_insights_key                         = module.appInsights.instrumentation_key
-  application_name                         = var.application_name
+  application_name                         = "${var.application_name}-${var.environment}-app"
   #cosmosdb_name                            = "${var.application_name}-${var.environment}-cosmosdb" #Include line 111-112 if CosmosDB is used instead of SQLDB
   #cosmosdb_account_key                     = module.cosmosdb.cosmosdb_account_key
   sqldb                                    = true #Remove/Comment out lines 113-114 if CosmosDB is used instead of SQLDB
@@ -122,6 +122,7 @@ module "appservice" {
   shared_container_registry_admin_username = var.shared_container_registry_admin_username
   shared_container_registry_admin_password = var.shared_container_registry_admin_password
   environment                              = var.environment
+  image_name                               = "referenceapp.api"
 
   depends_on  = [module.resource_group, module.!__dbtype__!, module.asp, module.appInsights] #This module requires information from other Modules to properly run. Force organized deployments with Depends_on function
 }

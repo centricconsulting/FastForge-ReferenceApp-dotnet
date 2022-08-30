@@ -1,0 +1,100 @@
+trigger: none
+resources:
+  pipelines:
+  - pipeline: buildteststage-pipeline
+    source: 'BuildTestStage-apiWebApp (run 1st)'
+    trigger:
+      branches:
+        include:
+        - refs/heads/main
+
+stages:
+- stage: Terraform_Plan_DEV
+  condition:
+  displayName: DEV Terraform Planning
+  dependsOn: []
+  variables:
+  - group: 'Infrastructure-Build'
+  - template: '../infrastructure/dev-env/variables.yml'
+  jobs:
+  - job: Plan
+    pool:
+      vmImage: ubuntu-latest
+    timeoutInMinutes: 0
+    continueOnError: false
+    steps:
+    - template: ../infrastructure/templates/terraform-plan-template.yml
+      parameters:
+        infraDirectory: '${{ variables.infraDirectory }}'
+        terraformVersion: '${{ variables.terraformVersion }}'
+        servicePrincipal: '${{ variables.servicePrincipal }}'
+        resourceGroup: '${{ variables.resourceGroup }}'
+        storageAccountName: '${{ variables.storageAccountName }}'
+        storageContainerName: '${{ variables.storageContainerName }}'
+        storageKey: '${{ variables.storageKey }}'
+        variableFile: '${{ variables.variableFile }}'
+
+- stage: Terraform_Apply_DEV
+  condition: and(succeeded(), eq(dependencies.Terraform_Plan_DEV.outputs['Plan.terraformPlan.changesPresent'], 'true'))
+  displayName: DEV Terraform Apply
+  dependsOn: ['Terraform_Plan_DEV']
+  variables:
+  - group: 'Infrastructure-Build'
+  - template: '../infrastructure/dev-env/variables.yml'
+  jobs:
+  - deployment: Apply
+    environment: 'DEV-Infrastructure'
+  - job:
+    pool:
+      vmImage: ubuntu-latest
+    timeoutInMinutes: 0
+    continueOnError: false
+    steps:
+    - template: ../infrastructure/templates/terraform-apply-template.yml
+      parameters:
+        infraDirectory: '${{ variables.infraDirectory }}'
+        terraformVersion: '${{ variables.terraformVersion }}'
+        servicePrincipal: '${{ variables.servicePrincipal }}'
+        resourceGroup: '${{ variables.resourceGroup }}'
+        storageAccountName: '${{ variables.storageAccountName }}'
+        storageContainerName: '${{ variables.storageContainerName }}'
+        storageKey: '${{ variables.storageKey }}'
+        variableFile: '${{ variables.variableFile }}'
+        environment: 'DEV'
+
+- stage: Deploy_DEV
+  displayName: "DEV Deployment"
+  condition: |
+    and
+    (
+      eq(dependencies.Terraform_Plan_DEV.result, 'Succeeded'),
+      in(dependencies.Terraform_Apply_DEV.result, 'Succeeded', 'Skipped')
+    )
+  dependsOn: ['Terraform_Apply_DEV']
+  variables:
+  - group: 'Infrastructure-Build'
+  - template: '../deploy-apiWebApp/dev-env/deploy-apiWebApp-variables.yml'
+  jobs:
+    - template:  ../deploy-apiWebApp/templates/deploy-webui-api-template.yml
+      parameters:
+        environment: ${{ variables.environment }}
+        servicePrincipal: '${{ variables.servicePrincipal }}'
+        apiAppName: ${{ variables.apiAppName }}
+        apiResourceGroupName: '${{ variables.apiResourceGroupName }}'
+        sourceDockerNamespace: '${{ variables.dockerNamespace }}'
+        targetDockerNamespace: '${{ variables.dockerNamespace }}'
+        dockerRepository: 'referenceapp.api'
+        sourceDockerTagName: "$(resources.pipeline.buildteststage-pipeline.runID)"
+        targetDockerTagName: ${{ variables.environment }}
+        webAppArtifactName: 'web-app-drop'
+        webAppSourceLocation: '$(System.DefaultWorkingDirectory)/development_build/**' # needs to match environments
+        webAppStorageAccount: '${{ variables.webAppStorageAccount }}'
+        projectid: '${{ variables.projectid }}'
+        buildDefinition: '${{ variables.buildDefinition }}'
+        storybookSourceLocation: ''
+        storybookStorageAccount: ''
+        sourceContainerRegistryServiceConnection: ${{ variables.containerRegistryServiceConnection }}
+        targetContainerRegistryServiceConnection: ${{ variables.containerRegistryServiceConnection }}
+        buildRunId: "$(resources.pipeline.buildteststage-pipeline.runID)"
+
+# Add additional Terraform_Plan, Terraform_Apply, and Deploy Stages as needed
