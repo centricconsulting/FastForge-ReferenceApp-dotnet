@@ -36,8 +36,8 @@ variable "cosmosdb_account_key" {
 
 variable "sqldb" { 
   description = "True or False boolean on if the app service is using a sqldb"
-  type        = string
-  default     = "false"
+  type        = bool
+  default     = false
 }
 
 variable "shared_container_registry_admin_username" {
@@ -80,4 +80,10 @@ variable "region" {
   description = "Region name"
   type        = string
   default     = "eastus"
+}
+
+variable "image_name" {
+  description = "Docker Image name"
+  type        = string
+  default     = "referenceapp.api"
 }

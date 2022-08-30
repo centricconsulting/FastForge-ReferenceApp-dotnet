@@ -2,6 +2,7 @@ variables:
   # Deploy API/WebApp:
   servicePrincipal: '' #update with Service principal/connection. Not the docker specific Service principal/connection, but the one used to connect to Azure in general
   applicationName: '' #Update to reflect application Name
+  apiResourceGroupName: '' #Update with Resource Group Name for API (used for restarts)
   dockerNamespace: '' #container registry name
   apiAppName: '' #place app service Name here
   projectid: '' #https://dev.azure.com/{organization}/_apis/projects?api-version=6.0 to find project ID
@@ -9,3 +10,4 @@ variables:
 
   environment: 'dev'
   webAppStorageAccount: '$(applicationName)web$(environment)'
+  containerRegistryServiceConnection: '' #Update with Docker Service Connection name
