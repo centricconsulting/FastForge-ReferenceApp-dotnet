@@ -6,7 +6,7 @@ terraform {
         }
     }
     backend "azurerm" {
-    }  
+    }
 }
 
 provider "azurerm" {
@@ -101,6 +101,12 @@ module "sqldb" {
   keyVault_secret_dbLogin    = module.keyVault.key_vault_login_value
   keyVault_secret_dbPassword = module.keyVault.key_vault_login_password_value
   environment                = var.environment
+
+  ### variables default to serverless Gen Purpose Gen v5.  To make provisioned change desired sku_name and 
+  ### set min_capacity and auto_pause_delay_in_minutes to null
+  # sku_name                   = "GP_Gen5_2"
+  # min_capacity               = null
+  # auto_pause_delay_in_minutes = null
 
   depends_on  = [module.resource_group, module.keyVault]
 }
