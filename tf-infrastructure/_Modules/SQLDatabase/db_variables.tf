@@ -45,3 +45,21 @@ variable "region" {
   type        = string
   default     = "eastus"
 }
+
+variable "auto_pause_delay_in_minutes" {
+  description = "Number of minutes of inactivity before serverless database is paused"
+  type        = number
+  default     = 60 # must be in the range (60 - 10080) and divisible by 10 or -1
+}
+
+variable "min_capacity" {
+  description = "Minimum vCPU capacity of the serverless database"
+  type        = number
+  default     = 0.5 
+}
+
+variable "sku_name" {
+  description = "Valid Azure MSSQL Sku"
+  type        = string
+  default     = "GP_S_Gen5_2"
+}

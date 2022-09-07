@@ -17,20 +17,19 @@ resource "azurerm_sql_firewall_rule" "allowServiceConnectionsRule" {
   depends_on = [azurerm_sql_server.dbserver]
 }
 
-resource "azurerm_sql_database" "db" {
-  name                = var.sql_db_name #"${var.application_name}-db-${var.environment}"
-  resource_group_name = var.resource_group_name
-  location            = var.region
-  server_name         = azurerm_sql_server.dbserver.name
-
-  tags = {
-    environment = var.environment
-  }
-  depends_on = [azurerm_sql_server.dbserver]
+resource "azurerm_mssql_database" "db" {
+    name                        = var.sql_db_name 
+    server_id                   = azurerm_sql_server.dbserver.id
+    auto_pause_delay_in_minutes = var.auto_pause_delay_in_minutes
+    min_capacity                = var.min_capacity
+    sku_name                    = var.sku_name
+    tags = {
+      environment = var.environment
+    }    
 }
 
 output "connection_string" {
   description = "Connection string for the Azure SQL Database created."
-  value       = "Server=tcp:${azurerm_sql_server.dbserver.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.db.name};Persist Security Info=False;User ID=${azurerm_sql_server.dbserver.administrator_login};Password=${azurerm_sql_server.dbserver.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  value       = "Server=tcp:${azurerm_sql_server.dbserver.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_mssql_database.db.name};Persist Security Info=False;User ID=${azurerm_sql_server.dbserver.administrator_login};Password=${azurerm_sql_server.dbserver.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   sensitive   = true 
 }
