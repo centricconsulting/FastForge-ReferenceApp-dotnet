@@ -1,5 +1,5 @@
 import { TodoType } from "../../types";
-import { TodoItemActionTypes } from "../actionTypes";
+import { TodoActionTypes } from "../actionTypes";
 import { TODO_TYPES } from "../types";
 
 interface StateType {
@@ -16,7 +16,7 @@ const initialState: StateType = {
 
 const reducer = (
   state: StateType = initialState,
-  action: TodoItemActionTypes
+  action: TodoActionTypes
 ): StateType => {
   switch (action.type) {
     case TODO_TYPES.TODO_LIST:

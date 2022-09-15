@@ -19,7 +19,7 @@ interface TodoDisableLoading {
   type: TODO_TYPES.DISABLE_LOADING;
 }
 
-export type TodoItemActionTypes =
+export type TodoActionTypes =
   | TodoListAction
   | TodoItemAction
   | TodoLoadingAction

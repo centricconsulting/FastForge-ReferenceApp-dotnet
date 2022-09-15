@@ -37,6 +37,8 @@
     "yup": "0.32.11"
   },
   "scripts": {
+    "start:server": "json-server -p 3001 --watch db.json",
+    "start:dev": "concurrently -k \"yarn start:server\" \"yarn start\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:development": "env-cmd -f .env.development react-scripts build",

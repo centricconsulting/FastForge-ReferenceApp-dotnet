@@ -1,8 +1,11 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useActions, useTypedSelector } from "../../../../core/hooks";
 
 const AddTodo = () => {
+  const { addTodo } = useActions();
+  const { loading } = useTypedSelector((state) => state.todo);
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -13,7 +16,6 @@ const AddTodo = () => {
       title: yup
         .string()
         .max(20, "title is too long")
-        .min(5, "title should be at least 5 characters long")
         .required("title is required"),
       description: yup
         .string()
@@ -23,7 +25,7 @@ const AddTodo = () => {
       urgent: yup.bool(),
     }),
     onSubmit: ({ title, description, urgent }) => {
-      console.log(title, description, urgent);
+      addTodo({ title, description, urgent, id: new Date().getTime() + "" });
     },
   });
 
@@ -31,6 +33,7 @@ const AddTodo = () => {
   const { title: titleError, description: descriptionError } = formik.errors;
   const { title: titleTouched, description: descriptiontouched } =
     formik.touched;
+  console.log(formik.errors);
   return (
     <>
       <div>
@@ -63,17 +66,14 @@ const AddTodo = () => {
               </div>
               <div className="col-12 col-md-6 col-xl-4">
                 {" "}
-                <label
-                  htmlFor="exampleInputPassword1"
-                  className="form-label w-100 text-left"
-                >
+                <label htmlFor="title" className="form-label w-100 text-left">
                   description
                 </label>
                 <input
                   name="description"
-                  type="password"
+                  type="text"
                   className="form-control"
-                  id="exampleInputPassword1"
+                  id="description"
                   value={description}
                   onChange={formik.handleChange}
                 />
@@ -112,4 +112,4 @@ const AddTodo = () => {
   );
 };
 
-export default AddTodo;
+export { AddTodo };
