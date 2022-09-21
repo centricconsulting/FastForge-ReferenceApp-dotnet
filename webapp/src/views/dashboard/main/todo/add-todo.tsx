@@ -33,14 +33,14 @@ const AddTodo = () => {
   const { title: titleError, description: descriptionError } = formik.errors;
   const { title: titleTouched, description: descriptiontouched } =
     formik.touched;
-  console.log(formik.errors);
+
   return (
     <>
       <div>
         <form onSubmit={formik.handleSubmit}>
           <div className="container text-center">
             <div className="row">
-              <h1>Add ToDO</h1>
+              <h1>Add TODO</h1>
             </div>
             <div className="row">
               <div className="col-12 col-md-6 col-xl-4">
@@ -61,7 +61,7 @@ const AddTodo = () => {
                   onChange={formik.handleChange}
                 />
                 {titleTouched && titleError && (
-                  <p className="input-error--select">{titleError}</p>
+                  <p className="input-error">{titleError}</p>
                 )}
               </div>
               <div className="col-12 col-md-6 col-xl-4">
@@ -78,7 +78,7 @@ const AddTodo = () => {
                   onChange={formik.handleChange}
                 />
                 {descriptiontouched && descriptionError && (
-                  <p className="input-error--select">{descriptionError}</p>
+                  <p className="input-error">{descriptionError}</p>
                 )}
               </div>
               <div className="col-12  col-xl-4  align-self-end">
