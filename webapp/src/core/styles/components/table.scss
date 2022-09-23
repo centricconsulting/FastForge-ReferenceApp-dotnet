@@ -1,0 +1,28 @@
+table {
+  width: 100%;
+
+  tr {
+    border: 1px solid $border-color;
+  }
+  tbody {
+    tr:nth-of-type(odd) {
+      background-color: lighten($color: $primary-color, $amount: 40);
+    }
+    td {
+      font-weight: map-get($font-weight, "medium");
+      font-size: map-get($font-size, "lg");
+    }
+  }
+  thead {
+    tr {
+      background-color: $table-head;
+      color: white;
+    }
+  }
+
+  tr td,
+  th {
+    padding: 2px 10px;
+    border: 1px solid $border-color;
+  }
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { defaultTodosCount } from "../../../../core/constants";
 import { useActions, useTypedSelector } from "../../../../core/hooks";
-import { useTable } from "react-table";
+import { Column, useTable } from "react-table";
 import Table from "../../../../core/components/table";
 
 const ListTodos = () => {
@@ -16,7 +16,7 @@ const ListTodos = () => {
     fetchTodos({ limit: defaultTodosCount, page: currentPage + 1 });
   }, [defaultTodosCount, currentPage]);
 
-  const COLUMNS = [
+  const COLUMNS: Column[] = [
     {
       Header: "ID",
       accessor: "id",
@@ -32,6 +32,9 @@ const ListTodos = () => {
     {
       Header: "Urgency",
       accessor: "urgent",
+      Cell: ({ value }) => {
+        return value ? "Yes" : "No";
+      },
     },
   ];
 
