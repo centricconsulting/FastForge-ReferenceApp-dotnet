@@ -53,10 +53,9 @@ export const addTodo =
       dispatch({
         type: TODO_TYPES.DISABLE_LOADING,
       });
-      // window.openToastSuccess("Todo was added successfully");
-      // window.navigate(-1);
+      window.openToastSuccess("Todo was added successfully");
+      window.navigate(-1);
     } catch (err: any) {
-      console.log(err);
       // const { message } = getCatch(err);
       // window.openToastError(message);
 

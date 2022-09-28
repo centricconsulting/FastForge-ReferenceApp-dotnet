@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { defaultTodosCount } from "../../../../core/constants";
-import { useActions, useTypedSelector } from "../../../../core/hooks";
-import { Column, useTable } from "react-table";
+import { PrimaryButton } from "../../../../core/components";
 import Table from "../../../../core/components/table";
+import { defaultTodosCount, TODO_COLUMNS } from "../../../../core/constants";
+import { useActions, useTypedSelector } from "../../../../core/hooks";
 
 const ListTodos = () => {
   const { fetchTodos } = useActions();
@@ -16,31 +17,12 @@ const ListTodos = () => {
     fetchTodos({ limit: defaultTodosCount, page: currentPage + 1 });
   }, [defaultTodosCount, currentPage]);
 
-  const COLUMNS: Column[] = [
-    {
-      Header: "ID",
-      accessor: "id",
-    },
-    {
-      Header: "Title",
-      accessor: "title",
-    },
-    {
-      Header: "Description",
-      accessor: "description",
-    },
-    {
-      Header: "Urgency",
-      accessor: "urgent",
-      Cell: ({ value }) => {
-        return value ? "Yes" : "No";
-      },
-    },
-  ];
-
   return (
     <>
-      <Table columns={COLUMNS as any} data={list} />
+      <Link to="add-todo">
+        <PrimaryButton title="Add Todo" />
+      </Link>
+      <Table columns={TODO_COLUMNS as any} data={list} />
     </>
   );
 };

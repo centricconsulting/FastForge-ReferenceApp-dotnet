@@ -15,5 +15,5 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src", "src/core/redux/actionTypes/.ts"]
+  "include": ["src", "types.d.ts"]
 }

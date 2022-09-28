@@ -1,0 +1,34 @@
+.disabled {
+  color: darken(white, 10%);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.secondary-button {
+  padding: 0 10px;
+  &__button {
+    display: block;
+    width: 99%;
+    padding: 7px 5px;
+    margin: 2px auto 2px;
+    color: white;
+    background-color: $tertiary-color;
+    outline: none;
+    border: none;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    transform: scale(0.95);
+    transition: transform ease 0.2s, box-shadow ease 0.2s;
+    cursor: pointer;
+    &:hover,
+    &:active {
+      transform: scale(1);
+      box-shadow: 0 2px 1px 1px darken($tertiary-color, 10%);
+    }
+
+    &[disabled] {
+      @extend .disabled;
+      background-color: darken($tertiary-color, 10%);
+    }
+  }
+}

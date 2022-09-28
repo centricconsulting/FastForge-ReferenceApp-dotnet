@@ -2,7 +2,8 @@
 @import "./breakpoints";
 @import "./utility";
 @import "./components/table.scss";
-
+@import "./components/primary-button.scss";
+@import "./components/secondary-button.scss";
 body {
   margin: 0;
   padding: 0;
@@ -20,4 +21,9 @@ main {
   margin: 0 auto;
   min-height: calc(100vh - 0px); //main - header - footer
   padding: 25px 10px;
+}
+
+a {
+  text-decoration: none !important;
+  color: inherit;
 }

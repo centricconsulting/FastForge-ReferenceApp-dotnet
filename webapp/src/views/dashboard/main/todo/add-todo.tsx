@@ -2,6 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useActions, useTypedSelector } from "../../../../core/hooks";
+import { SecondaryButton } from "../../../../core/components/secondaryButton";
 
 const AddTodo = () => {
   const { addTodo } = useActions();
@@ -81,7 +82,7 @@ const AddTodo = () => {
                   <p className="input-error">{descriptionError}</p>
                 )}
               </div>
-              <div className="col-12  col-xl-4  align-self-end">
+              <div className="col-12  col-xl-4  align-self-end pt-2">
                 {" "}
                 <input
                   type="checkbox"
@@ -100,9 +101,7 @@ const AddTodo = () => {
             </div>
             <div className="row">
               <div className="col-12  mt-4">
-                <button type="submit" className="btn btn-primary w-100">
-                  Submit
-                </button>
+                <SecondaryButton title="Submit" />
               </div>
             </div>
           </div>
