@@ -1,7 +1,7 @@
 export interface TodoType {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   urgent: boolean;
-  done?: boolean;
+  done?: boolean;  
 }

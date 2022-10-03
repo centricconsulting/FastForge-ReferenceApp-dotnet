@@ -1,17 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useActions, useTypedSelector } from "../../../../core/hooks";
 import { SecondaryButton } from "../../../../core/components/secondaryButton";
+import {useSearchParams} from "react-router-dom";
 
-const AddTodo = () => {
-  const { addTodo } = useActions();
-  const { loading } = useTypedSelector((state) => state.todo);
+const EditTodo = () => {
+   let [searchParams] = useSearchParams();
+  const _id = searchParams.get("_id");
+  const { editTodo, fetchOneTodo } = useActions();
+  const { loading, item } = useTypedSelector((state) => state.todo);
   const formik = useFormik({
+    enableReinitialize: true,  
     initialValues: {
-      title: "",
-      description: "",
-      urgent: false,
+      title: item?.title ?? "",
+      description: item?.description ?? "",
+      urgent: item?.urgent ?? false, 
     },
     validationSchema: yup.object({
       title: yup
@@ -25,10 +29,24 @@ const AddTodo = () => {
         .required("description is required"),
       urgent: yup.bool(),
     }),
-    onSubmit: ({ title, description, urgent }) => {
-      addTodo({ title, description, urgent, id: new Date().getTime() + "" });
+    onSubmit: ({ title, description, urgent }) => { 
+    
+      editTodo(
+           {
+          title,
+          description,
+          urgent,  
+        
+        },
+        item?.id ?? "");
     },
   });
+ 
+   useEffect(() => {
+    if (_id) {
+      fetchOneTodo(_id);
+    }
+  }, [_id]);  
 
   const { title, description, urgent } = formik.values;
   const { title: titleError, description: descriptionError } = formik.errors;
@@ -38,11 +56,12 @@ const AddTodo = () => {
   return (
     <>
       <div className="form-wrapper"> 
-       <h5 className="title">Add Todo</h5>
+       <h5 className="title">Edit Todo</h5>
         <form onSubmit={formik.handleSubmit}>
-          <div className="container text-center"> 
+          <div className="container text-center">
+
             <div className="row">
-              <div className="col-12 col-md-6 col-lg-6">
+              <div className="col-12 col-md-6 col-lg-6 ">
                 {" "}
                 <label
                   htmlFor="exampleInputEmail1"
@@ -63,7 +82,7 @@ const AddTodo = () => {
                   <p className="input-error">{titleError}</p>
                 )}
               </div>
-              <div className="col-12 col-md-6 col-lg-6">
+              <div className="col-12 col-md-6 col-lg-6 ">
                 {" "}
                 <label htmlFor="title" className="form-label w-100 text-left">
                   description
@@ -82,7 +101,7 @@ const AddTodo = () => {
               </div>
               <div className="col-12  col-lg-12 text-end align-self-end pt-2">
                 {" "}
-                <input 
+                <input
                   type="checkbox"
                   name="urgent"
                   className="form-check-input"
@@ -109,4 +128,4 @@ const AddTodo = () => {
   );
 };
 
-export { AddTodo };
+export { EditTodo };

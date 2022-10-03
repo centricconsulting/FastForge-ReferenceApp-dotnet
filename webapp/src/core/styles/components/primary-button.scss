@@ -8,11 +8,11 @@
   padding: 0 10px;
   &__button {
     min-width: 100px;
-    display: block;
-    width: 99%;
+    display: block; 
+    // width: 99%;
     white-space: nowrap;
     padding: 7px 5px;
-    margin: 21px auto;
+    margin: 21px 0 21px auto;
     color: $primary-color;
     background-color: lighten($secondary-color, 40%);
     outline: none;

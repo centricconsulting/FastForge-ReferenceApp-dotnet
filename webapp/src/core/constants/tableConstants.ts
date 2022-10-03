@@ -1,4 +1,8 @@
+import { FC } from "react";
 import { Column } from "react-table";
+import {TableActionIcons} from "../components"
+
+
 
 export const TODO_COLUMNS: Column[] = [
   {
@@ -16,8 +20,10 @@ export const TODO_COLUMNS: Column[] = [
   {
     Header: "Urgency",
     accessor: "urgent",
-    Cell: ({ value }) => {
-      return value ? "Yes" : "No";
-    },
+    
+  }, 
+   {
+    Header: "Actions", 
+     Cell: TableActionIcons,   
   },
-];
+]; 

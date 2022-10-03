@@ -11,12 +11,34 @@ table {
     td {
       font-weight: map-get($font-weight, "medium");
       font-size: map-get($font-size, "lg");
+      text-align: center; 
+      .icon-wrapper {
+        white-space: nowrap; 
+      }
+      span{
+        .edit-icon {
+           font-size: 1rem;
+           color: $tertiary-color;
+           padding: 0 3px; 
+           cursor: pointer;
+           margin: 0 5px; 
+        }
+            
+       .delete-icon {
+           font-size: 1rem;
+           color: red; 
+           cursor: pointer;
+           padding: 0 3px;
+           margin: 0 5px;
+         }
+      }
     }
   }
   thead {
     tr {
       background-color: $table-head;
       color: white;
+      text-align: center;
     }
   }
 

@@ -24,7 +24,7 @@ const reducer = (
         ...state,
         list: action.payload,
         loading: false,
-        item: null,
+        item: null,  
       };
 
     case TODO_TYPES.TODO_ITEM:
@@ -45,6 +45,22 @@ const reducer = (
         ...state,
         loading: false,
       };
+
+       case TODO_TYPES.TODO_DELETE:
+      let _list = state.list;
+      console.log("reducer", action.payload.todoId);
+      
+      if (_list) {
+        _list = _list?.filter((item) => {
+          return item?.id?.toString() !== action.payload.todoId?.toString();
+        });  
+      }  
+      return {
+        ...state, 
+        list: _list,
+        loading: false,
+      };
+
 
     default:
       return state;

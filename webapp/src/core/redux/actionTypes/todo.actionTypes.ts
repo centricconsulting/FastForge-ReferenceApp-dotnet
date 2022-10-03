@@ -5,6 +5,11 @@ interface TodoListAction {
   type: TODO_TYPES.TODO_LIST;
   payload: TodoType[];
 }
+interface TodoAction {
+  type: TODO_TYPES.TODO_ITEM; 
+  payload: TodoType;
+}
+
 
 interface TodoItemAction {
   type: TODO_TYPES.TODO_ITEM;
@@ -19,8 +24,15 @@ interface TodoDisableLoading {
   type: TODO_TYPES.DISABLE_LOADING;
 }
 
+interface TodoDeleteAction {
+  type: TODO_TYPES.TODO_DELETE;
+  payload: { todoId: string };
+}
+
 export type TodoActionTypes =
   | TodoListAction
   | TodoItemAction
   | TodoLoadingAction
-  | TodoDisableLoading;
+  | TodoDisableLoading
+  | TodoAction
+  | TodoDeleteAction;  

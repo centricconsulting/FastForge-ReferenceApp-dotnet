@@ -1,12 +1,19 @@
 import React, { useMemo, FC } from "react";
 import { Column, useTable } from "react-table";
-
+import { classNames } from "../utility";
 interface TableTypes {
   columns: Column;
   data: any;
+   wrapperClass?: string;
+  wrapperClassTHead?: string;
+  wrapperClassTBody?: string;
 }
 
-const Table: FC<TableTypes> = ({ columns, data }) => {
+const Table: FC<TableTypes> = ({ columns, 
+  data,
+  wrapperClass,
+  wrapperClassTHead,
+  wrapperClassTBody, }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns: useMemo(() => columns as any, [columns]),
@@ -14,8 +21,8 @@ const Table: FC<TableTypes> = ({ columns, data }) => {
     });
   return (
     <>
-      <table {...getTableProps()}>
-        <thead>
+      <table className={classNames(wrapperClass, "react-table")} {...getTableProps()}>
+        <thead className={classNames(wrapperClassTHead, "react-table-header")}>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
@@ -26,13 +33,13 @@ const Table: FC<TableTypes> = ({ columns, data }) => {
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody  className={classNames(wrapperClassTBody, "react-table-body")} {...getTableBodyProps()}>
           {rows.map((row, i) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  return (
+                  return ( 
                     <td {...cell.getCellProps()}>
                       {cell.render("Cell") as any}
                     </td>
