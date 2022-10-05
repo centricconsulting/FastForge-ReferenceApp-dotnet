@@ -1,0 +1,29 @@
+.pagination-container {
+  display: flex;
+  list-style-type: none;
+  justify-content: center;
+ font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+
+  background-color: $pure-white;
+  padding: 10px 0; 
+  margin-top: 0;
+  border: 1px solid $primary-color; 
+
+  li {
+    color: $input-color;
+  }
+
+  a {
+    padding: 0 10px;
+    color: inherit;
+    cursor: pointer;
+  }
+  li.disabled {
+    visibility: hidden;
+  }
+  li.selected {
+    color: $pure-white;
+    background-color: $primary-color;
+    border-radius: 5px;
+  }
+}

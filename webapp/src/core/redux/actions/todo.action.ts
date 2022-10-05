@@ -1,36 +1,35 @@
 import { AxiosRequestConfig } from "axios";
 import { Dispatch } from "react";
 import { customizedAxios } from "../../config";
-import { QueryParams, TodoType, InputObject, DeleteType } from "../../types";
+import { DeleteType, QueryParams, TodoType } from "../../types";
 import { TodoActionTypes } from "../actionTypes";
-import { BASE_API, TODO_API } from "../api";
+import { TODO_API } from "../api";
 import { TODO_TYPES } from "../types";
 
 export const fetchTodos =
-  ({ limit, page }: QueryParams) =>
-  async (dispatch: Dispatch<TodoActionTypes>) => {
+  (queryParams: QueryParams) => async (dispatch: Dispatch<TodoActionTypes>) => {
     try {
       dispatch({ type: TODO_TYPES.TODO_LOADING });
 
       const config: AxiosRequestConfig = {
-        headers: {
-          // Authorization: ``,
-        },
-        params: {
-          limit,
-          page,
-        },
+        params: queryParams,
       };
 
       let url = TODO_API;
       const res = await customizedAxios.get<TodoType[]>(url, config);
+
+      const arr = res.headers?.link.split(" ");
+      const index = arr.indexOf('rel="last"');
+
       dispatch({
         type: TODO_TYPES.TODO_LIST,
-        payload: res.data,
+        payload: {
+          list: res.data,
+          pages: +arr[index - 1].split("_page=")[1].split(">;")[0] ?? 1,
+        },
       });
     } catch (err: any) {
-      // const { message } = getCatch(err);
-      // window.openToastError(message);
+      console.log(err);
     } finally {
       dispatch({ type: TODO_TYPES.DISABLE_LOADING });
     }
@@ -41,11 +40,7 @@ export const addTodo =
     try {
       dispatch({ type: TODO_TYPES.TODO_LOADING });
 
-      const config: AxiosRequestConfig = {
-        headers: {
-          // Authorization: `Bearer ${store.getState().auth.token}`, // if you have a token, put it here
-        },
-      };
+      const config: AxiosRequestConfig = {};
 
       let url = TODO_API;
       await customizedAxios.post(url, body, config);
@@ -56,51 +51,37 @@ export const addTodo =
       window.openToastSuccess("Todo was added successfully");
       window.navigate(-1);
     } catch (err: any) {
-      // const { message } = getCatch(err);
-      // window.openToastError(message);
-
       dispatch({ type: TODO_TYPES.DISABLE_LOADING });
     }
   };
 
-  export const fetchOneTodo =
+export const fetchOneTodo =
   (id: string) => async (dispatch: Dispatch<TodoActionTypes>) => {
     try {
       dispatch({ type: TODO_TYPES.TODO_LOADING });
 
       const config: AxiosRequestConfig = {
-        headers: {
-          // Authorization: `Bearer ${store.getState().auth.token}`,
-        },
+        headers: {},
       };
 
       let url = TODO_API.concat("/" + id);
-      const res = await customizedAxios.get<TodoType>( 
-        url,
-        config
-      ); 
+      const res = await customizedAxios.get<TodoType>(url, config);
       dispatch({
         type: TODO_TYPES.TODO_ITEM,
         payload: res.data,
-      }); 
+      });
     } catch (err: any) {
-      // const { message } = getCatch(err);
-      // window.openToastError(message);
       dispatch({ type: TODO_TYPES.DISABLE_LOADING });
     }
   };
 
-  export const editTodo =
+export const editTodo =
   (body: TodoType, id: string) =>
-  async (dispatch: Dispatch<TodoActionTypes>) => { 
+  async (dispatch: Dispatch<TodoActionTypes>) => {
     try {
       dispatch({ type: TODO_TYPES.TODO_LOADING });
 
-      const config: AxiosRequestConfig = {
-        headers: {
-          // Authorization: `Bearer ${store.getState().auth.token}`,
-        },
-      };
+      const config: AxiosRequestConfig = {};
 
       let url = TODO_API.concat("/" + id);
       await customizedAxios.put(url, body, config);
@@ -111,21 +92,17 @@ export const addTodo =
       window.openToastSuccess("Todo Edited Successfully");
       window.navigate(-1);
     } catch (err: any) {
-      // const { message } = getCatch(err);
-      // window.openToastError(message);
       dispatch({ type: TODO_TYPES.DISABLE_LOADING });
     }
   };
 
-  export const deleteTodo =
+export const deleteTodo =
   (id: string) => async (dispatch: Dispatch<TodoActionTypes>) => {
     try {
       dispatch({ type: TODO_TYPES.TODO_LOADING });
- 
+
       const config: AxiosRequestConfig = {
-        headers: {
-          // Authorization: `Bearer ${store.getState().auth.token}`,
-        },
+        headers: {},
       };
 
       let url = TODO_API.concat("/" + id);
@@ -137,8 +114,6 @@ export const addTodo =
       });
       window.openToastSuccess("Todo Deleted");
     } catch (err: any) {
-      // const { message } = getCatch(err);
-      // window.openToastError(message);
       dispatch({ type: TODO_TYPES.DISABLE_LOADING });
     }
   };

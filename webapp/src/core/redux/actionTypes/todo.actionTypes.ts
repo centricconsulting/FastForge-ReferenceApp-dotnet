@@ -3,13 +3,12 @@ import { TODO_TYPES } from "../types";
 
 interface TodoListAction {
   type: TODO_TYPES.TODO_LIST;
-  payload: TodoType[];
+  payload: { list: TodoType[]; pages: number };
 }
 interface TodoAction {
-  type: TODO_TYPES.TODO_ITEM; 
+  type: TODO_TYPES.TODO_ITEM;
   payload: TodoType;
 }
-
 
 interface TodoItemAction {
   type: TODO_TYPES.TODO_ITEM;
@@ -35,4 +34,4 @@ export type TodoActionTypes =
   | TodoLoadingAction
   | TodoDisableLoading
   | TodoAction
-  | TodoDeleteAction;  
+  | TodoDeleteAction;

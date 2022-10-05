@@ -4,6 +4,7 @@ import { TODO_TYPES } from "../types";
 
 interface StateType {
   list: TodoType[] | null;
+  pages:null | number,
   item: TodoType | null;
   loading: boolean;
 }
@@ -12,6 +13,7 @@ const initialState: StateType = {
   list: null,
   item: null,
   loading: false,
+  pages:null
 };
 
 const reducer = (
@@ -22,7 +24,8 @@ const reducer = (
     case TODO_TYPES.TODO_LIST:
       return {
         ...state,
-        list: action.payload,
+        list: action.payload.list,
+        pages:action.payload.pages,
         loading: false,
         item: null,  
       };
