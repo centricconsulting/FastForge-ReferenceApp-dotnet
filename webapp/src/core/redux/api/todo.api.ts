@@ -1,1 +1,1 @@
-export const TODO_API = `/todos`;
+export const TODO_API = `/todo`;

@@ -19,7 +19,7 @@ export const TODO_COLUMNS: Column[] = [
   },
   {
     Header: "Urgency",
-    accessor: "urgent",
+    accessor: "isUrgent",
     
   }, 
    {

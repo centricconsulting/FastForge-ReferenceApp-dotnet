@@ -15,7 +15,7 @@ const EditTodo = () => {
     initialValues: {
       title: item?.title ?? "",
       description: item?.description ?? "",
-      urgent: item?.urgent ?? false, 
+      isUrgent: item?.isUrgent ?? false, 
     },
     validationSchema: yup.object({
       title: yup
@@ -27,15 +27,15 @@ const EditTodo = () => {
         .max(500, "description can't be more than 500")
         .min(10, "description should be at least 10 characters long")
         .required("description is required"),
-      urgent: yup.bool(),
+        isUrgent: yup.bool(),
     }),
-    onSubmit: ({ title, description, urgent }) => { 
+    onSubmit: ({ title, description, isUrgent }) => { 
     
       editTodo(
            {
           title,
           description,
-          urgent,  
+          isUrgent,  
         
         },
         item?.id ?? "");
@@ -48,7 +48,7 @@ const EditTodo = () => {
     }
   }, [_id]);  
 
-  const { title, description, urgent } = formik.values;
+  const { title, description, isUrgent } = formik.values;
   const { title: titleError, description: descriptionError } = formik.errors;
   const { title: titleTouched, description: descriptiontouched } =
     formik.touched;
@@ -103,12 +103,12 @@ const EditTodo = () => {
                 {" "}
                 <input
                   type="checkbox"
-                  name="urgent"
+                  name="isUrgent"
                   className="form-check-input"
                   id="exampleCheck1"
-                  checked={urgent}
+                  checked={isUrgent}
                   onChange={(e) => {
-                    formik.setFieldValue("urgent", e.target.checked, true);
+                    formik.setFieldValue("isUrgent", e.target.checked, true);
                   }}
                 />
                 <label className="form-check-label" htmlFor="exampleCheck1">

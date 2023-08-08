@@ -22,15 +22,21 @@ namespace referenceApp.Lib.Todos.Queries
             var todos = _context.Todos;
             var result = new TodoListModel();
 
-            result.Todos = await todos.Select(t => new TodoModel
+            var query = todos.Select(t => new TodoModel
             {
                 Id = t.Id,
                 Title = t.Title,
-                DueDate = t.DueDate,
+                Description = t.Description,
                 WhenCreated = t.WhenCreated,
-                IsComplete = t.IsComplete
+                IsComplete = t.IsComplete,
+                IsUrgent = t.IsUrgent
+            });
+
+            if (request.Limit.HasValue && request.Page.HasValue) {
+                query = query.Skip((request.Page.Value - 1) * request.Limit.Value).Take(request.Limit.Value);
             }
-            ).ToListAsync(cancellationToken);
+            
+            result.Todos = await query.ToListAsync(cancellationToken);
 
             return result;
         }

@@ -18,14 +18,15 @@ export const fetchTodos =
       let url = TODO_API;
       const res = await customizedAxios.get<TodoType[]>(url, config);
 
-      const arr = res.headers?.link.split(" ");
-      const index = arr.indexOf('rel="last"');
+      // Get with Frank to find out what the API needs to return.
+      // const arr = res.headers?.link.split(" ");
+      // const index = arr.indexOf('rel="last"');
 
       dispatch({
         type: TODO_TYPES.TODO_LIST,
         payload: {
           list: res.data,
-          pages: +arr[index - 1].split("_page=")[1].split(">;")[0] ?? 1,
+          pages: 1, //+arr[index - 1].split("_page=")[1].split(">;")[0] ?? 1, TODO:  This only works with clientside mock.  Get with Frank to find out what the API needs to return.
         },
       });
     } catch (err: any) {
