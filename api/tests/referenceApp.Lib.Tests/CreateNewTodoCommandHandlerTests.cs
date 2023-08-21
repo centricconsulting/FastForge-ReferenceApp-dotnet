@@ -41,7 +41,8 @@ namespace referenceApp.Lib.Tests
             var entity = await ExecuteCommand();
             entity.Id.ShouldBe(_command.Id);
             entity.Title.ShouldBe(_command.Title);
-            entity.DueDate.ShouldBe(_command.DueDate);
+            entity.Description.ShouldBe(_command.Description);
+            entity.IsUrgent.ShouldBe(_command.IsUrgent);
             entity.WhenCreated.ShouldBe(_command.WhenCreated);
         }
 

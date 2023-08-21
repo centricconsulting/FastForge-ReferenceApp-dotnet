@@ -1,0 +1,28 @@
+.delete-modal__wrapper {
+  height: 100%;
+  @extend .flexbox-space-between-stretch;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  .title {
+    display: flex;
+    align-items: center;
+  }
+
+}
+.delete-modal__message {   
+  text-align: center;
+  color: $input-color;
+} 
+  
+.delete-modal__button-wrapper {
+  display: inline-block;
+  align-items: center; 
+  &--item {
+    width: 50%;
+    display: inline-block;
+    @include media-break(sm, down) {
+      display: block;
+      width: 100%;
+    }
+  }
+} 

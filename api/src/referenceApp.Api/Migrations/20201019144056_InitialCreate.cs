@@ -13,8 +13,9 @@ namespace referenceApp.Api.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
-                    DueDate = table.Column<DateTime>(nullable: true),
-                    WhenCreated = table.Column<DateTime>(nullable: false)
+                    Description = table.Column<string>(nullable: true),
+                    WhenCreated = table.Column<DateTime>(nullable: false),
+                    IsUrgent = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

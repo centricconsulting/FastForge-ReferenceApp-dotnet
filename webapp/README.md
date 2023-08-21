@@ -1,3 +1,10 @@
+### How to run templete webapp with json-server
+
+1. Install node_modules by running command `yarn`
+2. Install json-server by running command `yarn gloabl add json-server`
+3. Install concurrently by running command `yarn gloabl add concurrently`
+4. Run the command `yarn start:dev`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

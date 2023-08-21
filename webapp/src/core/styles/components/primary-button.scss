@@ -1,0 +1,37 @@
+.disabled {
+  color: lighten(grey, 30%);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.primary-button {
+  padding: 0 10px;
+  &__button {
+    min-width: 100px;
+    display: block; 
+    // width: 99%;
+    white-space: nowrap;
+    padding: 7px 5px;
+    margin: 21px 0 21px auto;
+    color: $primary-color;
+    background-color: lighten($secondary-color, 40%);
+    outline: none;
+    border: 1px solid $primary-color;
+    border-radius: 10px;
+    font-size: map-get($font-size, "lg");
+    font-weight: map-get($font-weight, "normal");
+    transform: scale(0.95);
+    transition: transform ease 0.2s, box-shadow ease 0.2s;
+    cursor: pointer;
+    &:hover,
+    &:active {
+      // transform: scale(1);
+      box-shadow: 1px 1px 1px 1px darken($primary-color, 10%);
+    }
+
+    &[disabled] {
+      @extend .disabled;
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

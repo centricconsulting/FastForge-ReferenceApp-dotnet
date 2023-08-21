@@ -27,8 +27,8 @@ namespace referenceApp.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime?>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsComplete")
                         .HasColumnType("bit");
@@ -38,6 +38,9 @@ namespace referenceApp.Api.Migrations
 
                     b.Property<DateTime>("WhenCreated")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsUrgent")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

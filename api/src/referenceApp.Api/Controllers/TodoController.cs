@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
@@ -21,9 +25,18 @@ namespace referenceApp.Api.Controllers
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<TodoListModel> List()
+        public async Task<ActionResult<List<TodoModel>>> List([FromQuery] int? _limit = null, [FromQuery] int? _page = null)
         {
-            return await Mediator.Send(new GetTodosListQuery());
+            var result = await Mediator.Send(new GetTodosListQuery(_limit, _page));
+            return new OkObjectResult(result.Todos);
+        }
+
+        [HttpGet("{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<TodoModel>> GetTodo(Guid id) 
+        {
+            return await Mediator.Send(new FindTodoByIdQuery(id));
         }
 
         [HttpPost]
@@ -35,7 +48,8 @@ namespace referenceApp.Api.Controllers
             var command = new CreateNewTodoCommand
             {
                 Title = model.Title,
-                DueDate = model.DueDate
+                Description = model.Description,
+                IsUrgent = model.IsUrgent
             };
 
             return await Mediator.Send(command);

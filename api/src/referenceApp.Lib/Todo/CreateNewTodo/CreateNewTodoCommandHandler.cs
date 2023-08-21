@@ -20,11 +20,12 @@ namespace referenceApp.Lib.Todos.CreateNewTodo
 
         public async Task<TodoModel> Handle(CreateNewTodoCommand request, CancellationToken cancellationToken)
         {
-            var newTodo = new Todo();
+            var newTodo = new referenceApp.Persistence.Models.Todo();
 
             newTodo.Id = request.Id;
             newTodo.Title = request.Title;
-            newTodo.DueDate = request.DueDate;
+            newTodo.Description = request.Description;
+            newTodo.IsUrgent = request.IsUrgent;
             newTodo.WhenCreated = request.WhenCreated;
 
             await _context.Todos.AddAsync(newTodo, cancellationToken);

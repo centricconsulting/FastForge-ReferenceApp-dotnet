@@ -1,0 +1,13 @@
+@mixin media-break($point: xs, $direction: up) {
+  $point-value: map-get($point-list, $point);
+  $direction-value: up;
+  @if ($direction == "down") {
+    $direction-value: max-width;
+  } @else {
+    $direction-value: min-width;
+  }
+
+  @media ($direction-value: $point-value) {
+    @content;
+  }
+}
