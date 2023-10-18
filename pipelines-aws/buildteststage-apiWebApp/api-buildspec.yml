@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  variables:
+    buildConfiguration: "Release"
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      dotnet: 6.x
+    commands:
+      - cd api
+      - dotnet tool install -g dotnet-format
+  build:
+    commands:
+      - dotnet-format --check --verbosity diagnostic referenceApi.sln
+      - dotnet restore referenceApi.sln
+      - dotnet build referenceApi.sln --configuration "${buildConfiguration}"
+      - dotnet test **/*Tests/*.csproj --verbosity normal --logger trx --results-directory ./test-results /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+reports:
+  WebAppTestCoverage:
+    file-format:  COBERTURAXML
+    files:
+      - '**/coverage.cobertura.xml'
+    base-directory: './api'
+  WebAppTests:
+    file-format:  VisualStudioTrx
+    files:
+      - '**/*'
+    base-directory: './api/test-results'
+artifacts:
+  files:
+    - 'api/src/referenceApp.Api/**/*'
+  name: builds/$CODEBUILD_BUILD_NUMBER/api-drop

@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    foo: "bar"
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: 14.x
+    commands:
+      - cd webapp
+      - yarn install
+  build:
+    commands:
+      - yarn run eslint --fix-dry-run "./src/**"
+      - yarn run build:development
+      - yarn test ---coverage --watchAll=false --reporters="jest-trx-results-processor"
+reports:
+  WebAppTests:
+    file-format:  VisualStudioTrx
+    files:
+      - '**/test-results.trx'
+    base-directory: './webapp'
+artifacts:
+  files:
+    - 'webapp/build/**/*'
+  name: builds/$CODEBUILD_BUILD_NUMBER/webapp-drop

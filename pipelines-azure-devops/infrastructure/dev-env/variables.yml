@@ -1,6 +1,6 @@
 variables:
   # Terraform Needed Variables:
-  infraDirectory: 'tf-infrastructure'
+  infraDirectory: 'tf-infrastructure-azure'
   terraformVersion: '0.14.11'
   
   # Update values below to match Azure environment resources
