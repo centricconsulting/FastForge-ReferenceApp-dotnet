@@ -49,7 +49,7 @@ const reducer = (
         loading: false,
       };
 
-       case TODO_TYPES.TODO_DELETE:
+    case TODO_TYPES.TODO_DELETE:
       let _list = state.list;
       console.log("reducer", action.payload.todoId);
       
