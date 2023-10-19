@@ -8,7 +8,7 @@ phases:
   install:
     on-failure: ABORT
     runtime-versions:
-      nodejs: 14.x
+      nodejs: 16.x
     commands:
       - cd webapp
       - yarn install
