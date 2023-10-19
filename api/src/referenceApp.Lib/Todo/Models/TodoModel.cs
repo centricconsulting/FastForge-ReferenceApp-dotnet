@@ -18,9 +18,9 @@ namespace referenceApp.Lib.Todos.Models
 
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string Description {get; set;}
+        public string Description { get; set; }
         public DateTime WhenCreated { get; set; }
         public bool? IsComplete { get; set; }
-        public bool IsUrgent {get; set;}
+        public bool IsUrgent { get; set; }
     }
 }

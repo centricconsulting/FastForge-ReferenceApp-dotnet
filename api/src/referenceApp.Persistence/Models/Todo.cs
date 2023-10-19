@@ -9,6 +9,6 @@ namespace referenceApp.Persistence.Models
         public string Description { get; set; }
         public bool? IsComplete { get; set; } = false;
         public DateTime WhenCreated { get; set; }
-        public bool IsUrgent {get; set; }
+        public bool IsUrgent { get; set; }
     }
 }

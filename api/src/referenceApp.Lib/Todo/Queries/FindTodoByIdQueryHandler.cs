@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -31,8 +31,8 @@ namespace referenceApp.Lib.Todos.Queries
                 IsComplete = t.IsComplete,
                 IsUrgent = t.IsUrgent
             }).FirstOrDefaultAsync(cancellationToken);
-            
+
             return result;
-        }        
+        }
     }
 }

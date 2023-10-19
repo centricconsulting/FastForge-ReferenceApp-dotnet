@@ -8,7 +8,7 @@ namespace referenceApp.Lib.Todos.CreateNewTodo
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public string Description {get; set; }
+        public string Description { get; set; }
         public DateTime WhenCreated { get; set; } = DateTime.UtcNow;
         public bool IsUrgent { get; set; }
     }

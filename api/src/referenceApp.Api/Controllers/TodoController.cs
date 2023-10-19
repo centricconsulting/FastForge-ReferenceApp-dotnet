@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
@@ -34,7 +34,7 @@ namespace referenceApp.Api.Controllers
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<TodoModel>> GetTodo(Guid id) 
+        public async Task<ActionResult<TodoModel>> GetTodo(Guid id)
         {
             return await Mediator.Send(new FindTodoByIdQuery(id));
         }

@@ -32,10 +32,11 @@ namespace referenceApp.Lib.Todos.Queries
                 IsUrgent = t.IsUrgent
             });
 
-            if (request.Limit.HasValue && request.Page.HasValue) {
+            if (request.Limit.HasValue && request.Page.HasValue)
+            {
                 query = query.Skip((request.Page.Value - 1) * request.Limit.Value).Take(request.Limit.Value);
             }
-            
+
             result.Todos = await query.ToListAsync(cancellationToken);
 
             return result;
