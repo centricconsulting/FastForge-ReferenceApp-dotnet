@@ -6,7 +6,7 @@ import { SecondaryButton } from "../../../../core/components/secondaryButton";
 import {useSearchParams} from "react-router-dom";
 
 const EditTodo = () => {
-   let [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const _id = searchParams.get("_id");
   const { editTodo, fetchOneTodo } = useActions();
   const { loading, item } = useTypedSelector((state) => state.todo);

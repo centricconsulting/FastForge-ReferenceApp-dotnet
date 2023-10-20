@@ -15,7 +15,7 @@ export const fetchTodos =
         params: queryParams,
       };
 
-      let url = TODO_API;
+      const url = TODO_API;
       const res = await customizedAxios.get<TodoType[]>(url, config);
 
       // Get with Frank to find out what the API needs to return.
@@ -43,7 +43,7 @@ export const addTodo =
 
       const config: AxiosRequestConfig = {};
 
-      let url = TODO_API;
+      const url = TODO_API;
       await customizedAxios.post(url, body, config);
 
       dispatch({
@@ -65,7 +65,7 @@ export const fetchOneTodo =
         headers: {},
       };
 
-      let url = TODO_API.concat("/" + id);
+      const url = TODO_API.concat("/" + id);
       const res = await customizedAxios.get<TodoType>(url, config);
       dispatch({
         type: TODO_TYPES.TODO_ITEM,
@@ -84,7 +84,7 @@ export const editTodo =
 
       const config: AxiosRequestConfig = {};
 
-      let url = TODO_API.concat("/" + id);
+      const url = TODO_API.concat("/" + id);
       await customizedAxios.put(url, body, config);
 
       dispatch({
@@ -106,7 +106,7 @@ export const deleteTodo =
         headers: {},
       };
 
-      let url = TODO_API.concat("/" + id);
+      const url = TODO_API.concat("/" + id);
       await customizedAxios.delete<DeleteType<TodoType>>(url, config);
 
       dispatch({
