@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    TF_VERSION: "0.15.5"
+    VAR_FILE: "dev-env/terraform.tfvars"
+
+phases:
+
+  install:
+    commands:
+      - cd /usr/bin
+      - curl -s -qL -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip -o terraform.zip
+      - terraform --version
+
+  build:
+    commands:
+      - cd ${CODEBUILD_SRC_DIR}/tf-infrastructure-aws
+      - terraform init -no-color
+      - terraform plan -var-file="${VAR_FILE}" -out=tfplan_commitid_${CODEBUILD_RESOLVED_SOURCE_VERSION}_pipelineid_${PIPELINE_EXECUTION_ID}
+      - cp tfplan_commitid_${CODEBUILD_RESOLVED_SOURCE_VERSION}_pipelineid_${PIPELINE_EXECUTION_ID} ${CODEBUILD_SRC_DIR}/
+
+  post_build:
+    commands:
+      - echo "Terraform plan completed on `date`"
+
+artifacts:
+  files:
+    - tfplan_commitid_${CODEBUILD_RESOLVED_SOURCE_VERSION}_pipelineid_${PIPELINE_EXECUTION_ID}
+  name: TerraformPlanFile
