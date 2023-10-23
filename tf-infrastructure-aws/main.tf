@@ -12,10 +12,19 @@ terraform {
   }
 }
 
-module "rds" {
-    source = "./_Modules/rds"
-    db_name     = var.db_name
-    db_username = var.db_username
-    db_password = var.db_password
-}
+# module "rds" {
+#     source = "./_Modules/rds"
+#     db_name     = var.db_name
+#     db_username = var.db_username
+#     db_password = var.db_password
+#     tags = {
+#       Project_name = "FFTEST"
+#     }    
+# }
 
+module "vpc" {
+    source = "./_Modules/vpc"
+    tags = {
+      Project_name = "FFTEST"
+    }       
+}

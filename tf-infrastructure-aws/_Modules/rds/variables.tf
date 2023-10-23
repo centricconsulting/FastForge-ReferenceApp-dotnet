@@ -10,10 +10,10 @@ variable "tags" {
 
 variable "db_username" {
     description = "The master db username"
-    type        = "string"
+    type        = string
 }
 
 variable "db_password" {
     description = "The master db password"
-    type        = "string"
+    type        = string
 }
