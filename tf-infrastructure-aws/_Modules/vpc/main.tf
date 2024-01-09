@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   tags = var.tags
 }
 
-resource "aws_internet_gateway" "vpc_igw" {
+resource "aws_internet_gateway" "vpc_ig" {
   vpc_id = aws_vpc.main.id
 
   tags = var.tags
@@ -19,11 +19,11 @@ resource "aws_internet_gateway" "vpc_igw" {
 # }
 
 resource "aws_subnet" "public_subnets" {
-  count              = var.subnet_count.public
+  count             = var.subnet_count.public
   
-  vpc_id             = aws_vpc.main.id
-  cidr_block         = var.public_subnet_cidr_blocks[count.index]
-  availability_zones = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.public_subnet_cidr_blocks[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = var.tags
 }
 
@@ -35,11 +35,11 @@ resource "aws_subnet" "public_subnets" {
 # }
 
 resource "aws_subnet" "private_subnets" {
-  count              = var.subnet_count.private
+  count             = var.subnet_count.private
 
-  vpc_id             = aws_vpc.main.id
-  cidr_block         = var.private_subnet_cidr_blocks[count.index]
-  availability_zones = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_cidr_blocks[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = var.tags
 }
 
@@ -66,7 +66,7 @@ resource "aws_route_table" "private_rt" {
 resource "aws_route_table_association" "private_rt_assoc" {
   count          = var.subnet_count.private
 
-  route_table_id = aws_route_tabel.private_rt.id
+  route_table_id = aws_route_table.private_rt.id
   subnet_id      = aws_subnet.private_subnets[count.index].id
 }
 
@@ -80,7 +80,7 @@ resource "aws_security_group" "rds_sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "db" {
   security_group_id            = aws_security_group.rds_sg.id
-  referenced_security_group_id = aws_security_group.ingress_api.id
+  referenced_security_group_id = aws_security_group.api_sg.id
 
   //cidr_ipv4                    = "0.0.0.0/0"
   from_port                    = 1433
@@ -101,9 +101,7 @@ resource "aws_vpc_security_group_egress_rule" "egress_all" {
   security_group_id = aws_security_group.api_sg.id
 
   cidr_ipv4   = "0.0.0.0/0"
-  from_port   = 0
   ip_protocol = "-1"
-  to_port     = 0
 
   tags = var.tags
 }

@@ -12,19 +12,50 @@ terraform {
   }
 }
 
-# module "rds" {
-#     source = "./_Modules/rds"
-#     db_name     = var.db_name
-#     db_username = var.db_username
-#     db_password = var.db_password
-#     tags = {
-#       Project_name = "FFTEST"
-#     }    
-# }
+
+####################
+# Random Resources # 
+####################
+resource "random_password" "password" {
+    length  = 16
+    special = true
+    override_special = "_%@"
+}
+
+resource "random_string" "random" {
+    length  = 16
+    special = true
+    override_special = "/@£$"
+}
+
+module "rdm_user_secret" {
+  source = "./_Modules/secrets"
+  name = "${var.project_name}_rdm_admin_user"
+  secret_string = random_string.random.result
+}
+
+module "rdm_user_password" {
+  source = "./_Modules/secrets"
+  name = "${var.project_name}_rdm_admin_password"
+  secret_string = random_password.password.result
+}
 
 module "vpc" {
-    source = "./_Modules/vpc"
+  source = "./_Modules/vpc"
+  tags = {
+    Project_name = var.project_name
+  }       
+}
+
+module "rds" {
+  source = "./_Modules/rds"
+    db_name            = var.db_name
+    subnet_group       = module.vpc.rds_db_subnet_group_name
+    security_group_ids = [module.vpc.rds_db_security_group]
+    db_username        = random_string.random.result
+    db_password        = random_password.password.result
     tags = {
-      Project_name = "FFTEST"
-    }       
+      Project_name = var.project_name
+    }
+    depends_on  = [module.rdm_user_secret, module.rdm_user_password]  
 }

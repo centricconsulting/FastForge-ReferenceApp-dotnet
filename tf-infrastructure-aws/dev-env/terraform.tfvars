@@ -1,3 +1,2 @@
-db_name     = "fastforge-dev-db"
-db_username = "fastforge-user"
-db_password = "avoid-plaintext-passwords"
+db_name      = "" # sqlserver-ex requires ""
+project_name = "FFTEST"

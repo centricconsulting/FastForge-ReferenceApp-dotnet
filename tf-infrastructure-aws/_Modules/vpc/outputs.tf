@@ -23,7 +23,7 @@ output "rds_db_subnet_group_name" {
     value       = aws_db_subnet_group.rds_db_sg.id
 }
 
-output "rds_db_subnet_group" {
-    description = "Id of the DB Subnet Group" 
-    value       = aws_subnet_group.rds_sg.id
+output "rds_db_security_group" {
+    description = "Id of the DB Security Group" 
+    value       = aws_security_group.rds_sg.id
 }
