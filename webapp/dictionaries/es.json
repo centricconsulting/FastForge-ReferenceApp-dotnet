@@ -2,8 +2,9 @@
     "server-component": {
       "welcome": "Willkommen"
     },
-    "counter": {
-      "increment": "Zuwachs",
-      "decrement": "Dekrementieren"
+    "auth": {
+      "login": "Zuwachs",
+      "email": "Dekrementieren"
+     
     }
   }

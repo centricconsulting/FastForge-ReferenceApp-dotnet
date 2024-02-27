@@ -1,13 +1,13 @@
 import { getDictionary } from "@/get-dictionary";
 import { Locale } from "@/i18n-config";
-import Login from "../components/auth/login";
+import FindAccount from "../components/auth/find-account";
 
-export default async function LoginPage({
+export default async function FindAccountPage({
   params: { lang },
 }: {
   params: { lang: Locale };
 }) {
   const dictionary = await getDictionary(lang);
 
-  return <Login dictionary={dictionary} />;
+  return <FindAccount dictionary={dictionary} />;
 }
