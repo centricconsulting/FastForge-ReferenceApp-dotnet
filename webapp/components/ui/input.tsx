@@ -6,10 +6,11 @@ import { cn } from "@/lib/utils";
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   label?: string;
+  hint?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, label, id, ...props }, ref) => {
+  ({ className, type, error, label, id, required, hint, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleShowPassword = () => {
@@ -28,15 +29,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             htmlFor={id}
             className="block mb-2 text-base font-bold text-gray-dark text-start"
           >
-            {label}
+            {label} {required && <span className="text-error">*</span>}
           </label>
         )}
+        {hint && <p className="text-xs text-gray-light mb-2">{hint}</p>}
         <input
           type={passwordType()}
           className={cn(
             `${
               error ? "border-error" : "border-input"
-            } flex h-10 w-full rounded-md border  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-light focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`,
+            } flex h-10 w-full border  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-light focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`,
             className
           )}
           ref={ref}
@@ -45,12 +47,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {type === "password" &&
           (showPassword ? (
             <EyeOff
-              className="absolute top-[2.5rem] right-[1rem] cursor-pointer"
+              className={`absolute ${
+                error ? "bottom-[1.6rem]" : "bottom-[0.6rem]"
+              } right-[1rem] cursor-pointer`}
               onClick={handleShowPassword}
             />
           ) : (
             <EyeIcon
-              className="absolute top-[2.5rem] right-[1rem] cursor-pointer"
+              className={`absolute ${
+                error ? "bottom-[1.6rem]" : "bottom-[0.6rem]"
+              } right-[1rem] cursor-pointer`}
               onClick={handleShowPassword}
             />
           ))}

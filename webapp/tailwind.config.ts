@@ -18,13 +18,20 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        poppins: ["var(--font-poppins)"],
+      },
+
       colors: {
         primary: { DEFAULT: "#2C1A5D" },
         gray: {
           dark: "#232D3D",
           light: "#A3A4A6",
+          mid: "#67686A",
         },
-        error: "#bd0909",
+        error: "#E10412",
+        success: "#0DBA61",
       },
       keyframes: {
         "accordion-down": {
