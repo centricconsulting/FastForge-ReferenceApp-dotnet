@@ -31,10 +31,16 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, hasClose, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    hasClose?: boolean;
+    withBackground?: boolean;
+  }
+>(({ className, children, hasClose, withBackground, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
+    {withBackground && (
+      <div className="w-full h-full absolute top-0 left-0 right-0 bg-[url(/images/loading-bg.png)] bg-no-repeat bg-cover bg-bottom" />
+    )}
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

@@ -10,6 +10,7 @@ import * as yup from "yup";
 import AuthWrapper from "./auth-wrapper";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { DictionaryType } from "@/types";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First name is required"),
@@ -20,7 +21,11 @@ const validationSchema = yup.object({
   confirmPassword: yup.string().required("Confirm password is required"),
 });
 
-export default function CreateAccount({ dictionary }: { dictionary: any }) {
+export default function CreateAccount({
+  dictionary,
+}: {
+  dictionary: DictionaryType;
+}) {
   const [agree, setAgree] = useState(false);
   const router = useRouter();
 

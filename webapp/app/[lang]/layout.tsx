@@ -9,7 +9,7 @@ const openSans = Open_Sans({
   display: "swap",
   variable: "--font-sans",
 });
-export const poppins = Poppins({
+const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-poppins",

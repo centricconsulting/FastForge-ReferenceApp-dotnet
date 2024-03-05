@@ -9,6 +9,7 @@ import { ChevronRight } from "lucide-react";
 import * as yup from "yup";
 import AuthWrapper from "./auth-wrapper";
 import { useRouter } from "next/navigation";
+import { DictionaryType } from "@/types";
 
 const validationSchema = yup.object({
   ssnDigits: yup
@@ -24,7 +25,11 @@ const validationSchema = yup.object({
     ),
 });
 
-export default function FindAccount({ dictionary }: { dictionary: any }) {
+export default function FindAccount({
+  dictionary,
+}: {
+  dictionary: DictionaryType;
+}) {
   const router = useRouter();
 
   const formik = useFormik({

@@ -2,19 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DictionaryType } from "@/types";
 import { useFormik } from "formik";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import * as yup from "yup";
-import AuthWrapper from "./auth-wrapper";
-import SuccessPopper from "../success-popper";
 import { useState } from "react";
+import * as yup from "yup";
+import SuccessPopper from "../success-popper";
+import AuthWrapper from "./auth-wrapper";
 
 const validationSchema = yup.object({
   accountType: yup.string(),
 });
 
-export default function AccountType({ dictionary }: { dictionary: any }) {
+export default function AccountType({
+  dictionary,
+}: {
+  dictionary: DictionaryType;
+}) {
   const [openSuccessPopper, setOpenSuccessPopper] = useState(false);
 
   const formik = useFormik({

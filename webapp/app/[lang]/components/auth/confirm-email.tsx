@@ -2,8 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import AuthWrapper from "./auth-wrapper";
+import { DictionaryType } from "@/types";
 
-export default function ConfirmEmail({ dictionary }: { dictionary: any }) {
+export default function ConfirmEmail({
+  dictionary,
+}: {
+  dictionary: DictionaryType;
+}) {
   return (
     <AuthWrapper title={"Please Confirm Your Email"}>
       <p className=" text-black text-base my-6">
