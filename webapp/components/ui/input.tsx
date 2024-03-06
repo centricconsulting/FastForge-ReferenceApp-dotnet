@@ -1,4 +1,4 @@
-import { useState, InputHTMLAttributes, forwardRef } from "react";
+import { useState, InputHTMLAttributes, forwardRef, ReactNode } from "react";
 import { EyeIcon, EyeOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -7,10 +7,14 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   label?: string;
   hint?: string;
+  icon?: ReactNode;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, error, label, id, required, hint, ...props }, ref) => {
+  (
+    { className, type, error, label, id, required, hint, icon, ...props },
+    ref
+  ) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleShowPassword = () => {
@@ -27,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {!!label && (
           <label
             htmlFor={id}
-            className="block mb-2 text-base font-bold text-gray-dark text-start"
+            className="block mb-2 text-base font-bold text-gray-dark text-start uppercase"
           >
             {label} {required && <span className="text-error">*</span>}
           </label>
@@ -38,7 +42,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             `${
               error ? "border-error" : "border-input"
-            } flex h-10 w-full border  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-light focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50`,
+            }  flex h-10 w-full border  bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-light focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50
+            ${icon && "pl-12"}
+            `,
             className
           )}
           ref={ref}
@@ -60,6 +66,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               onClick={handleShowPassword}
             />
           ))}
+        {icon && (
+          <div
+            className={`absolute  bottom-[0.6rem] left-[1rem] cursor-pointer`}
+          >
+            {icon}
+          </div>
+        )}
         {!!error && <span className="text-xs text-error mt-1">{error}</span>}
       </div>
     );

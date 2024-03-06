@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import Header from "./components/header";
 import { Locale } from "@/i18n-config";
 import { Open_Sans, Poppins } from "next/font/google";
+import Header from "../components/header";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
+  weight: "400",
 });
 const poppins = Poppins({
   subsets: ["latin"],

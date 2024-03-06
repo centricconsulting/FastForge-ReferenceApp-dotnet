@@ -8,11 +8,13 @@ import Link from "next/link";
 
 import * as yup from "yup";
 import AuthWrapper from "./auth-wrapper";
-//import LoadingWithBackground from "../loding-with-background";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Loader2Icon } from "lucide-react";
 import { DictionaryType } from "@/types";
+const SecureAccount = dynamic(() => import("./secure-account"), {
+  loading: () => <Loader2Icon />,
+});
 const LoadingWithBackground = dynamic(
   () => import("../loading-with-background"),
   {
@@ -27,6 +29,7 @@ const validationSchema = yup.object({
 
 export default function Login({ dictionary }: { dictionary: DictionaryType }) {
   const [openLoading, setOpenLoading] = useState(false);
+  const [openSecureAccount, setOpenSecureAccount] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -48,12 +51,12 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
     <>
       <AuthWrapper title={dictionary.auth.login}>
         <form onSubmit={formik.handleSubmit}>
-          <div className="my-8">
+          <div className="my-8" onClick={() => setOpenSecureAccount(true)}>
             <Input
               name="email"
               id="email"
-              placeholder="Email"
-              label="EMAIL"
+              placeholder={dictionary.auth.email}
+              label={dictionary.auth.email}
               autoComplete="off"
               error={emailTouched && emailError ? emailError : undefined}
               value={email}
@@ -62,11 +65,11 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
           </div>
           <div className="my-8">
             <Input
-              label="Password"
+              label={dictionary.auth.password}
               type="password"
               name="password"
               id="password"
-              placeholder="Password"
+              placeholder={dictionary.auth.password}
               error={
                 passwordTouched && passwordError ? passwordError : undefined
               }
@@ -79,20 +82,20 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
             htmlFor="terms"
             className="text-base font-semibold ml-2 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
           >
-            Remember my email on this device
+            {dictionary.auth.remember_my_email_on_this_device}
           </label>
           <div className="flex flex-col items-end">
             <Link
-              className="text-xs font-bold text-primary mb-4 mt-8"
+              className="text-xs font-bold text-primary mb-4 mt-8 capitalize"
               href="/forget-password"
             >
-              Forgot Email?
+              {dictionary.auth.forgot_email}?
             </Link>
             <Link
-              className="text-xs font-bold text-primary"
+              className="text-xs font-bold text-primary capitalize"
               href="/forget-password"
             >
-              Forgot Password?
+              {dictionary.auth.forgot_password}?
             </Link>
           </div>
 
@@ -100,15 +103,21 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
             {dictionary.auth.login}
           </Button>
           <div className="text-xs font-bold text-center mt-8">
-            Don’t have an account?{" "}
+            {dictionary.auth["don’t_have_an_account"]}?{" "}
             <Link href="/find-account" className="text-primary">
-              Register
+              {dictionary.auth.register}
             </Link>
           </div>
         </form>
       </AuthWrapper>
       {openLoading && (
         <LoadingWithBackground open={openLoading} setOpen={setOpenLoading} />
+      )}
+      {openSecureAccount && (
+        <SecureAccount
+          open={openSecureAccount}
+          setOpen={setOpenSecureAccount}
+        />
       )}
     </>
   );

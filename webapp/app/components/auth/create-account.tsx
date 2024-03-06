@@ -75,8 +75,8 @@ export default function CreateAccount({
             required
             name="firstName"
             id="firstName"
-            placeholder="First Name"
-            label="First Name"
+            placeholder={dictionary.auth.first_name}
+            label={dictionary.auth.first_name}
             autoComplete="off"
             error={
               firstNameTouched && firstNameError ? firstNameError : undefined
@@ -88,8 +88,8 @@ export default function CreateAccount({
             required
             name="lastName"
             id="lastName"
-            placeholder="Last Name"
-            label="Last Name"
+            placeholder={dictionary.auth.last_name}
+            label={dictionary.auth.last_name}
             autoComplete="off"
             error={lastNameTouched && lastNameError ? lastNameError : undefined}
             value={lastName}
@@ -101,8 +101,8 @@ export default function CreateAccount({
             required
             name="phone"
             id="phone"
-            placeholder="Primary Phone Number"
-            label="Primary Phone Number"
+            placeholder={dictionary.auth.primary_phone_number}
+            label={dictionary.auth.primary_phone_number}
             autoComplete="off"
             error={PhoneTouched && PhoneError ? PhoneError : undefined}
             value={phone}
@@ -114,8 +114,8 @@ export default function CreateAccount({
             required
             name="email"
             id="email"
-            placeholder="Email"
-            label="Email"
+            placeholder={dictionary.auth.email}
+            label={dictionary.auth.email}
             autoComplete="off"
             error={emailTouched && emailError ? emailError : undefined}
             value={email}
@@ -125,11 +125,11 @@ export default function CreateAccount({
         <div className="my-6">
           <Input
             hint="Password must contain at least 8 characters and include at least one of each of the following: an uppercase letter, a lowercase letter, a number and a special symbol (!, @, #, $, %, ^, & or *)"
-            label="Password"
+            label={dictionary.auth.password}
             type="password"
             name="password"
             id="password"
-            placeholder="Password"
+            placeholder={dictionary.auth.password}
             error={passwordTouched && passwordError ? passwordError : undefined}
             value={password}
             onChange={formik.handleChange}

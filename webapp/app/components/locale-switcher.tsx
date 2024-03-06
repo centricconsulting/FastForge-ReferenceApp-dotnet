@@ -8,7 +8,7 @@ import {
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { i18n, type Locale } from "../../../i18n-config";
+import { i18n, type Locale } from "../../i18n-config";
 
 export default function LocaleSwitcher({ lang }: { lang: Locale }) {
   const pathName = usePathname();
