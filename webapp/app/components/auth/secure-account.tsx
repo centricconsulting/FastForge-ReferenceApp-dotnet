@@ -1,18 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useFormik } from "formik";
 import { ChevronRight, Loader2Icon, Phone } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import * as yup from "yup";
 const VerificationInput = dynamic(() => import("react-verification-input"), {
   loading: () => <Loader2Icon />,
@@ -50,6 +45,11 @@ export default function SecureAccount({ setOpen, open }: Props) {
     },
   });
 
+  const handleCloseModal = useCallback(() => {
+    if (showCode) setShowCode(false);
+    else setOpen(false);
+  }, [setOpen, showCode]);
+
   const { phone } = formik.values;
   const { phone: phoneError } = formik.errors;
   const { phone: phoneTouched } = formik.touched;
@@ -63,8 +63,8 @@ export default function SecureAccount({ setOpen, open }: Props) {
               Secure Your Account
             </h1>
           </DialogHeader>
-          <DialogDescription className="text-lg font-bold text-gray-dark text-center px-4">
-            <p className="text-lg text-gray-dark mt-10">
+          <div className=" text-center px-4">
+            <p className="text-lg text-gray-dark mt-10 font-bold ">
               {showCode
                 ? "Confirm Your Phone Number"
                 : "Receive authentication via phone"}
@@ -94,8 +94,8 @@ export default function SecureAccount({ setOpen, open }: Props) {
                   disabled={!code || code.length !== 6}
                   type="button"
                   onClick={() => {
-                    setShowCode(false);
                     setOpenLoading(true);
+                    setShowCode(false);
                     setOpen(false);
                   }}
                   className="mt-6"
@@ -105,7 +105,7 @@ export default function SecureAccount({ setOpen, open }: Props) {
               </>
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-6 my-4">
+                <div className="grid grid-cols-2 gap-6 my-8">
                   <div
                     className={`border ${
                       contactType === 1
@@ -151,22 +151,27 @@ export default function SecureAccount({ setOpen, open }: Props) {
                     error={phoneTouched && phoneError ? phoneError : undefined}
                     value={phone}
                     onChange={formik.handleChange}
-                    icon={<Phone size={18} />}
+                    icon={<Phone className="text-gray-mid" size={18} />}
                   />
-                  <p className="mt-6 text-gray-dark">
+                  <p className="mt-6 text-gray-dark font-bold">
                     Text or data rates may apply.
                   </p>
                   <Button type="submit" className="mt-6">
-                    NEXT <ChevronRight />
+                    Continue <ChevronRight />
                   </Button>
                 </form>
               </>
             )}
 
-            <Button variant={"outline"} type="button" className="mt-4">
+            <Button
+              variant={"outline"}
+              type="button"
+              className="mt-4"
+              onClick={handleCloseModal}
+            >
               Go Back
             </Button>
-          </DialogDescription>
+          </div>
         </DialogContent>
       </Dialog>
       {openLoading && (

@@ -1,12 +1,18 @@
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <header className="p-4">header</header>
-      <nav className="w-full flex-none md:w-64 fixed left-0 px-4 py-16">
-        sidebar
-      </nav>
+import Drawer from "@/app/components/drawer";
+import { Locale } from "@/i18n-config";
 
-      {children}
+export default function Layout({
+  children,
+  params: { lang },
+}: {
+  children: React.ReactNode;
+  params: { lang: Locale };
+}) {
+  return (
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden max-w-screen-2xl m-auto relative">
+      <Drawer lang={lang} />
+
+      <div className="ml-[85px] mt-[58px] p-4">{children}</div>
     </div>
   );
 }

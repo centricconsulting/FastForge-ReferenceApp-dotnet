@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Manage Profile",
+  title: "WaysToSavePage",
 };
 
-export default async function ManageProfilePage() {
+export default async function WaysToSavePage() {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-2xl">Manage Profile</h1>
+        <h1 className="text-2xl">WaysToSavePage </h1>
       </div>
     </div>
   );

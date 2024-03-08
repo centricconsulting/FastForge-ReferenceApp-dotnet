@@ -11,14 +11,21 @@ import AuthWrapper from "./auth-wrapper";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DictionaryType } from "@/types";
+import { phoneRegExp } from "@/constants/regex";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
-  phone: yup.string().required("Phone is required"),
+  phone: yup
+    .string()
+    .matches(phoneRegExp, "Primary phone number is not valid")
+    .required("Phone is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
   password: yup.string().required("Password is required"),
-  confirmPassword: yup.string().required("Confirm password is required"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm password is required")
+    .oneOf([yup.ref("password")], "Passwords not match"),
 });
 
 export default function CreateAccount({
@@ -101,6 +108,8 @@ export default function CreateAccount({
             required
             name="phone"
             id="phone"
+            inputMode="numeric"
+            type="number"
             placeholder={dictionary.auth.primary_phone_number}
             label={dictionary.auth.primary_phone_number}
             autoComplete="off"

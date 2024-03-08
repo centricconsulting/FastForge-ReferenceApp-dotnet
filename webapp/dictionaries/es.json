@@ -13,6 +13,8 @@
       "register":"Register",
       "first_name":"First name",
       "last_name":"Last name",
-      "primary_phone_number":"Primary phone number"
+      "primary_phone_number":"Primary phone number",
+      "residential":"Residential",
+      "commercial":"Commercial"
     }
   }

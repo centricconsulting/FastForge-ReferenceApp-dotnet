@@ -43,7 +43,7 @@ export default function AccountType({
       </p>
       <form onSubmit={formik.handleSubmit}>
         <RadioGroup
-          defaultValue="ssn"
+          value={formik.values.accountType}
           className="flex"
           onValueChange={(val: "residential" | "commercial") => {
             formik.setFieldValue("accountType", val);
@@ -51,7 +51,7 @@ export default function AccountType({
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="commercial" id="commercial" />
-            <label htmlFor="commercial">Commercial</label>
+            <label htmlFor="commercial">{dictionary.auth.commercial}</label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem
@@ -59,7 +59,7 @@ export default function AccountType({
               id="residential"
               className="ml-4"
             />
-            <label htmlFor="residential">Residential</label>
+            <label htmlFor="residential">{dictionary.auth.residential}</label>
           </div>
         </RadioGroup>
 

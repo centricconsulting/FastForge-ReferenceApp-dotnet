@@ -8,7 +8,6 @@ const openSans = Open_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-  weight: "400",
 });
 const poppins = Poppins({
   subsets: ["latin"],

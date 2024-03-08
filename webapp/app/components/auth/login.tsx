@@ -15,12 +15,6 @@ import { DictionaryType } from "@/types";
 const SecureAccount = dynamic(() => import("./secure-account"), {
   loading: () => <Loader2Icon />,
 });
-const LoadingWithBackground = dynamic(
-  () => import("../loading-with-background"),
-  {
-    loading: () => <Loader2Icon />,
-  }
-);
 
 const validationSchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -28,7 +22,6 @@ const validationSchema = yup.object({
 });
 
 export default function Login({ dictionary }: { dictionary: DictionaryType }) {
-  const [openLoading, setOpenLoading] = useState(false);
   const [openSecureAccount, setOpenSecureAccount] = useState(false);
 
   const formik = useFormik({
@@ -39,7 +32,7 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
     validationSchema,
     onSubmit: (values) => {
       console.log(values);
-      setOpenLoading(true);
+      setOpenSecureAccount(true);
     },
   });
 
@@ -51,7 +44,7 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
     <>
       <AuthWrapper title={dictionary.auth.login}>
         <form onSubmit={formik.handleSubmit}>
-          <div className="my-8" onClick={() => setOpenSecureAccount(true)}>
+          <div className="my-8">
             <Input
               name="email"
               id="email"
@@ -110,15 +103,8 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
           </div>
         </form>
       </AuthWrapper>
-      {openLoading && (
-        <LoadingWithBackground open={openLoading} setOpen={setOpenLoading} />
-      )}
-      {openSecureAccount && (
-        <SecureAccount
-          open={openSecureAccount}
-          setOpen={setOpenSecureAccount}
-        />
-      )}
+
+      <SecureAccount open={openSecureAccount} setOpen={setOpenSecureAccount} />
     </>
   );
 }

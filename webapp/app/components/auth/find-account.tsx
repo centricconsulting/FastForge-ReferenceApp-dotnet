@@ -10,16 +10,25 @@ import * as yup from "yup";
 import AuthWrapper from "./auth-wrapper";
 import { useRouter } from "next/navigation";
 import { DictionaryType } from "@/types";
+import { phoneRegExp } from "@/constants/regex";
 
 const validationSchema = yup.object({
   ssnDigits: yup
     .string()
+    .matches(/^\d{4}$/, "Must be a 4-digit number")
     .required("Last 4 digits of SSN or tax ID is required"),
-  phone: yup.string().required("Primary phone number is required"),
-  accountNumber: yup.string().required("Account number is required"),
+  phone: yup
+    .string()
+    .matches(phoneRegExp, "Primary phone number is not valid")
+    .required("Primary phone number is required"),
+  accountNumber: yup
+    .string()
+    .matches(/^\d{9,18}$/, "Account number is not valid")
+    .required("Account number is required"),
   hasZip: yup.boolean(),
   zipCode: yup
     .string()
+    .matches(/^\d{5}(?:[-\s]\d{4})?$/, "Zip code is not valid")
     .when("hasZip", (hasZip, schema) =>
       hasZip?.[0] ? schema.required("Zip code is required") : schema.optional()
     ),
@@ -92,6 +101,7 @@ export default function FindAccount({
           <Input
             required
             label="Last 4 Digits of SSN or Tax ID"
+            inputMode="numeric"
             type="number"
             name="ssnDigits"
             id="ssnDigits"
@@ -125,6 +135,8 @@ export default function FindAccount({
                 ? accountNumberError
                 : undefined
             }
+            type="number"
+            inputMode="numeric"
             value={accountNumber}
             onChange={formik.handleChange}
           />
@@ -152,6 +164,8 @@ export default function FindAccount({
               required
               name="zipCode"
               id="zipCode"
+              type="number"
+              inputMode="numeric"
               placeholder="Zip Code"
               label="Zip Code"
               autoComplete="off"
