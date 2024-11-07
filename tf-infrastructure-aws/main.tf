@@ -59,3 +59,14 @@ module "rds" {
     }
     depends_on  = [module.rdm_user_secret, module.rdm_user_password]  
 }
+
+module "app" {
+  source = "./_Modules/app_runner"
+    name = "${var.project_name}_app_runner"
+    ecr_uri = var.ecr_uri
+    rds_subnets = module.vpc.private_subnet_ids
+    rds_security_groups = [module.vpc.rds_db_security_group]
+    tags = {
+      Project_name = var.project_name
+    }
+}
