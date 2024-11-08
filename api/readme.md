@@ -13,11 +13,11 @@ The reference application includes support for SQL Server and Cosmos DB Entity F
 1. install docker
 2. install latest sql distro
 ```
-docker pull mcr.microsoft.com/mssql/server:2019-latest
+docker pull mcr.microsoft.com/azure-sql-edge
 ```
 3. start sql server instance
 ```
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:1433 --name mssql -d mcr.microsoft.com/mssql/server:2019-latest
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=yourStrong(!)Password' -p 1433:1433 --name mssql -d mcr.microsoft.com/azure-sql-edge
 ```
 4. Update connection string in your favorite way to store development secrets:
    * appsettings.Development.json
