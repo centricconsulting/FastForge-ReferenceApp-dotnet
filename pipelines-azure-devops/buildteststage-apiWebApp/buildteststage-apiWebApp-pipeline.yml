@@ -32,10 +32,10 @@ stages:
         script: 'printenv'
         
     - task: UseDotNet@2
-      displayName: Use .NET 6.0
+      displayName: Use .NET 8.0
       inputs:
         packageType: 'sdk'
-        version: '6.0.x'    
+        version: '8.0.x'    
     
     - task: DotNetCoreCLI@2
       displayName: 'install dotnet format'
@@ -105,10 +105,10 @@ stages:
       submodules: true
       
     - task: UseDotNet@2
-      displayName: Use .NET 6.0
+      displayName: Use .NET 8.0
       inputs:
         packageType: 'sdk'
-        version: '6.0.x'  
+        version: '8.0.x'  
         
     - task: DotNetCoreCLI@2
       displayName: 'Stage API Build Artifacts'
@@ -161,7 +161,7 @@ stages:
 
     - task: NodeTool@0
       inputs:
-        versionSpec: '14.x'
+        versionSpec: '20.x'
       displayName: 'Install Node.js'
 
     - script: |
