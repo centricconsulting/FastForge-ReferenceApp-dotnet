@@ -1,0 +1,5 @@
+
+     resource_group_name  = "Test"
+     storage_account_name = "straz02004t"
+     container_name       = "ctraz02005t"
+     key                  = "terraform.tfstate"

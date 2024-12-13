@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 #COPY *.sln ./
@@ -19,7 +19,7 @@ RUN dotnet build -c release --no-restore
 FROM build as publish
 RUN dotnet publish "./referenceApp.Api.csproj" -c Release -o "./out/" --no-restore
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 
 RUN useradd -M -s /bin/true -u 1000 dotnet
 
