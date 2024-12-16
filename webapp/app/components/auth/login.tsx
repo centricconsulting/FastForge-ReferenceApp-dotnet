@@ -73,31 +73,37 @@ export default function Login({ dictionary }: { dictionary: DictionaryType }) {
           <Checkbox id="terms" />
           <label
             htmlFor="terms"
-            className="text-base font-semibold ml-2 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
+            className="text-base font-semibold ml-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 tracking-[0.5px]"
           >
             {dictionary.auth.remember_my_email_on_this_device}
           </label>
           <div className="flex flex-col items-end">
             <Link
-              className="text-xs font-bold text-primary mb-4 mt-8 capitalize"
+              className="text-xs font-bold tracking-[1px] text-primary mb-4 mt-8 capitalize underline underline-offset-auto decoration-solid decoration-auto"
               href="/forget-password"
             >
               {dictionary.auth.forgot_email}?
             </Link>
             <Link
-              className="text-xs font-bold text-primary capitalize"
+              className="text-xs font-bold text-primary tracking-[1px] capitalize underline underline-offset-auto decoration-solid decoration-auto"
               href="/forget-password"
             >
               {dictionary.auth.forgot_password}?
             </Link>
           </div>
 
-          <Button type="submit" className="mt-12">
+          <Button
+            type="submit"
+            className="mt-16 uppercase font-bold text-base tracking-[1px]"
+          >
             {dictionary.auth.login}
           </Button>
-          <div className="text-xs font-bold text-center mt-8">
+          <div className="text-xs font-semibold tracking-[1px] text-center mt-8">
             {dictionary.auth["don’t_have_an_account"]}?{" "}
-            <Link href="/find-account" className="text-primary">
+            <Link
+              href="/find-account"
+              className="text-primary underline underline-offset-auto decoration-solid decoration-auto"
+            >
               {dictionary.auth.register}
             </Link>
           </div>

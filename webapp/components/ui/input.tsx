@@ -31,7 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {!!label && (
           <label
             htmlFor={id}
-            className="block mb-2 text-sm md:text-base font-bold text-gray-dark text-start uppercase"
+            className="block mb-2 text-sm md:text-base font-bold text-gray-dark text-start font-sans tracking-[0.5px]"
           >
             {label} {required && <span className="text-error">*</span>}
           </label>
