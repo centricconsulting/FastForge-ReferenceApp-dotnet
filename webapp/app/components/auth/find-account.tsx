@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useFormik } from "formik";
 import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import * as yup from "yup";
 import AuthWrapper from "./auth-wrapper";
 import { useRouter } from "next/navigation";
@@ -72,16 +72,16 @@ export default function FindAccount({
 
   return (
     <AuthWrapper title={"FIND YOUR ACCOUNT"}>
-      <p className="text-sm mt-4">
+      <p className="text-black text-sm mt-[0.62rem] leading-[1.4rem] font-sans font-normal tracking-[0.03125rem]">
         If you are a Centric Utilities customer, register today for easy online
         access to your account. It&apos;s a fast and convenient way to pay your
         bill, report an outage, monitor your usage, and so much more.
       </p>
-      <p className="text-sm mt-2">
+      <p className="text-black text-sm mt-[0.62rem] leading-[1.4rem] font-sans font-normal tracking-[0.03125rem]">
         Register using the phone number associated with your account{" "}
       </p>
-      <p className="text-xs mt-6 text-gray-mid">
-        <span className="text-error mr-1">*</span>Required fields
+      <p className=" text-gray-mid font-sans text-xs font-normal leading-[0.975rem] mt-[1.88rem]">
+        <span className="text-error font-bold mr-1">*</span>Required fields
       </p>
       <form onSubmit={formik.handleSubmit}>
         <div className="my-6">
@@ -114,12 +114,12 @@ export default function FindAccount({
           />
         </div>
         <div className="relative mt-8">
-          <hr className="border-[#D6CCF1] border-2" />
-          <span className="absolute left-1/2 text-base font-bold -translate-x-1/2 bg-white top-[-12px] px-2">
+          <hr className="border-[#D6CCF1] border-[0.125rem]" />
+          <span className="absolute left-1/2 text-base leading-[1.6rem] font-bold -translate-x-1/2 bg-white top-[-12px] px-2">
             OR
           </span>
         </div>
-        <p className="text-sm mt-8">
+        <p className="text-black text-sm mt-[1.5rem] leading-[1.4rem] font-sans font-normal tracking-[0.03125rem]">
           Register using the account number associated with your account{" "}
         </p>
         <div className="my-8">
@@ -151,11 +151,11 @@ export default function FindAccount({
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="ssn" id="ssn" />
-            <label htmlFor="ssn">Use my SSN or Tax ID</label>
+            <label htmlFor="ssn" className="text-black text-base leading-[1.6rem] font-sans font-normal tracking-[0.03125rem]">Use my SSN or Tax ID</label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="zip" id="zip" className="ml-4" />
-            <label htmlFor="zip">Use Zip Code</label>
+            <label htmlFor="zip" className="text-black text-base leading-[1.6rem] font-sans font-normal tracking-[0.03125rem]">Use Zip Code</label>
           </div>
         </RadioGroup>
         {hasZip && (
@@ -176,12 +176,12 @@ export default function FindAccount({
           </div>
         )}
 
-        <Button type="submit" className="mt-12">
-          NEXT <ChevronRight />
+        <Button type="submit" className="mt-12 text-base leading-[1.6rem] font-sans font-bold tracking-[0.03125rem]">
+          NEXT <ArrowRight className="ml-3 h-6 w-6"/>
         </Button>
-        <div className="text-xs font-bold text-center mt-8">
+        <div className="text-xs leading-[1.2rem] font-sans font-semibold tracking-[0.0625rem] text-center mt-8">
           Already have an account?{" "}
-          <Link href="/login" className="text-primary">
+          <Link href="/login" className="text-primary underline underline-offset-auto decoration-solid decoration-auto">
             Log In
           </Link>
         </div>
