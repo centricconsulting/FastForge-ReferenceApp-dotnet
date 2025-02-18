@@ -16,7 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\referenceApp.Common\referenceApp.Common.csproj" />
     <ProjectReference Include="..\referenceApp.Persistence\referenceApp.Persistence.csproj" />
+    <ProjectReference Include="..\referenceApp.PowerBi\referenceApp.PowerBi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Report\Commands\" />
+    <Folder Include="Report\Queries\" />
+    <Folder Include="System\Commands\" />
   </ItemGroup>
 
 </Project>

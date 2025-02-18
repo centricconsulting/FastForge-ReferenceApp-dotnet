@@ -13,12 +13,15 @@ using referenceApp.Lib.Todos.CreateNewTodo;
 using referenceApp.Lib.Todos.Models;
 using referenceApp.Lib.Todos.Queries;
 using referenceApp.Lib.Todos.ToggleTodoComplete;
+using referenceApp.Api.System;
+using referenceApp.Common.Models.System;
 
 namespace referenceApp.Api.Controllers
 {
     public class TodoController : ApiControllerBase
     {
-        public TodoController(IFeatureManager featureManager) : base(featureManager)
+        public TodoController(IFeatureManager featureManager, IUserSecurityService userSecurity, ISettingsData settingsData)
+            : base(featureManager, userSecurity, settingsData)
         {
         }
 
