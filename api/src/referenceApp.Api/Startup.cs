@@ -112,7 +112,7 @@ namespace referenceApp.Api
             });
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi();
         }
     }
 }
