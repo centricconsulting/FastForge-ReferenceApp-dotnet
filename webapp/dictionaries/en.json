@@ -50,6 +50,9 @@
     "monthly_billing_history": "Monthly Billing History",
     "year_by_year_comparison": "Year by Year Comparison",
     "monthly_service_cost_in_dollars": "Monthly Service Cost in dollars",
-    "month": "Month"
+    "month": "Month",
+    "summary":"Summary",
+    "billingDetails":"Billing Details",
+    "payMyBills":"Pay My Bills"
   }
 }

@@ -1,27 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { DictionaryType } from "@/types";
-
-class BillDetails {
-  customerId:number =1;
-  fromDate: string = "03/01/2025";
-  toDate: string = "03/31/2025";
-  dueDate: string = "03/30/2025";
-  dueAmount: string = "$50";
-}
+import { BillDetails, DictionaryType } from "@/types";
 
 const CurrentBill = ({
   dictionary,
-  billDetails = new BillDetails(),
+  billDetails,
+  setShowBillDetails,
 }: {
   dictionary: DictionaryType;
-  billDetails?: BillDetails;
+  billDetails: BillDetails;
+  setShowBillDetails?: (showBillDetails: boolean) => void;
 }) => {
   const { fromDate, toDate, dueDate, dueAmount } = billDetails;
   return (
     <div className="w-[49%] p-[24px] bg-white">
-      <h1 className="text-2xl leading-9 font-poppins font-bold  text-black tracking-[1px] mb-[24px]">
+      <h1 className="text-2xl leading-9 font-poppins font-bold  text-black tracking-[1px] ">
         {dictionary.billings.current_bill}
       </h1>
+      <div className="w-12 h-1 bg-[#FDB825] mt-2 mb-[24px]" />
       <p className="font-normal text-black text-lg leading-[28.8px] font-sans">
         {`${dictionary.billings.utility_service} ${fromDate} - ${toDate}`}
       </p>
@@ -42,7 +37,7 @@ const CurrentBill = ({
       <div className="flex w-full justify-between mt-[16px]">
         <Button
           type="button"
-          // onClick={() => {}}
+          onClick={() => { setShowBillDetails?.(true); }}
           className="mt-6 w-5/12 uppercase font-bold text-base tracking-[0.5px] disabled:bg-[#D6CCF1] disabled:opacity-100"
           variant={"outline"}
         >

@@ -50,6 +50,9 @@
     "monthly_billing_history": "Historial de facturación mensual",
     "year_by_year_comparison": "Comparación año por año",
     "monthly_service_cost_in_dollars": "Costo del servicio mensual en dólares",
-    "month": "Mes"
+    "month": "Mes",
+    "summary": "resumen",
+    "billingDetails": "Detalles de facturación",
+    "payMyBills": "Pagar mis facturas"
   }
 }

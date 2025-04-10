@@ -4,13 +4,95 @@
     "dueDate": "04/30/2025",
     "dueAmount": "$50",
     "fromDate": "03/01/2025",
-    "toDate": "03/31/2025"
+    "toDate": "03/31/2025",
+    "subTotal": "$45",
+    "billCharges": {
+      "Basic Service Charge": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Energy Charge Winter": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Fuel Cost Charge": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Sales True up": {
+        "units": "1",
+        "charge": "10"
+      }
+    },
+    "billTaxes": {
+      "City Fees": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Transit Improvement Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "City Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "County Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "State Tax": {
+        "units": "1",
+        "charge": "10"
+      }
+    }
   },
   {
     "customerId": 345,
     "dueDate": "05/30/2025",
     "dueAmount": "$30",
     "fromDate": "04/01/2025",
-    "toDate": "04/31/2025"
+    "toDate": "04/31/2025",
+    "subTotal": "$25",
+    "billDetails": {
+      "Basic Service Charge": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Energy Charge Winter": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Fuel Cost Charge": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Sales True up": {
+        "units": "1",
+        "charge": "10"
+      }
+    },
+    "billTaxes": {
+      "City Fees": {
+        "units": "1",
+        "charge": "10"
+      },
+      "Transit Improvement Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "City Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "County Tax": {
+        "units": "1",
+        "charge": "10"
+      },
+      "State Tax": {
+        "units": "1",
+        "charge": "10"
+      }
+    }
   }
 ]
